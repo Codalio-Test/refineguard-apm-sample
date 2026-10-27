@@ -1,0 +1,41 @@
+# PostgreSQL configuration for RefineGuard APM (Rhino v4 on Rails).
+#
+# Every environment carries an explicit `url:` so that an ambient DATABASE_URL
+# (which Rails merges into the *primary* configuration of whichever environment
+# is running) can never point the test suite at the development database.
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  host: <%= ENV.fetch("PGHOST", "localhost") %>
+  port: <%= ENV.fetch("PGPORT", 5432) %>
+  username: <%= ENV.fetch("PGUSER", "postgres") %>
+  password: <%= ENV.fetch("PGPASSWORD", "postgres") %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  url: <%= ENV["DEVELOPMENT_DATABASE_URL"] || "postgresql://postgres:postgres@localhost/rhino_1952" %>
+  database: rhino_1952
+
+test:
+  <<: *default
+  url: <%= ENV["TEST_DATABASE_URL"] || "postgresql://postgres:postgres@localhost/rhino_1952_test" %>
+  database: rhino_1952_test
+
+production:
+  primary: &primary_production
+    <<: *default
+    url: <%= ENV["DEVELOPMENT_DATABASE_URL"] || "postgresql://postgres:postgres@localhost/rhino_1952" %>
+    database: rhino_1952
+  cache:
+    <<: *primary_production
+    database: rhino_1952_cache
+    migrations_paths: db/cache_migrate
+  queue:
+    <<: *primary_production
+    database: rhino_1952_queue
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *primary_production
+    database: rhino_1952_cable
+    migrations_paths: db/cable_migrate

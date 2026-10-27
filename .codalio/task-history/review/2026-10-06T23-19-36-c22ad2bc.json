@@ -1,0 +1,32 @@
+[
+  {
+    "title": "Read inputs (acceptance-criteria.json, .rhino-plan.md, task message)",
+    "notes": "",
+    "status": "done"
+  },
+  {
+    "title": "Inventory the backend suites in the workspace",
+    "notes": "",
+    "status": "done"
+  },
+  {
+    "title": "Run the backend suite and capture output to .codalio/review/backend.log",
+    "notes": "",
+    "status": "done"
+  },
+  {
+    "title": "Capture coverage (SimpleCov) or note tooling not configured",
+    "notes": "",
+    "status": "done"
+  },
+  {
+    "title": "Map test results to acceptance criteria and update .codalio/acceptance-criteria.json incrementally",
+    "notes": "",
+    "status": "done"
+  },
+  {
+    "title": "Write .rhino-review.md report",
+    "notes": "",
+    "status": "done"
+  }
+]

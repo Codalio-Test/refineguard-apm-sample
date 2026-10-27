@@ -1,0 +1,132 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap");
+@import "tailwindcss";
+
+:root {
+  --background: hsl(216 33% 97%);
+  --foreground: hsl(222 48% 11%);
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(222 48% 11%);
+  --primary: hsl(220 86% 53%);
+  --primary-foreground: hsl(0 0% 100%);
+  --secondary: hsl(216 30% 94%);
+  --secondary-foreground: hsl(222 40% 17%);
+  --muted: hsl(216 28% 95%);
+  --muted-foreground: hsl(215 18% 40%);
+  --accent: hsl(190 74% 91%);
+  --accent-foreground: hsl(193 88% 20%);
+  --destructive: hsl(0 72% 51%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(214 25% 87%);
+  --input: hsl(214 24% 80%);
+  --ring: hsl(220 86% 53%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(222 48% 11%);
+  --sidebar: hsl(224 52% 9%);
+  --sidebar-foreground: hsl(214 35% 94%);
+  --sidebar-primary: hsl(188 90% 51%);
+  --sidebar-primary-foreground: hsl(224 58% 8%);
+  --sidebar-accent: hsl(221 43% 18%);
+  --sidebar-accent-foreground: hsl(0 0% 100%);
+  --sidebar-border: hsl(220 34% 19%);
+  --sidebar-ring: hsl(188 90% 51%);
+  --radius: 0.75rem;
+  --font-body: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+.dark {
+  --background: hsl(224 40% 6%);
+  --foreground: hsl(210 40% 98%);
+  --card: hsl(223 34% 10%);
+  --card-foreground: hsl(210 40% 98%);
+  --primary: hsl(188 90% 51%);
+  --primary-foreground: hsl(224 58% 8%);
+  --secondary: hsl(220 28% 17%);
+  --secondary-foreground: hsl(210 40% 98%);
+  --muted: hsl(221 27% 14%);
+  --muted-foreground: hsl(215 20% 69%);
+  --accent: hsl(190 52% 19%);
+  --accent-foreground: hsl(187 92% 88%);
+  --destructive: hsl(0 74% 56%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(218 25% 21%);
+  --input: hsl(218 24% 28%);
+  --ring: hsl(188 90% 51%);
+  --popover: hsl(223 34% 10%);
+  --popover-foreground: hsl(210 40% 98%);
+  --sidebar: hsl(226 53% 5%);
+  --sidebar-foreground: hsl(214 35% 94%);
+  --sidebar-primary: hsl(188 90% 51%);
+  --sidebar-primary-foreground: hsl(224 58% 8%);
+  --sidebar-accent: hsl(218 42% 17%);
+  --sidebar-accent-foreground: hsl(0 0% 100%);
+  --sidebar-border: hsl(220 32% 15%);
+  --sidebar-ring: hsl(188 90% 51%);
+}
+
+@theme inline {
+  --color-background: var(--background); --color-foreground: var(--foreground);
+  --color-card: var(--card); --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary); --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary); --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted); --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent); --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive); --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border); --color-input: var(--input); --color-ring: var(--ring);
+  --color-popover: var(--popover); --color-popover-foreground: var(--popover-foreground);
+  --color-sidebar: var(--sidebar); --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary); --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent); --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border); --color-sidebar-ring: var(--sidebar-ring);
+  --radius-sm: calc(var(--radius) - 5px); --radius-md: calc(var(--radius) - 3px); --radius-lg: var(--radius); --radius-xl: calc(var(--radius) + 4px);
+  --font-sans: var(--font-body); --font-heading: var(--font-display);
+}
+
+@layer base {
+  * { @apply border-border outline-ring/50; }
+  html { @apply antialiased; }
+  body {
+    @apply bg-background font-sans text-foreground;
+    background-image: linear-gradient(to bottom, color-mix(in srgb, var(--primary) 3%, transparent), transparent 18rem);
+    background-attachment: fixed;
+  }
+  h1, h2, h3, h4, h5, h6 { @apply font-heading tracking-tight; }
+  button, a { @apply transition-[color,background-color,border-color,box-shadow,transform] duration-150; }
+  ::selection { @apply bg-primary/20 text-foreground; }
+}
+
+@layer components {
+  [data-slot="card"] {
+    @apply border-border/75 bg-card shadow-[0_1px_2px_rgba(15,23,42,0.03),0_10px_30px_rgba(15,23,42,0.045)];
+  }
+  .dark [data-slot="card"] { box-shadow: 0 1px 0 rgba(255,255,255,.025), 0 18px 50px rgba(0,0,0,.16); }
+  [data-slot="card-header"] { @apply gap-1.5; }
+  [data-slot="button"] { @apply gap-2 font-semibold shadow-sm active:scale-[0.985]; }
+  [data-slot="button"]:focus-visible { @apply ring-2 ring-ring/30 ring-offset-2 ring-offset-background; }
+  [data-slot="table-header"] { @apply bg-muted/45; }
+  [data-slot="table-head"] { @apply h-11 px-5 text-xs font-semibold uppercase tracking-[0.075em] text-muted-foreground; }
+  [data-slot="table-cell"] { @apply px-5 py-3.5 align-middle; }
+  [data-slot="table-row"] { @apply border-border/70 transition-colors duration-150; }
+  [data-slot="table-row"]:hover { @apply bg-primary/[0.035]; }
+  [data-slot="input"], [data-slot="textarea"], [data-slot="select-trigger"] {
+    @apply border-border bg-card shadow-[0_1px_2px_rgba(15,23,42,0.035)] transition-[border-color,box-shadow,background-color] duration-150;
+  }
+  [data-slot="input"]:hover, [data-slot="textarea"]:hover, [data-slot="select-trigger"]:hover { @apply border-input; }
+  [data-slot="input"]:focus, [data-slot="textarea"]:focus, [data-slot="select-trigger"]:focus {
+    @apply border-primary/60;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 12%, transparent);
+  }
+  [role="menu"], [role="listbox"] { @apply border-border/80 shadow-[0_16px_40px_rgba(15,23,42,0.14)]; }
+
+  button:not([role="switch"]):not([role="checkbox"]) { @apply active:scale-[0.985]; }
+  input:not([type="checkbox"]):not([type="radio"]), textarea {
+    @apply shadow-[0_1px_2px_rgba(15,23,42,0.035)] transition-[border-color,box-shadow,background-color] duration-150;
+  }
+  input:not([type="checkbox"]):not([type="radio"]):focus, textarea:focus {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 12%, transparent);
+  }
+  table thead { @apply bg-muted/45; }
+  table th { @apply text-xs font-semibold uppercase tracking-[0.075em] text-muted-foreground; }
+  table tbody tr { @apply transition-colors duration-150; }
+  table tbody tr:hover { @apply bg-primary/[0.035]; }
+}

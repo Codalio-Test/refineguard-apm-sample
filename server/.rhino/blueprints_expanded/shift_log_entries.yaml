@@ -1,0 +1,194 @@
+model: ShiftLogEntry
+slug: shift_log_entries
+table: shift_log_entries
+options:
+  belongs_to_organization: true
+  soft_deletes: false
+  audit_trail: true
+  pagination: true
+  per_page: 100
+columns:
+  plant_unit_id:
+    type: foreignId
+    foreign_model: PlantUnit
+    nullable: true
+    index: true
+    filterable: true
+  asset_id:
+    type: foreignId
+    foreign_model: Asset
+    nullable: true
+    index: true
+    filterable: true
+  author_id:
+    type: foreignId
+    foreign_model: User
+    nullable: true
+    index: true
+    filterable: true
+  acknowledged_by_id:
+    type: foreignId
+    foreign_model: User
+    nullable: true
+    index: true
+  occurred_at:
+    type: datetime
+    nullable: false
+    filterable: true
+    sortable: true
+  shift_label:
+    type: string
+    nullable: true
+    filterable: true
+    sortable: true
+    searchable: true
+  event_type:
+    type: string
+    nullable: true
+    filterable: true
+    sortable: true
+  severity:
+    type: string
+    nullable: true
+    default: info
+    filterable: true
+  message:
+    type: text
+    nullable: true
+    searchable: true
+  unit_status:
+    type: text
+    nullable: true
+  open_risks:
+    type: text
+    nullable: true
+  outstanding_actions:
+    type: text
+    nullable: true
+  procedure_steps_json:
+    type: json
+    nullable: true
+  steps_completed:
+    type: integer
+    nullable: true
+    default: 0
+  steps_total:
+    type: integer
+    nullable: true
+    default: 0
+  incoming_ack:
+    type: boolean
+    nullable: true
+    default: false
+    filterable: true
+  handover_completed_at:
+    type: datetime
+    nullable: true
+relationships:
+- type: belongsTo
+  model: Organization
+- type: belongsTo
+  model: PlantUnit
+- type: belongsTo
+  model: Asset
+- type: belongsTo
+  model: User
+permissions:
+  admin:
+    actions:
+    - index
+    - show
+    - store
+    - update
+    - destroy
+    show_fields: '*'
+    create_fields: '*'
+    update_fields: '*'
+  operations_superintendent:
+    actions:
+    - index
+    - show
+    - store
+    - update
+    show_fields: '*'
+    create_fields:
+    - plant_unit_id
+    - asset_id
+    - occurred_at
+    - shift_label
+    - event_type
+    - severity
+    - message
+    - unit_status
+    - open_risks
+    - outstanding_actions
+    - procedure_steps_json
+    - steps_completed
+    - steps_total
+    - incoming_ack
+    - handover_completed_at
+    update_fields:
+    - plant_unit_id
+    - asset_id
+    - occurred_at
+    - shift_label
+    - event_type
+    - severity
+    - message
+    - unit_status
+    - open_risks
+    - outstanding_actions
+    - procedure_steps_json
+    - steps_completed
+    - steps_total
+    - incoming_ack
+    - handover_completed_at
+  reliability_engineer:
+    actions:
+    - index
+    - show
+    - store
+    show_fields: '*'
+    create_fields:
+    - plant_unit_id
+    - asset_id
+    - occurred_at
+    - shift_label
+    - event_type
+    - severity
+    - message
+    - procedure_steps_json
+    - steps_completed
+    - steps_total
+    update_fields: []
+  maintenance_planner:
+    actions:
+    - index
+    - show
+    show_fields:
+    - id
+    - plant_unit_id
+    - asset_id
+    - occurred_at
+    - shift_label
+    - event_type
+    - severity
+    - message
+    - outstanding_actions
+    create_fields: []
+    update_fields: []
+  machinery_specialist:
+    actions:
+    - index
+    - show
+    show_fields:
+    - id
+    - plant_unit_id
+    - asset_id
+    - occurred_at
+    - shift_label
+    - event_type
+    - severity
+    - message
+    create_fields: []
+    update_fields: []

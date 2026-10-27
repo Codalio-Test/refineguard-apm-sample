@@ -1,0 +1,123 @@
+model: HistorianConnector
+slug: historian_connectors
+table: historian_connectors
+options:
+  belongs_to_organization: true
+  soft_deletes: true
+  pagination: true
+  per_page: 50
+columns:
+  connector_name:
+    type: string
+    nullable: false
+    sortable: true
+    searchable: true
+  historian_type:
+    type: string
+    nullable: false
+    filterable: true
+  protocol_type:
+    type: string
+    nullable: true
+    filterable: true
+  endpoint_url:
+    type: string
+    nullable: true
+    searchable: true
+  server_address:
+    type: string
+    nullable: true
+    searchable: true
+  port:
+    type: integer
+    nullable: true
+  polling_interval_seconds:
+    type: integer
+    nullable: true
+    default: 5
+  status:
+    type: string
+    nullable: false
+    default: Connected
+    filterable: true
+    sortable: true
+  last_heartbeat:
+    type: datetime
+    nullable: true
+    sortable: true
+  poll_latency_ms:
+    type: integer
+    nullable: true
+    sortable: true
+  buffer_depth:
+    type: bigInteger
+    nullable: true
+  backfill_queue:
+    type: integer
+    nullable: true
+  backfill_committed:
+    type: bigInteger
+    nullable: true
+  backfill_total:
+    type: bigInteger
+    nullable: true
+  ring_buffer_enabled:
+    type: boolean
+    nullable: true
+    default: true
+  connection_timeout_ms:
+    type: integer
+    nullable: true
+    default: 3000
+  credentials_ref:
+    type: string
+    nullable: true
+relationships:
+- type: belongsTo
+  model: Organization
+- type: hasMany
+  model: HistorianTag
+permissions:
+  admin:
+    actions:
+    - index
+    - show
+    - store
+    - update
+    - destroy
+    - trashed
+    - restore
+    - forceDelete
+    show_fields: '*'
+    create_fields: '*'
+    update_fields: '*'
+  reliability_engineer:
+    actions:
+    - index
+    - show
+    show_fields:
+    - id
+    - connector_name
+    - historian_type
+    - status
+    - last_heartbeat
+    - poll_latency_ms
+    - buffer_depth
+    - backfill_queue
+    create_fields: []
+    update_fields: []
+  machinery_specialist:
+    actions:
+    - index
+    - show
+    show_fields:
+    - id
+    - connector_name
+    - historian_type
+    - protocol_type
+    - status
+    - last_heartbeat
+    - poll_latency_ms
+    - buffer_depth
+    create_fields: []
+    update_fields: []

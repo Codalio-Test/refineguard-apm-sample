@@ -1,0 +1,3281 @@
+{
+  "pages": [
+    {
+      "name": "FleetOverview",
+      "route": "/fleet-overview",
+      "locked": false,
+      "sections": [
+        {
+          "title": "Fleet scope and shift controls",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "FleetToolbar",
+              "props": {
+                "sort": "Worst health first",
+                "shift": "Day Shift",
+                "unitShortcuts": [
+                  "1 CDU",
+                  "2 FCC",
+                  "3 HCU",
+                  "4 ALKY"
+                ]
+              },
+              "images": null,
+              "styling": {
+                "className": "flex flex-wrap items-center gap-2"
+              },
+              "has_state": true,
+              "image_urls": null,
+              "data_source": null,
+              "event_handlers": [
+                "onUnitFilter",
+                "onSearch",
+                "onSort"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Button",
+                "ToggleGroup",
+                "ToggleGroupItem",
+                "Select",
+                "SelectTrigger",
+                "SelectContent",
+                "SelectItem",
+                "Input",
+                "Badge"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Fleet health triage",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "FleetKpiStrip",
+              "props": {
+                "metrics": [
+                  "Assets monitored",
+                  "Normal",
+                  "Advisory",
+                  "Alarm",
+                  "Trip",
+                  "Unacknowledged"
+                ]
+              },
+              "images": null,
+              "styling": {
+                "value": "font-mono text-2xl tabular-nums",
+                "className": "grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2"
+              },
+              "has_state": false,
+              "image_urls": null,
+              "data_source": "asset_health_indices",
+              "event_handlers": null,
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardContent",
+                "Badge"
+              ]
+            },
+            {
+              "name": "AssetTriageMatrix",
+              "props": {
+                "columns": [
+                  "State",
+                  "Asset",
+                  "Unit",
+                  "Health Index",
+                  "RMS Velocity",
+                  "Bearing Temp",
+                  "RUL",
+                  "Last Sample"
+                ],
+                "keyboard": {
+                  "open": "Enter",
+                  "navigate": "J/K"
+                }
+              },
+              "images": null,
+              "styling": {
+                "row": "h-10 text-xs",
+                "numeric": "font-mono tabular-nums",
+                "className": "border border-border rounded-sm overflow-hidden"
+              },
+              "has_state": true,
+              "image_urls": null,
+              "data_source": "assets",
+              "event_handlers": [
+                "onSelectAsset",
+                "onAcknowledge",
+                "onKeyDown"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Table",
+                "TableHeader",
+                "TableHead",
+                "TableBody",
+                "TableRow",
+                "TableCell",
+                "Badge",
+                "Progress",
+                "Button",
+                "DropdownMenu",
+                "DropdownMenuTrigger",
+                "DropdownMenuContent",
+                "DropdownMenuItem"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Unit risk and anomaly queue",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "UnitRiskSummary",
+              "props": {},
+              "images": null,
+              "styling": {
+                "className": "grid lg:grid-cols-2 gap-3"
+              },
+              "has_state": false,
+              "image_urls": null,
+              "data_source": "plant_units",
+              "event_handlers": null,
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Progress"
+              ]
+            },
+            {
+              "name": "ActiveAnomalyQueue",
+              "props": {},
+              "images": null,
+              "styling": {},
+              "has_state": true,
+              "image_urls": null,
+              "data_source": "diagnostic_incidents",
+              "event_handlers": [
+                "onOpenIncident"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "ScrollArea",
+                "Badge",
+                "Button"
+              ]
+            }
+          ]
+        }
+      ],
+      "display_title": "Fleet Overview",
+      "required_imports": [
+        "lucide-react",
+        "react-router-dom"
+      ],
+      "has_dynamic_params": false
+    },
+    {
+      "name": "Assets",
+      "route": "/assets",
+      "locked": false,
+      "sections": [
+        {
+          "title": "Hierarchy controls",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "AssetHierarchyToolbar",
+              "props": {
+                "views": [
+                  "Tree",
+                  "Table"
+                ],
+                "filters": [
+                  "Unit",
+                  "Asset class",
+                  "Health state"
+                ]
+              },
+              "images": null,
+              "styling": {
+                "className": "flex flex-wrap gap-2"
+              },
+              "has_state": true,
+              "image_urls": null,
+              "data_source": null,
+              "event_handlers": [
+                "onSearch",
+                "onFilter",
+                "onViewChange"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Input",
+                "Select",
+                "SelectTrigger",
+                "SelectContent",
+                "SelectItem",
+                "Button",
+                "ToggleGroup",
+                "ToggleGroupItem"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "ISA-95 equipment browser",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "AssetHierarchyBrowser",
+              "props": {
+                "levels": [
+                  "Complex",
+                  "Unit",
+                  "Train",
+                  "Asset",
+                  "Component"
+                ],
+                "keyboard": "J/K then Enter"
+              },
+              "images": null,
+              "styling": {
+                "node": "h-8 text-xs",
+                "tree": "h-[calc(100vh-230px)]",
+                "className": "grid xl:grid-cols-[minmax(360px,0.8fr)_minmax(520px,1.2fr)] gap-3"
+              },
+              "has_state": true,
+              "image_urls": null,
+              "data_source": "assets",
+              "event_handlers": [
+                "onSelectNode",
+                "onExpandNode",
+                "onKeyDown"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardContent",
+                "Accordion",
+                "AccordionItem",
+                "AccordionTrigger",
+                "AccordionContent",
+                "ScrollArea",
+                "Badge",
+                "Button"
+              ]
+            },
+            {
+              "name": "AssetDetailInspector",
+              "props": {
+                "tabs": [
+                  "Identity",
+                  "Components",
+                  "Envelope",
+                  "Tags"
+                ]
+              },
+              "images": null,
+              "styling": {},
+              "has_state": true,
+              "image_urls": null,
+              "data_source": "asset_components",
+              "event_handlers": [
+                "onOpenAsset"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Tabs",
+                "TabsList",
+                "TabsTrigger",
+                "TabsContent",
+                "Table",
+                "TableBody",
+                "TableRow",
+                "TableCell",
+                "Button"
+              ]
+            }
+          ]
+        }
+      ],
+      "display_title": "Asset Hierarchy",
+      "required_imports": [
+        "lucide-react",
+        "react-router-dom"
+      ],
+      "has_dynamic_params": false
+    },
+    {
+      "name": "AssetDiagnostics",
+      "route": "/assets/:assetId/diagnostics",
+      "locked": false,
+      "sections": [
+        {
+          "title": "Diagnostic incident controls",
+          "spacing": "tight",
+          "component_specs": [
+            {
+              "name": "DiagnosticToolbar",
+              "props": {
+                "actions": [
+                  "Acknowledge",
+                  "Compare baseline",
+                  "Author finding"
+                ],
+                "incident": "INC-24018",
+                "demoFeedback": "Show loading, success toast, and updated acknowledged state for each action"
+              },
+              "styling": {
+                "className": "flex flex-wrap justify-between gap-2"
+              },
+              "has_state": true,
+              "event_handlers": [
+                "onSelectIncident",
+                "onAcknowledge",
+                "onCompareBaseline",
+                "onAuthorFinding"
+              ],
+              "shadcn_components": [
+                "Select",
+                "SelectTrigger",
+                "SelectContent",
+                "SelectItem",
+                "Button",
+                "Badge"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Failure mode evidence",
+          "spacing": "tight",
+          "component_specs": [
+            {
+              "name": "FailureModeClassifier",
+              "props": {
+                "modes": [
+                  "Unbalance",
+                  "Misalignment",
+                  "Bearing outer race",
+                  "Cavitation"
+                ],
+                "showConfidenceIntervals": true
+              },
+              "styling": {
+                "className": "grid lg:grid-cols-2 gap-3",
+                "probability": "font-mono tabular-nums"
+              },
+              "has_state": false,
+              "data_source": "failure_modes",
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Progress",
+                "Badge"
+              ]
+            },
+            {
+              "name": "PhysicalFingerprintEvidence",
+              "props": {
+                "columns": [
+                  "Marker",
+                  "Expected Hz",
+                  "Observed Hz",
+                  "Amplitude",
+                  "Match"
+                ],
+                "markers": [
+                  "1X",
+                  "2X",
+                  "BPFO",
+                  "BPFI",
+                  "BSF",
+                  "FTF"
+                ]
+              },
+              "styling": {
+                "numeric": "font-mono text-xs tabular-nums"
+              },
+              "has_state": false,
+              "data_source": "diagnostic_incidents",
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Table",
+                "TableHeader",
+                "TableHead",
+                "TableBody",
+                "TableRow",
+                "TableCell",
+                "Badge"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Engineering determination",
+          "spacing": "tight",
+          "component_specs": [
+            {
+              "name": "DiagnosticFindingEditor",
+              "props": {
+                "action": "Save engineering finding",
+                "fields": [
+                  "Root cause",
+                  "Evidence summary",
+                  "Failure mechanism",
+                  "Confidence",
+                  "Sign-off"
+                ],
+                "demoFeedback": "Validate required fields, disable submit while saving, persist local draft, and show success toast"
+              },
+              "styling": {},
+              "has_state": true,
+              "event_handlers": [
+                "onChange",
+                "onSave",
+                "onSignOff"
+              ],
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Textarea",
+                "Label",
+                "Select",
+                "SelectTrigger",
+                "SelectContent",
+                "SelectItem",
+                "Button",
+                "Checkbox"
+              ]
+            },
+            {
+              "name": "DiagnosticAuditTrail",
+              "props": {},
+              "styling": {},
+              "has_state": false,
+              "data_source": "audit_logs",
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "ScrollArea",
+                "Separator",
+                "Badge"
+              ]
+            }
+          ]
+        }
+      ],
+      "display_title": "Diagnostics & Failure Fingerprints",
+      "required_imports": [
+        "lucide-react",
+        "react-router-dom"
+      ],
+      "has_dynamic_params": true
+    },
+    {
+      "name": "Login",
+      "route": "/login",
+      "locked": false,
+      "sections": [
+        {
+          "title": "Local domain authentication",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "LocalDomainLogin",
+              "props": {
+                "title": "RefineGuard APM",
+                "domain": "BRR-OT.LOCAL",
+                "airGapNotice": "Authentication remains inside the sealed OT network."
+              },
+              "images": null,
+              "styling": {
+                "card": "w-full max-w-md border-border",
+                "fields": "space-y-3",
+                "className": "min-h-[calc(100vh-110px)] grid place-items-center"
+              },
+              "has_state": true,
+              "image_urls": null,
+              "data_source": null,
+              "event_handlers": [
+                "onSubmit"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardDescription",
+                "CardContent",
+                "CardFooter",
+                "Input",
+                "Label",
+                "Button",
+                "Alert",
+                "AlertDescription"
+              ]
+            }
+          ]
+        }
+      ],
+      "display_title": "Secure Sign In",
+      "required_imports": [
+        "lucide-react"
+      ],
+      "has_dynamic_params": false
+    },
+    {
+      "name": "AssetHealthSummary",
+      "route": "/assets/:assetId/health-summary",
+      "locked": false,
+      "sections": [
+        {
+          "title": "Asset state and actions",
+          "spacing": "tight",
+          "component_specs": [
+            {
+              "name": "AssetStatusHeader",
+              "props": {
+                "actions": [
+                  "Acknowledge",
+                  "Open advisory",
+                  "Create work order"
+                ],
+                "shortcut": "A / Space",
+                "demoFeedback": "Update acknowledgment state immediately and route advisory/work-order actions to their demo screens"
+              },
+              "styling": {
+                "assetTag": "font-mono text-xl",
+                "className": "flex items-center justify-between gap-3"
+              },
+              "has_state": true,
+              "data_source": "assets",
+              "event_handlers": [
+                "onAcknowledge",
+                "onOpenAdvisory",
+                "onCreateWorkOrder",
+                "onKeyDown"
+              ],
+              "shadcn_components": [
+                "Badge",
+                "Button",
+                "DropdownMenu",
+                "DropdownMenuTrigger",
+                "DropdownMenuContent",
+                "DropdownMenuItem"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Health index and operating envelope",
+          "spacing": "tight",
+          "component_specs": [
+            {
+              "name": "HealthIndexPanel",
+              "props": {
+                "showConfidence": true,
+                "showBaselineDelta": true
+              },
+              "styling": {
+                "score": "font-mono text-5xl tabular-nums",
+                "className": "grid md:grid-cols-[280px_1fr] gap-3"
+              },
+              "has_state": false,
+              "data_source": "asset_health_indices",
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Progress",
+                "Badge"
+              ]
+            },
+            {
+              "name": "TelemetryTrendGrid",
+              "props": {
+                "range": "24h",
+                "signals": [
+                  "RMS velocity",
+                  "Peak-to-peak displacement",
+                  "Bearing temperature",
+                  "Discharge pressure",
+                  "Motor current"
+                ]
+              },
+              "styling": {
+                "chart": "h-28",
+                "className": "grid md:grid-cols-2 xl:grid-cols-5 gap-2"
+              },
+              "has_state": true,
+              "data_source": "telemetry_records",
+              "event_handlers": [
+                "onRangeChange",
+                "onInspectSignal"
+              ],
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Tooltip"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Explainable anomaly attribution",
+          "spacing": "tight",
+          "component_specs": [
+            {
+              "name": "AnomalyAttributionPanel",
+              "props": {
+                "example": "78% Outboard Bearing 1X harmonic surge; 22% DE Bearing RTD thermal drift"
+              },
+              "styling": {
+                "className": "grid lg:grid-cols-[1fr_340px] gap-3"
+              },
+              "has_state": false,
+              "data_source": "diagnostic_incidents",
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Progress",
+                "Alert",
+                "AlertTitle",
+                "AlertDescription"
+              ]
+            },
+            {
+              "name": "OperatingEnvelopeTable",
+              "props": {
+                "columns": [
+                  "Tag",
+                  "Reading",
+                  "Normal range",
+                  "Alarm limit",
+                  "State"
+                ]
+              },
+              "styling": {
+                "numeric": "font-mono tabular-nums text-xs"
+              },
+              "has_state": false,
+              "data_source": "historian_tags",
+              "shadcn_components": [
+                "Table",
+                "TableHeader",
+                "TableHead",
+                "TableBody",
+                "TableRow",
+                "TableCell",
+                "Badge"
+              ]
+            }
+          ]
+        }
+      ],
+      "display_title": "Asset Health Summary",
+      "required_imports": [
+        "lucide-react",
+        "react-router-dom",
+        "recharts"
+      ],
+      "has_dynamic_params": true
+    },
+    {
+      "name": "SpectralAnalytics",
+      "route": "/assets/:assetId/spectral-analytics",
+      "locked": false,
+      "sections": [
+        {
+          "title": "Spectral analysis controls",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "SpectralToolbar",
+              "props": {
+                "modes": [
+                  "Spectrum",
+                  "Waterfall",
+                  "Orbit"
+                ],
+                "channels": [
+                  "OB Horizontal",
+                  "OB Vertical",
+                  "OB Axial"
+                ],
+                "shortcuts": {
+                  "view": "W",
+                  "scrub": "Left/Right",
+                  "bearings": "B",
+                  "harmonics": "H"
+                }
+              },
+              "images": null,
+              "styling": {
+                "className": "flex flex-wrap items-center gap-2"
+              },
+              "has_state": true,
+              "image_urls": null,
+              "data_source": null,
+              "event_handlers": [
+                "onChannelChange",
+                "onToggleHarmonics",
+                "onToggleBearings",
+                "onModeChange",
+                "onKeyDown"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Select",
+                "SelectTrigger",
+                "SelectContent",
+                "SelectItem",
+                "Toggle",
+                "ToggleGroup",
+                "ToggleGroupItem",
+                "Button",
+                "Badge"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "FFT and marker workbench",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "FftSpectrumWorkbench",
+              "props": {
+                "xAxis": "Frequency Hz",
+                "yAxis": "Velocity mm/s RMS",
+                "markers": [
+                  "1X",
+                  "2X",
+                  "3X",
+                  "BPFO",
+                  "BPFI",
+                  "BSF",
+                  "FTF"
+                ],
+                "cursorSnap": true
+              },
+              "images": null,
+              "styling": {
+                "chart": "h-full bg-background",
+                "className": "h-[430px] border border-border"
+              },
+              "has_state": true,
+              "image_urls": null,
+              "data_source": "telemetry_records",
+              "event_handlers": [
+                "onCursorMove",
+                "onMarkerToggle",
+                "onZoom"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Tooltip",
+                "ContextMenu",
+                "ContextMenuTrigger",
+                "ContextMenuContent",
+                "ContextMenuItem"
+              ]
+            },
+            {
+              "name": "SpectralReadoutRail",
+              "props": {
+                "readouts": [
+                  "Running speed",
+                  "Cursor frequency",
+                  "Amplitude",
+                  "Order",
+                  "Delta baseline"
+                ]
+              },
+              "images": null,
+              "styling": {
+                "numeric": "font-mono tabular-nums",
+                "className": "xl:w-72"
+              },
+              "has_state": false,
+              "image_urls": null,
+              "data_source": null,
+              "event_handlers": null,
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Table",
+                "TableBody",
+                "TableRow",
+                "TableCell",
+                "Badge"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Historical comparison and orbit",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "WaterfallTimeline",
+              "props": {
+                "timeSlices": 24,
+                "scrubShortcuts": "Left / Right"
+              },
+              "images": null,
+              "styling": {
+                "chart": "h-64"
+              },
+              "has_state": true,
+              "image_urls": null,
+              "data_source": "telemetry_records",
+              "event_handlers": [
+                "onScrub"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Slider",
+                "Button"
+              ]
+            },
+            {
+              "name": "OrbitPlotPanel",
+              "props": {},
+              "images": null,
+              "styling": {
+                "chart": "h-64"
+              },
+              "has_state": true,
+              "image_urls": null,
+              "data_source": "telemetry_records",
+              "event_handlers": [
+                "onPhaseCompensation"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Toggle"
+              ]
+            }
+          ]
+        }
+      ],
+      "display_title": "Spectral Workbench",
+      "required_imports": [
+        "lucide-react",
+        "react-router-dom",
+        "recharts"
+      ],
+      "has_dynamic_params": true
+    },
+    {
+      "name": "UnitRiskMatrix",
+      "route": "/operations/unit-risk-matrix",
+      "locked": false,
+      "sections": [
+        {
+          "title": "Operations horizon controls",
+          "spacing": "tight",
+          "component_specs": [
+            {
+              "name": "RiskHorizonToolbar",
+              "props": {
+                "horizons": [
+                  "Current shift",
+                  "24 hours",
+                  "7 days",
+                  "30 days"
+                ],
+                "scenario": "Current production plan"
+              },
+              "styling": {},
+              "has_state": true,
+              "event_handlers": [
+                "onHorizonChange",
+                "onScenarioChange",
+                "onRefresh"
+              ],
+              "shadcn_components": [
+                "Select",
+                "SelectTrigger",
+                "SelectContent",
+                "SelectItem",
+                "ToggleGroup",
+                "ToggleGroupItem",
+                "Button",
+                "Badge"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Throughput risk matrix",
+          "spacing": "tight",
+          "component_specs": [
+            {
+              "name": "ProductionRiskMatrix",
+              "props": {
+                "columns": [
+                  "Unit",
+                  "Current rate",
+                  "Critical train",
+                  "Trip probability",
+                  "Potential derate",
+                  "Revenue exposure",
+                  "Mitigation"
+                ]
+              },
+              "styling": {
+                "cell": "text-xs",
+                "numeric": "font-mono tabular-nums"
+              },
+              "has_state": true,
+              "data_source": "plant_units",
+              "event_handlers": [
+                "onSelectUnit",
+                "onOpenMitigation"
+              ],
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Table",
+                "TableHeader",
+                "TableHead",
+                "TableBody",
+                "TableRow",
+                "TableCell",
+                "Badge",
+                "Tooltip"
+              ]
+            },
+            {
+              "name": "CrossUnitRiskMap",
+              "props": {
+                "states": [
+                  "Normal",
+                  "Alert",
+                  "Alarm",
+                  "Trip"
+                ]
+              },
+              "styling": {
+                "map": "grid grid-cols-4 gap-1",
+                "className": "grid xl:grid-cols-[1fr_360px] gap-3"
+              },
+              "has_state": true,
+              "data_source": "assets",
+              "event_handlers": [
+                "onSelectAsset"
+              ],
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Badge"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Shift decision support",
+          "spacing": "tight",
+          "component_specs": [
+            {
+              "name": "DerateRecommendations",
+              "props": {
+                "demoFeedback": "Opening a recommendation selects it and exposes an actionable advisory detail"
+              },
+              "styling": {},
+              "has_state": true,
+              "data_source": "prescriptive_advisories",
+              "event_handlers": [
+                "onOpenAdvisory",
+                "onApplyScenario"
+              ],
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Alert",
+                "AlertTitle",
+                "AlertDescription",
+                "Button"
+              ]
+            },
+            {
+              "name": "UnitRiskTrend",
+              "props": {},
+              "styling": {
+                "chart": "h-52"
+              },
+              "has_state": false,
+              "data_source": "asset_health_indices",
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent"
+              ]
+            }
+          ]
+        }
+      ],
+      "display_title": "Operations Unit Risk Matrix",
+      "required_imports": [
+        "lucide-react",
+        "recharts"
+      ],
+      "has_dynamic_params": false
+    },
+    {
+      "name": "PrescriptiveAdvisories",
+      "route": "/prescriptive-advisories",
+      "locked": false,
+      "sections": [
+        {
+          "title": "Advisory queue controls",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "AdvisoryFilters",
+              "props": {
+                "sort": "Shortest RUL",
+                "filters": [
+                  "State",
+                  "Unit",
+                  "RUL window",
+                  "CMMS status"
+                ]
+              },
+              "images": null,
+              "styling": {},
+              "has_state": true,
+              "image_urls": null,
+              "data_source": null,
+              "event_handlers": [
+                "onSearch",
+                "onFilter",
+                "onSort"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Input",
+                "Select",
+                "SelectTrigger",
+                "SelectContent",
+                "SelectItem",
+                "ToggleGroup",
+                "ToggleGroupItem",
+                "Button"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "RUL and intervention queue",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "AdvisoryQueue",
+              "props": {
+                "columns": [
+                  "Priority",
+                  "Asset",
+                  "Finding",
+                  "RUL window",
+                  "P-F interval",
+                  "Recommendation",
+                  "Spares",
+                  "CMMS"
+                ]
+              },
+              "images": null,
+              "styling": {
+                "row": "h-12 text-xs",
+                "numeric": "font-mono tabular-nums"
+              },
+              "has_state": true,
+              "image_urls": null,
+              "data_source": "prescriptive_advisories",
+              "event_handlers": [
+                "onSelectAdvisory",
+                "onCreateWorkOrder"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Table",
+                "TableHeader",
+                "TableHead",
+                "TableBody",
+                "TableRow",
+                "TableCell",
+                "Badge",
+                "Progress",
+                "Button"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Selected intervention plan",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "InterventionDetail",
+              "props": {
+                "tabs": [
+                  "Recommendation",
+                  "Evidence",
+                  "Spares",
+                  "CMMS Payload"
+                ],
+                "dispatchShortcut": "Ctrl+Enter"
+              },
+              "images": null,
+              "styling": {
+                "className": "grid lg:grid-cols-[1fr_360px] gap-3"
+              },
+              "has_state": true,
+              "image_urls": null,
+              "data_source": "prescriptive_advisories",
+              "event_handlers": [
+                "onVerifySpare",
+                "onDispatch",
+                "onKeyDown"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Tabs",
+                "TabsList",
+                "TabsTrigger",
+                "TabsContent",
+                "Alert",
+                "AlertTitle",
+                "AlertDescription",
+                "Checkbox",
+                "Button"
+              ]
+            },
+            {
+              "name": "RulTimeline",
+              "props": {
+                "showLeadTime": true,
+                "showConfidenceBand": true
+              },
+              "images": null,
+              "styling": {},
+              "has_state": false,
+              "image_urls": null,
+              "data_source": "prescriptive_advisories",
+              "event_handlers": null,
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Progress",
+                "Badge"
+              ]
+            }
+          ]
+        }
+      ],
+      "display_title": "Prescriptive Advisories",
+      "required_imports": [
+        "lucide-react",
+        "react-router-dom"
+      ],
+      "has_dynamic_params": false
+    },
+    {
+      "name": "ModelRetraining",
+      "route": "/model-management/retraining",
+      "locked": false,
+      "sections": [
+        {
+          "title": "Baseline scope and eligibility",
+          "spacing": "tight",
+          "component_specs": [
+            {
+              "name": "RetrainingToolbar",
+              "props": {
+                "actions": [
+                  "Select golden run",
+                  "Compare baseline",
+                  "Start retraining"
+                ],
+                "demoFeedback": "Require a selected valid window, show progress during the simulated run, and allow reset"
+              },
+              "styling": {},
+              "has_state": true,
+              "event_handlers": [
+                "onAssetChange",
+                "onSelectGoldenRun",
+                "onCompareBaseline",
+                "onStartTraining"
+              ],
+              "shadcn_components": [
+                "Select",
+                "SelectTrigger",
+                "SelectContent",
+                "SelectItem",
+                "Button",
+                "Badge"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Golden run selection",
+          "spacing": "tight",
+          "component_specs": [
+            {
+              "name": "GoldenRunSelector",
+              "props": {
+                "columns": [
+                  "Select",
+                  "Window",
+                  "Operating load",
+                  "Data completeness",
+                  "Excluded events",
+                  "Validation"
+                ]
+              },
+              "styling": {},
+              "has_state": true,
+              "data_source": "model_baselines",
+              "event_handlers": [
+                "onSelectWindow",
+                "onToggleWindow"
+              ],
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Table",
+                "TableHeader",
+                "TableHead",
+                "TableBody",
+                "TableRow",
+                "TableCell",
+                "Checkbox",
+                "Badge"
+              ]
+            },
+            {
+              "name": "BaselineTelemetryComparison",
+              "props": {
+                "signals": [
+                  "Vibration",
+                  "Temperature",
+                  "Pressure",
+                  "Current"
+                ]
+              },
+              "styling": {
+                "chart": "h-64"
+              },
+              "has_state": true,
+              "data_source": "telemetry_records",
+              "event_handlers": [
+                "onSignalChange"
+              ],
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Tabs",
+                "TabsList",
+                "TabsTrigger",
+                "TabsContent"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Training configuration and run status",
+          "spacing": "tight",
+          "component_specs": [
+            {
+              "name": "RetrainingConfiguration",
+              "props": {
+                "fields": [
+                  "Window length",
+                  "Contamination threshold",
+                  "Feature set",
+                  "Validation split"
+                ],
+                "demoFeedback": "Validate numeric fields, simulate staged progress, and show completion toast"
+              },
+              "styling": {},
+              "has_state": true,
+              "event_handlers": [
+                "onConfigure",
+                "onRun",
+                "onReset"
+              ],
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Label",
+                "Input",
+                "Select",
+                "SelectTrigger",
+                "SelectContent",
+                "SelectItem",
+                "Switch",
+                "Button"
+              ]
+            },
+            {
+              "name": "TrainingRunMonitor",
+              "props": {
+                "stages": [
+                  "Validation",
+                  "Feature extraction",
+                  "Fit",
+                  "Backtest",
+                  "Approval"
+                ]
+              },
+              "styling": {
+                "log": "font-mono text-xs"
+              },
+              "has_state": true,
+              "data_source": "model_baselines",
+              "event_handlers": [
+                "onCancelRun",
+                "onViewLogs"
+              ],
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Progress",
+                "Badge",
+                "ScrollArea",
+                "Button"
+              ]
+            }
+          ]
+        }
+      ],
+      "display_title": "Model Retraining",
+      "required_imports": [
+        "lucide-react",
+        "recharts"
+      ],
+      "has_dynamic_params": false
+    },
+    {
+      "name": "ModelEvaluation",
+      "route": "/model-management/evaluation",
+      "locked": false,
+      "sections": [
+        {
+          "title": "Evaluation selection",
+          "spacing": "tight",
+          "component_specs": [
+            {
+              "name": "EvaluationToolbar",
+              "props": {
+                "actions": [
+                  "Export evidence",
+                  "Approve promotion"
+                ],
+                "compare": [
+                  "Candidate baseline",
+                  "Production baseline"
+                ],
+                "demoFeedback": "Download a local evidence file and require confirmation before approval"
+              },
+              "styling": {},
+              "has_state": true,
+              "event_handlers": [
+                "onCompareChange",
+                "onExport",
+                "onApprove"
+              ],
+              "shadcn_components": [
+                "Select",
+                "SelectTrigger",
+                "SelectContent",
+                "SelectItem",
+                "Button",
+                "Badge"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Performance and drift evidence",
+          "spacing": "tight",
+          "component_specs": [
+            {
+              "name": "ModelMetricGrid",
+              "props": {
+                "metrics": [
+                  "Precision",
+                  "Recall",
+                  "False alarm rate",
+                  "Detection lead time",
+                  "Drift score",
+                  "Coverage"
+                ]
+              },
+              "styling": {
+                "value": "font-mono text-2xl",
+                "className": "grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2"
+              },
+              "has_state": false,
+              "data_source": "model_baselines",
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Badge"
+              ]
+            },
+            {
+              "name": "EvaluationCharts",
+              "props": {
+                "views": [
+                  "Confusion matrix",
+                  "ROC",
+                  "Residuals",
+                  "Health backtest"
+                ]
+              },
+              "styling": {
+                "chart": "h-72"
+              },
+              "has_state": true,
+              "data_source": "diagnostic_incidents",
+              "event_handlers": [
+                "onViewChange"
+              ],
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Tabs",
+                "TabsList",
+                "TabsTrigger",
+                "TabsContent"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Promotion decision",
+          "spacing": "tight",
+          "component_specs": [
+            {
+              "name": "EvaluationGateChecklist",
+              "props": {
+                "gates": [
+                  "Golden run provenance",
+                  "No critical regression",
+                  "Specialist sign-off",
+                  "Rollback snapshot"
+                ],
+                "demoFeedback": "Disable promotion until every gate passes, then confirm and update the version history"
+              },
+              "styling": {},
+              "has_state": true,
+              "event_handlers": [
+                "onGateChange",
+                "onPromote"
+              ],
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Checkbox",
+                "Alert",
+                "AlertTitle",
+                "AlertDescription",
+                "Button"
+              ]
+            },
+            {
+              "name": "ModelVersionHistory",
+              "props": {
+                "columns": [
+                  "Version",
+                  "Created",
+                  "Dataset",
+                  "State",
+                  "Approver"
+                ]
+              },
+              "styling": {},
+              "has_state": false,
+              "data_source": "model_baselines",
+              "shadcn_components": [
+                "Table",
+                "TableHeader",
+                "TableHead",
+                "TableBody",
+                "TableRow",
+                "TableCell",
+                "Badge"
+              ]
+            }
+          ]
+        }
+      ],
+      "display_title": "Model Evaluation",
+      "required_imports": [
+        "lucide-react",
+        "recharts"
+      ],
+      "has_dynamic_params": false
+    },
+    {
+      "name": "Landing",
+      "route": "/",
+      "locked": false,
+      "sections": [
+        {
+          "title": "Mission-critical machinery intelligence",
+          "spacing": "tight",
+          "section_type": "hero",
+          "component_specs": [
+            {
+              "name": "OperationsHero",
+              "props": {
+                "subhead": "Triage rotating assets, explain failure fingerprints, and dispatch maintenance before production is at risk.",
+                "headline": "Deterministic machinery health for air-gapped refineries",
+                "demoFeedback": "Both CTAs navigate immediately using client-side routing",
+                "primaryAction": {
+                  "label": "Open Fleet Overview",
+                  "route": "/fleet-overview"
+                },
+                "secondaryAction": {
+                  "label": "Sign In",
+                  "route": "/login"
+                }
+              },
+              "styling": {
+                "preview": "border border-border bg-card font-mono",
+                "headline": "text-4xl lg:text-6xl font-semibold tracking-tight",
+                "className": "grid lg:grid-cols-[1fr_420px] gap-4 min-h-[420px] items-center"
+              },
+              "has_state": true,
+              "event_handlers": [
+                "onPrimaryAction",
+                "onSecondaryAction"
+              ],
+              "image_keywords": [
+                "refinery"
+              ],
+              "shadcn_components": [
+                "Card",
+                "CardContent",
+                "Button",
+                "Badge"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Operational capabilities",
+          "spacing": "normal",
+          "section_type": "features",
+          "component_specs": [
+            {
+              "name": "CapabilityGrid",
+              "props": {
+                "items": [
+                  "Fleet triage",
+                  "Explainable diagnostics",
+                  "Spectral workbench",
+                  "CMMS dispatch",
+                  "Air-gapped governance",
+                  "Historian resiliency"
+                ]
+              },
+              "styling": {
+                "className": "grid md:grid-cols-2 xl:grid-cols-3 gap-3"
+              },
+              "has_state": false,
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Badge"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Enter the local operations workspace",
+          "spacing": "normal",
+          "section_type": "final_cta",
+          "component_specs": [
+            {
+              "name": "WorkspaceCta",
+              "props": {
+                "title": "Local telemetry is synchronized",
+                "action": {
+                  "label": "Open RefineGuard",
+                  "route": "/fleet-overview"
+                },
+                "status": "PI 380ms \u00b7 PHD Sync OK \u00b7 Air-gap sealed"
+              },
+              "styling": {
+                "className": "border-primary/40 bg-card"
+              },
+              "has_state": true,
+              "event_handlers": [
+                "onOpenWorkspace"
+              ],
+              "shadcn_components": [
+                "Card",
+                "CardContent",
+                "Button"
+              ]
+            }
+          ]
+        }
+      ],
+      "display_title": "RefineGuard APM",
+      "required_imports": [
+        "lucide-react",
+        "react-router-dom"
+      ],
+      "has_dynamic_params": false
+    },
+    {
+      "name": "WorkOrderConfirmation",
+      "route": "/work-orders/confirmation",
+      "locked": false,
+      "sections": [
+        {
+          "title": "Dispatch review",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "WorkOrderReview",
+              "props": {
+                "systems": [
+                  "SAP PM",
+                  "IBM Maximo"
+                ],
+                "sections": [
+                  "Asset identity",
+                  "Diagnostic finding",
+                  "Recommended tasks",
+                  "Spares",
+                  "Attachments",
+                  "Scheduling"
+                ]
+              },
+              "images": null,
+              "styling": {
+                "fields": "grid md:grid-cols-2 gap-3",
+                "className": "grid xl:grid-cols-[1fr_360px] gap-3"
+              },
+              "has_state": true,
+              "image_urls": null,
+              "data_source": "cmms_work_orders",
+              "event_handlers": [
+                "onChange",
+                "onValidate"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardDescription",
+                "CardContent",
+                "Label",
+                "Input",
+                "Textarea",
+                "Select",
+                "SelectTrigger",
+                "SelectContent",
+                "SelectItem",
+                "Checkbox",
+                "Separator"
+              ]
+            },
+            {
+              "name": "CmmsPayloadPreview",
+              "props": {},
+              "images": null,
+              "styling": {
+                "payload": "font-mono text-xs h-[460px]"
+              },
+              "has_state": false,
+              "image_urls": null,
+              "data_source": "cmms_work_orders",
+              "event_handlers": null,
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "ScrollArea",
+                "Badge"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Confirm local dispatch",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "DispatchConfirmationBar",
+              "props": {
+                "notice": "Dispatch writes to the local CMMS connector only.",
+                "actions": [
+                  "Back to advisory",
+                  "Confirm and dispatch"
+                ],
+                "shortcut": "Ctrl+Enter"
+              },
+              "images": null,
+              "styling": {
+                "className": "sticky bottom-0 bg-background border-t border-border py-3"
+              },
+              "has_state": true,
+              "image_urls": null,
+              "data_source": null,
+              "event_handlers": [
+                "onCancel",
+                "onConfirm",
+                "onKeyDown"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Alert",
+                "AlertTitle",
+                "AlertDescription",
+                "Button"
+              ]
+            }
+          ]
+        }
+      ],
+      "display_title": "Work Order Confirmation",
+      "required_imports": [
+        "lucide-react",
+        "react-router-dom"
+      ],
+      "has_dynamic_params": false
+    },
+    {
+      "name": "HistorianConnections",
+      "route": "/admin/historian-connections",
+      "locked": false,
+      "sections": [
+        {
+          "title": "Connector health summary",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "ConnectorKpiStrip",
+              "props": {
+                "metrics": [
+                  "Connected",
+                  "Degraded",
+                  "Polling latency",
+                  "Buffer depth",
+                  "Backfill queue"
+                ]
+              },
+              "images": null,
+              "styling": {
+                "value": "font-mono text-xl",
+                "className": "grid grid-cols-2 md:grid-cols-5 gap-2"
+              },
+              "has_state": false,
+              "image_urls": null,
+              "data_source": "historian_connectors",
+              "event_handlers": null,
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardContent",
+                "Badge"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "On-prem historian connectors",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "HistorianConnectorTable",
+              "props": {
+                "columns": [
+                  "State",
+                  "Connector",
+                  "Protocol",
+                  "Endpoint",
+                  "Latency",
+                  "Buffer",
+                  "Last poll",
+                  "Actions"
+                ]
+              },
+              "images": null,
+              "styling": {
+                "numeric": "font-mono tabular-nums text-xs"
+              },
+              "has_state": true,
+              "image_urls": null,
+              "data_source": "historian_connectors",
+              "event_handlers": [
+                "onTest",
+                "onPause",
+                "onOpenConnector"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Table",
+                "TableHeader",
+                "TableHead",
+                "TableBody",
+                "TableRow",
+                "TableCell",
+                "Badge",
+                "Button",
+                "DropdownMenu",
+                "DropdownMenuTrigger",
+                "DropdownMenuContent",
+                "DropdownMenuItem"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Connector detail and backfill",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "ConnectorInspector",
+              "props": {
+                "tabs": [
+                  "Configuration",
+                  "Polling",
+                  "Failover",
+                  "Certificates"
+                ]
+              },
+              "images": null,
+              "styling": {},
+              "has_state": true,
+              "image_urls": null,
+              "data_source": "historian_connectors",
+              "event_handlers": [
+                "onSave",
+                "onTest"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Tabs",
+                "TabsList",
+                "TabsTrigger",
+                "TabsContent",
+                "Label",
+                "Input",
+                "Switch",
+                "Button"
+              ]
+            },
+            {
+              "name": "BufferBackfillMonitor",
+              "props": {
+                "showLocalBuffer": true,
+                "showBatchBackfill": true
+              },
+              "images": null,
+              "styling": {
+                "log": "font-mono text-xs"
+              },
+              "has_state": false,
+              "image_urls": null,
+              "data_source": null,
+              "event_handlers": null,
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Progress",
+                "ScrollArea",
+                "Badge"
+              ]
+            }
+          ]
+        }
+      ],
+      "display_title": "Historian Connections",
+      "required_imports": [
+        "lucide-react"
+      ],
+      "has_dynamic_params": false
+    },
+    {
+      "name": "TagMapping",
+      "route": "/admin/tag-mapping",
+      "locked": false,
+      "sections": [
+        {
+          "title": "Mapping controls",
+          "spacing": "tight",
+          "component_specs": [
+            {
+              "name": "TagMappingToolbar",
+              "props": {
+                "actions": [
+                  "Auto-map",
+                  "Import CSV",
+                  "Validate selected"
+                ],
+                "filters": [
+                  "Connector",
+                  "Unit",
+                  "Mapping state",
+                  "Signal type"
+                ],
+                "demoFeedback": "Open a local CSV picker, simulate auto-mapping, and report validation results with toasts"
+              },
+              "styling": {},
+              "has_state": true,
+              "event_handlers": [
+                "onSearch",
+                "onFilter",
+                "onAutoMap",
+                "onImport",
+                "onValidateSelected"
+              ],
+              "shadcn_components": [
+                "Input",
+                "Select",
+                "SelectTrigger",
+                "SelectContent",
+                "SelectItem",
+                "Button",
+                "Badge"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Historian tag mappings",
+          "spacing": "tight",
+          "component_specs": [
+            {
+              "name": "TagMappingTable",
+              "props": {
+                "columns": [
+                  "Select",
+                  "Historian tag",
+                  "Asset",
+                  "Component",
+                  "Measurement",
+                  "Units",
+                  "Sample rate",
+                  "Quality",
+                  "State"
+                ]
+              },
+              "styling": {
+                "row": "h-10 text-xs",
+                "tag": "font-mono"
+              },
+              "has_state": true,
+              "data_source": "historian_tags",
+              "event_handlers": [
+                "onSelect",
+                "onEditMapping",
+                "onFieldChange"
+              ],
+              "shadcn_components": [
+                "Table",
+                "TableHeader",
+                "TableHead",
+                "TableBody",
+                "TableRow",
+                "TableCell",
+                "Checkbox",
+                "Badge",
+                "Select",
+                "SelectTrigger",
+                "SelectContent",
+                "SelectItem",
+                "Input"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Mapping validation and preview",
+          "spacing": "tight",
+          "component_specs": [
+            {
+              "name": "TagSignalPreview",
+              "props": {},
+              "styling": {
+                "chart": "h-52"
+              },
+              "has_state": false,
+              "data_source": "telemetry_records",
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Badge"
+              ]
+            },
+            {
+              "name": "MappingValidationSummary",
+              "props": {
+                "checks": [
+                  "Units compatible",
+                  "Signal plausible",
+                  "No duplicate binding",
+                  "Recent data"
+                ],
+                "demoFeedback": "Commit only valid selected mappings and reflect committed state in the table"
+              },
+              "styling": {},
+              "has_state": true,
+              "event_handlers": [
+                "onCommitMappings"
+              ],
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Progress",
+                "Alert",
+                "AlertTitle",
+                "AlertDescription",
+                "Button"
+              ]
+            }
+          ]
+        }
+      ],
+      "display_title": "Tag Mapping",
+      "required_imports": [
+        "lucide-react",
+        "recharts"
+      ],
+      "has_dynamic_params": false
+    },
+    {
+      "name": "AssetHierarchyBuilder",
+      "route": "/admin/asset-hierarchy-builder",
+      "locked": false,
+      "sections": [
+        {
+          "title": "Builder controls",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "HierarchyBuilderToolbar",
+              "props": {
+                "actions": [
+                  "Add unit",
+                  "Add train",
+                  "Add asset",
+                  "Validate",
+                  "Publish"
+                ],
+                "standard": "ISA-95 / ISO 14224"
+              },
+              "images": null,
+              "styling": {},
+              "has_state": true,
+              "image_urls": null,
+              "data_source": null,
+              "event_handlers": [
+                "onAddNode",
+                "onValidate",
+                "onPublish"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Button",
+                "Select",
+                "SelectTrigger",
+                "SelectContent",
+                "SelectItem",
+                "Badge"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Digital twin hierarchy workspace",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "HierarchyEditor",
+              "props": {},
+              "images": null,
+              "styling": {
+                "tree": "h-[620px]",
+                "className": "grid xl:grid-cols-[360px_1fr] gap-3"
+              },
+              "has_state": true,
+              "image_urls": null,
+              "data_source": "assets",
+              "event_handlers": [
+                "onSelectNode",
+                "onMoveNode",
+                "onDeleteNode"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "ScrollArea",
+                "Accordion",
+                "AccordionItem",
+                "AccordionTrigger",
+                "AccordionContent",
+                "ContextMenu",
+                "ContextMenuTrigger",
+                "ContextMenuContent",
+                "ContextMenuItem"
+              ]
+            },
+            {
+              "name": "AssetMetadataEditor",
+              "props": {
+                "tabs": [
+                  "Identity",
+                  "Mechanical",
+                  "Bearings",
+                  "Seal Plan",
+                  "Envelope"
+                ]
+              },
+              "images": null,
+              "styling": {},
+              "has_state": true,
+              "image_urls": null,
+              "data_source": "asset_components",
+              "event_handlers": [
+                "onChange",
+                "onSave"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Tabs",
+                "TabsList",
+                "TabsTrigger",
+                "TabsContent",
+                "Label",
+                "Input",
+                "Select",
+                "SelectTrigger",
+                "SelectContent",
+                "SelectItem",
+                "Button"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Validation results",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "HierarchyValidationPanel",
+              "props": {
+                "checks": [
+                  "Unique tags",
+                  "Parent integrity",
+                  "Required metadata",
+                  "Historian bindings"
+                ]
+              },
+              "images": null,
+              "styling": {},
+              "has_state": false,
+              "image_urls": null,
+              "data_source": null,
+              "event_handlers": null,
+              "image_keywords": null,
+              "shadcn_components": [
+                "Alert",
+                "AlertTitle",
+                "AlertDescription",
+                "Table",
+                "TableHeader",
+                "TableHead",
+                "TableBody",
+                "TableRow",
+                "TableCell",
+                "Badge"
+              ]
+            }
+          ]
+        }
+      ],
+      "display_title": "Asset Hierarchy Builder",
+      "required_imports": [
+        "lucide-react"
+      ],
+      "has_dynamic_params": false
+    },
+    {
+      "name": "SecurityAudit",
+      "route": "/admin/security-audit",
+      "locked": false,
+      "sections": [
+        {
+          "title": "Governance scope",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "AuditToolbar",
+              "props": {
+                "actions": [
+                  "Export IEC 62443 evidence"
+                ],
+                "filters": [
+                  "Actor",
+                  "Action",
+                  "Severity",
+                  "Date range"
+                ]
+              },
+              "images": null,
+              "styling": {},
+              "has_state": true,
+              "image_urls": null,
+              "data_source": null,
+              "event_handlers": [
+                "onFilter",
+                "onSearch",
+                "onExport"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Select",
+                "SelectTrigger",
+                "SelectContent",
+                "SelectItem",
+                "Input",
+                "Button",
+                "Badge"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Local security audit trail",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "SecurityAuditTable",
+              "props": {
+                "columns": [
+                  "Timestamp",
+                  "Severity",
+                  "Actor",
+                  "Role",
+                  "Action",
+                  "Object",
+                  "Source host",
+                  "Result"
+                ]
+              },
+              "images": null,
+              "styling": {
+                "row": "h-10 text-xs",
+                "technical": "font-mono"
+              },
+              "has_state": true,
+              "image_urls": null,
+              "data_source": "audit_logs",
+              "event_handlers": [
+                "onOpenEvent"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Table",
+                "TableHeader",
+                "TableHead",
+                "TableBody",
+                "TableRow",
+                "TableCell",
+                "Badge",
+                "Button"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Access and compliance posture",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "RbacSummary",
+              "props": {},
+              "images": null,
+              "styling": {},
+              "has_state": false,
+              "image_urls": null,
+              "data_source": "users_roles",
+              "event_handlers": null,
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Table",
+                "TableBody",
+                "TableRow",
+                "TableCell",
+                "Badge"
+              ]
+            },
+            {
+              "name": "ComplianceChecks",
+              "props": {
+                "checks": [
+                  "Air-gap outbound deny",
+                  "Local LDAP binding",
+                  "Privileged role review",
+                  "Audit retention",
+                  "Certificate validity"
+                ]
+              },
+              "images": null,
+              "styling": {},
+              "has_state": false,
+              "image_urls": null,
+              "data_source": null,
+              "event_handlers": null,
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Progress",
+                "Alert",
+                "AlertTitle",
+                "AlertDescription"
+              ]
+            }
+          ]
+        }
+      ],
+      "display_title": "Security Audit",
+      "required_imports": [
+        "lucide-react"
+      ],
+      "has_dynamic_params": false
+    },
+    {
+      "name": "SystemHealth",
+      "route": "/admin/system-health",
+      "locked": false,
+      "sections": [
+        {
+          "title": "Platform health summary",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "SystemHealthKpis",
+              "props": {
+                "metrics": [
+                  "Local DB",
+                  "API latency",
+                  "Ingestion rate",
+                  "Disk used",
+                  "Model workers",
+                  "Clock drift"
+                ]
+              },
+              "images": null,
+              "styling": {
+                "value": "font-mono text-xl tabular-nums",
+                "className": "grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2"
+              },
+              "has_state": false,
+              "image_urls": null,
+              "data_source": null,
+              "event_handlers": null,
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardContent",
+                "Badge",
+                "Progress"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Infrastructure and service status",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "ServiceHealthTable",
+              "props": {
+                "columns": [
+                  "State",
+                  "Service",
+                  "Node",
+                  "Version",
+                  "CPU",
+                  "Memory",
+                  "Last heartbeat"
+                ],
+                "services": [
+                  "Ingestion gateway",
+                  "Time-series database",
+                  "Diagnostic engine",
+                  "Model worker",
+                  "CMMS bridge",
+                  "LDAP"
+                ]
+              },
+              "images": null,
+              "styling": {
+                "numeric": "font-mono text-xs"
+              },
+              "has_state": true,
+              "image_urls": null,
+              "data_source": null,
+              "event_handlers": [
+                "onOpenService"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Table",
+                "TableHeader",
+                "TableHead",
+                "TableBody",
+                "TableRow",
+                "TableCell",
+                "Badge",
+                "Progress",
+                "Button"
+              ]
+            },
+            {
+              "name": "ResourceTrendPanel",
+              "props": {
+                "views": [
+                  "CPU",
+                  "Memory",
+                  "Disk I/O",
+                  "Network",
+                  "Ingestion"
+                ]
+              },
+              "images": null,
+              "styling": {
+                "chart": "h-64"
+              },
+              "has_state": true,
+              "image_urls": null,
+              "data_source": null,
+              "event_handlers": [
+                "onViewChange"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Tabs",
+                "TabsList",
+                "TabsTrigger",
+                "TabsContent"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Buffer, storage, and local events",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "StorageAndBufferPanel",
+              "props": {
+                "volumes": [
+                  "Historian cache",
+                  "Telemetry store",
+                  "Model artifacts",
+                  "Audit archive"
+                ]
+              },
+              "images": null,
+              "styling": {},
+              "has_state": false,
+              "image_urls": null,
+              "data_source": null,
+              "event_handlers": null,
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Progress",
+                "Badge"
+              ]
+            },
+            {
+              "name": "PlatformEventLog",
+              "props": {},
+              "images": null,
+              "styling": {
+                "log": "font-mono text-xs h-60"
+              },
+              "has_state": false,
+              "image_urls": null,
+              "data_source": "audit_logs",
+              "event_handlers": null,
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "ScrollArea",
+                "Badge"
+              ]
+            }
+          ]
+        }
+      ],
+      "display_title": "System Health",
+      "required_imports": [
+        "lucide-react",
+        "recharts"
+      ],
+      "has_dynamic_params": false
+    },
+    {
+      "name": "OperationsShiftLog",
+      "route": "/operations/shift-log",
+      "locked": false,
+      "sections": [
+        {
+          "title": "Shift handover controls",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "ShiftLogToolbar",
+              "props": {
+                "shift": "Day Shift A",
+                "actions": [
+                  "Export handover",
+                  "Start new entry"
+                ]
+              },
+              "images": null,
+              "styling": {},
+              "has_state": true,
+              "image_urls": null,
+              "data_source": null,
+              "event_handlers": [
+                "onShiftChange",
+                "onExport",
+                "onNewEntry"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Select",
+                "SelectTrigger",
+                "SelectContent",
+                "SelectItem",
+                "Button",
+                "Badge"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Handover timeline",
+          "images": null,
+          "spacing": "tight",
+          "image_urls": null,
+          "section_type": null,
+          "image_keywords": null,
+          "component_specs": [
+            {
+              "name": "ShiftEventTimeline",
+              "props": {
+                "eventTypes": [
+                  "Alarm",
+                  "Acknowledgment",
+                  "Derate",
+                  "Maintenance",
+                  "Historian"
+                ]
+              },
+              "images": null,
+              "styling": {
+                "timeline": "h-[560px]",
+                "className": "grid xl:grid-cols-[1fr_420px] gap-3"
+              },
+              "has_state": true,
+              "image_urls": null,
+              "data_source": "audit_logs",
+              "event_handlers": [
+                "onOpenEvent"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "ScrollArea",
+                "Badge",
+                "Separator",
+                "Button"
+              ]
+            },
+            {
+              "name": "ShiftHandoverEditor",
+              "props": {
+                "fields": [
+                  "Unit status",
+                  "Open risks",
+                  "Outstanding actions",
+                  "Incoming shift acknowledgment"
+                ]
+              },
+              "images": null,
+              "styling": {},
+              "has_state": true,
+              "image_urls": null,
+              "data_source": null,
+              "event_handlers": [
+                "onSave",
+                "onHandover"
+              ],
+              "image_keywords": null,
+              "shadcn_components": [
+                "Card",
+                "CardHeader",
+                "CardTitle",
+                "CardContent",
+                "Label",
+                "Textarea",
+                "Select",
+                "SelectTrigger",
+                "SelectContent",
+                "SelectItem",
+                "Checkbox",
+                "Button"
+              ]
+            }
+          ]
+        }
+      ],
+      "display_title": "Operations Shift Log",
+      "required_imports": [
+        "lucide-react"
+      ],
+      "has_dynamic_params": false
+    }
+  ],
+  "layout": {
+    "name": "Layout",
+    "props": {
+      "userProfile": {
+        "signOut": {
+          "destination": "/login",
+          "confirmation": "Confirm before signing out"
+        },
+        "menuItems": [
+          {
+            "icon": "User",
+            "label": "View profile",
+            "action": "openProfileDialog"
+          },
+          {
+            "icon": "Settings",
+            "label": "Account settings",
+            "action": "openAccountDialog"
+          },
+          {
+            "icon": "LogOut",
+            "label": "Sign out",
+            "action": "signOutAndNavigateToLogin"
+          }
+        ],
+        "interaction": "Clicking the avatar or operator identity opens an accessible dropdown menu",
+        "accountDialog": {
+          "title": "Account settings",
+          "actions": [
+            "Cancel",
+            "Save preferences"
+          ],
+          "controls": [
+            "Email notifications",
+            "Critical alert sounds",
+            "Compact navigation"
+          ],
+          "saveFeedback": "Show a success toast and persist preferences in client-side demo state"
+        },
+        "profileDialog": {
+          "title": "Operator profile",
+          "fields": [
+            "displayName",
+            "email",
+            "role"
+          ],
+          "actions": [
+            "Cancel",
+            "Save changes"
+          ],
+          "saveFeedback": "Show a success toast and update the shell identity immediately",
+          "editableFields": [
+            "displayName",
+            "email"
+          ]
+        }
+      }
+    },
+    "images": null,
+    "styling": {
+      "main": "flex-1 w-full min-w-0 px-3 lg:px-4 py-3 flex flex-col gap-3 overflow-auto",
+      "focus": "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+      "shell": "h-screen overflow-hidden bg-background text-foreground font-sans",
+      "footer": "h-7 border-t border-border bg-card px-3 flex items-center justify-between text-[11px] font-mono",
+      "header": "h-[52px] border-b border-border bg-card px-3 flex items-center gap-3",
+      "sidebar": "w-[280px] data-[state=collapsed]:w-14 border-r border-border bg-card",
+      "telemetry": "font-mono tabular-nums",
+      "breadcrumb": "h-8 flex items-center text-xs",
+      "contextTabs": "h-9 border-b border-border bg-background sticky top-0 z-20"
+    },
+    "has_state": true,
+    "image_urls": null,
+    "data_source": null,
+    "event_handlers": [
+      "onProfileMenuOpenChange",
+      "onViewProfile",
+      "onOpenAccountSettings",
+      "onProfileFieldChange",
+      "onSaveProfile",
+      "onPreferenceChange",
+      "onSavePreferences",
+      "onSignOut"
+    ],
+    "image_keywords": null,
+    "shadcn_components": [
+      "Sidebar",
+      "SidebarProvider",
+      "SidebarTrigger",
+      "Sheet",
+      "Button",
+      "Badge",
+      "Breadcrumb",
+      "Command",
+      "CommandDialog",
+      "CommandInput",
+      "CommandList",
+      "CommandItem",
+      "DropdownMenu",
+      "DropdownMenuTrigger",
+      "DropdownMenuContent",
+      "DropdownMenuItem",
+      "Avatar",
+      "Tooltip",
+      "Separator",
+      "ScrollArea",
+      "Accordion",
+      "AccordionItem",
+      "AccordionTrigger",
+      "AccordionContent"
+    ]
+  },
+  "design_notes": null,
+  "project_name": "RefineGuard APM",
+  "design_tokens": {
+    "dark": {
+      "card": "#1E293B",
+      "ring": "#67E8F9",
+      "input": "#334155",
+      "muted": "#1E293B",
+      "accent": "#F59E0B",
+      "border": "#475569",
+      "radius": "0.25rem",
+      "primary": "#22D3EE",
+      "secondary": "#334155",
+      "background": "#0F172A",
+      "foreground": "#F8FAFC",
+      "destructive": "#EF4444",
+      "card_foreground": "#F8FAFC",
+      "muted_foreground": "#CBD5E1",
+      "accent_foreground": "#1C1917",
+      "primary_foreground": "#083344",
+      "secondary_foreground": "#F8FAFC",
+      "destructive_foreground": "#FFFFFF"
+    },
+    "light": {
+      "card": "#FFFFFF",
+      "ring": "#0369A1",
+      "input": "#CBD5E1",
+      "muted": "#E2E8F0",
+      "accent": "#FDE68A",
+      "border": "#94A3B8",
+      "radius": "0.25rem",
+      "primary": "#155E75",
+      "secondary": "#E2E8F0",
+      "background": "#F8FAFC",
+      "foreground": "#0F172A",
+      "destructive": "#B91C1C",
+      "card_foreground": "#0F172A",
+      "muted_foreground": "#334155",
+      "accent_foreground": "#422006",
+      "primary_foreground": "#FFFFFF",
+      "secondary_foreground": "#0F172A",
+      "destructive_foreground": "#FFFFFF"
+    },
+    "gradients": null,
+    "typography": {
+      "body": "IBM Plex Sans",
+      "heading": "IBM Plex Sans"
+    }
+  },
+  "layout_archetype": "dashboard",
+  "shared_components": [
+    {
+      "name": "SeverityBadge",
+      "props": {
+        "states": {
+          "trip": {
+            "icon": "Ban",
+            "color": "#EF4444",
+            "label": "Trip",
+            "shape": "diamond"
+          },
+          "alarm": {
+            "icon": "OctagonAlert",
+            "color": "#F97316",
+            "label": "Alarm",
+            "shape": "octagon"
+          },
+          "alert": {
+            "icon": "TriangleAlert",
+            "color": "#F59E0B",
+            "label": "Alert",
+            "shape": "triangle"
+          },
+          "normal": {
+            "icon": "CircleCheck",
+            "color": "#10B981",
+            "label": "Normal",
+            "shape": "circle"
+          }
+        },
+        "redundantCues": true
+      },
+      "images": null,
+      "styling": {
+        "icon": "size-3 shrink-0",
+        "className": "inline-flex items-center gap-1 font-semibold uppercase tracking-wide text-[10px]"
+      },
+      "has_state": false,
+      "image_urls": null,
+      "data_source": null,
+      "event_handlers": null,
+      "image_keywords": null,
+      "shadcn_components": [
+        "Badge",
+        "Tooltip",
+        "TooltipTrigger",
+        "TooltipContent"
+      ]
+    },
+    {
+      "name": "TelemetryValue",
+      "props": {
+        "showUnit": true,
+        "showTimestamp": true,
+        "staleThresholdSeconds": 10
+      },
+      "images": null,
+      "styling": {
+        "unit": "ml-1 text-muted-foreground",
+        "stale": "line-through decoration-destructive decoration-2",
+        "value": "font-mono tabular-nums font-semibold"
+      },
+      "has_state": false,
+      "image_urls": null,
+      "data_source": null,
+      "event_handlers": null,
+      "image_keywords": null,
+      "shadcn_components": [
+        "Tooltip",
+        "TooltipTrigger",
+        "TooltipContent"
+      ]
+    },
+    {
+      "name": "OperationalChartFrame",
+      "props": {
+        "emptyState": true,
+        "showLegend": true,
+        "loadingState": true,
+        "exportActions": [
+          "CSV",
+          "PNG"
+        ],
+        "showTimestamp": true
+      },
+      "images": null,
+      "styling": {
+        "chart": "min-h-0 font-mono text-xs",
+        "header": "px-3 py-2 border-b border-border",
+        "content": "p-2",
+        "className": "border-border bg-card rounded-sm"
+      },
+      "has_state": true,
+      "image_urls": null,
+      "data_source": null,
+      "event_handlers": [
+        "onRangeChange",
+        "onExport",
+        "onLegendToggle"
+      ],
+      "image_keywords": null,
+      "shadcn_components": [
+        "Card",
+        "CardHeader",
+        "CardTitle",
+        "CardDescription",
+        "CardContent",
+        "Button",
+        "DropdownMenu",
+        "DropdownMenuTrigger",
+        "DropdownMenuContent",
+        "DropdownMenuItem",
+        "Tooltip"
+      ]
+    },
+    {
+      "name": "ExplainabilityEvidence",
+      "props": {
+        "showAttributionPercent": true,
+        "showBaselineComparison": true,
+        "showConfidenceInterval": true,
+        "showPhysicalFingerprint": true
+      },
+      "images": null,
+      "styling": {
+        "driver": "grid grid-cols-[1fr_72px] gap-2 items-center text-xs",
+        "percent": "font-mono tabular-nums text-right",
+        "className": "border-border bg-card"
+      },
+      "has_state": false,
+      "image_urls": null,
+      "data_source": null,
+      "event_handlers": null,
+      "image_keywords": null,
+      "shadcn_components": [
+        "Card",
+        "CardHeader",
+        "CardTitle",
+        "CardContent",
+        "Progress",
+        "Badge",
+        "Separator",
+        "Alert",
+        "AlertTitle",
+        "AlertDescription"
+      ]
+    },
+    {
+      "name": "AssetContextNavigation",
+      "props": {
+        "tabs": [
+          {
+            "label": "Health Summary",
+            "suffix": "health-summary"
+          },
+          {
+            "label": "Diagnostics",
+            "suffix": "diagnostics"
+          },
+          {
+            "label": "Spectral Analytics",
+            "suffix": "spectral-analytics"
+          }
+        ],
+        "preserveAssetId": true
+      },
+      "images": null,
+      "styling": {
+        "tabs": "h-9 rounded-none bg-transparent",
+        "trigger": "h-9 rounded-none border-b-2 border-transparent data-[state=active]:border-primary",
+        "className": "h-9 flex items-center justify-between border-b border-border bg-background"
+      },
+      "has_state": true,
+      "image_urls": null,
+      "data_source": "assets",
+      "event_handlers": [
+        "onTabChange"
+      ],
+      "image_keywords": null,
+      "shadcn_components": [
+        "Tabs",
+        "TabsList",
+        "TabsTrigger",
+        "Badge",
+        "Button"
+      ]
+    },
+    {
+      "name": "GlobalAlertDrawer",
+      "props": {
+        "side": "right",
+        "tabs": [
+          "Unacknowledged",
+          "All active",
+          "Shift history"
+        ],
+        "width": "480px",
+        "shortcuts": {
+          "open": "Space",
+          "close": "Esc",
+          "acknowledge": "A"
+        }
+      },
+      "images": null,
+      "styling": {
+        "item": "p-3 border-b border-border",
+        "content": "w-full sm:max-w-[480px] p-0",
+        "technical": "font-mono text-xs"
+      },
+      "has_state": true,
+      "image_urls": null,
+      "data_source": "diagnostic_incidents",
+      "event_handlers": [
+        "onAcknowledge",
+        "onOpenAsset",
+        "onCreateAdvisory",
+        "onKeyDown"
+      ],
+      "image_keywords": null,
+      "shadcn_components": [
+        "Sheet",
+        "SheetContent",
+        "SheetHeader",
+        "SheetTitle",
+        "SheetDescription",
+        "Tabs",
+        "TabsList",
+        "TabsTrigger",
+        "TabsContent",
+        "ScrollArea",
+        "Badge",
+        "Button",
+        "Separator"
+      ]
+    }
+  ]
+}

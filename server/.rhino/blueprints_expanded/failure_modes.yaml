@@ -1,0 +1,97 @@
+model: FailureMode
+slug: failure_modes
+table: failure_modes
+options:
+  belongs_to_organization: true
+  soft_deletes: true
+  pagination: true
+  per_page: 50
+columns:
+  iso_code:
+    type: string
+    nullable: false
+    filterable: true
+    sortable: true
+    searchable: true
+  failure_name:
+    type: string
+    nullable: false
+    sortable: true
+    searchable: true
+  equipment_category:
+    type: string
+    nullable: true
+    filterable: true
+  severity_weight:
+    type: float
+    nullable: true
+    sortable: true
+  detection_signature:
+    type: string
+    nullable: true
+    searchable: true
+  description:
+    type: text
+    nullable: true
+    searchable: true
+relationships:
+- type: belongsTo
+  model: Organization
+- type: hasMany
+  model: DiagnosticIncident
+- type: hasMany
+  model: FailureModeAssessment
+permissions:
+  admin:
+    actions:
+    - index
+    - show
+    - store
+    - update
+    - destroy
+    - trashed
+    - restore
+    - forceDelete
+    show_fields: '*'
+    create_fields: '*'
+    update_fields: '*'
+  machinery_specialist:
+    actions:
+    - index
+    - show
+    - store
+    - update
+    show_fields: '*'
+    create_fields:
+    - iso_code
+    - failure_name
+    - equipment_category
+    - severity_weight
+    - detection_signature
+    - description
+    update_fields:
+    - iso_code
+    - failure_name
+    - equipment_category
+    - severity_weight
+    - detection_signature
+    - description
+  reliability_engineer:
+    actions:
+    - index
+    - show
+    show_fields: '*'
+    create_fields: []
+    update_fields: []
+  maintenance_planner:
+    actions:
+    - index
+    - show
+    show_fields:
+    - id
+    - iso_code
+    - failure_name
+    - equipment_category
+    - severity_weight
+    create_fields: []
+    update_fields: []

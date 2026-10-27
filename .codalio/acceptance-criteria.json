@@ -1,0 +1,2341 @@
+{
+  "criteria": [
+    {
+      "id": "AC-1",
+      "name": "The app provides an upload UI for historian tag mapping data, accepting CSV and JSON formats, and visibly confirms a successful import.",
+      "user_story": "US-01: Historian Connection & Loss-Free Local Telemetry Buffering",
+      "prd_story_id": "US-01",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_historian_tag_mapping_imports_CSV_and_JSON_and_rejects_bad_rows",
+      "subtasks": [
+        "Add `import` action to server/app/controllers/api/historian_tags_controller.rb accepting multipart CSV and JSON, delegated to server/app/services/historian_tag_importer.rb",
+        "Wire the existing `Import CSV` button in client/src/components/admin/TagMappingPage.tsx to the import hook and render the created-row count in the toolbar status line",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-2",
+      "name": "The historian tag mapping file must validate required columns: historian_type (OSIsoft_PI or Honeywell_PHD), source_tag_name, engineering_unit, scan_rate_ms, and deadband_val.",
+      "user_story": "US-01: Historian Connection & Loss-Free Local Telemetry Buffering",
+      "prd_story_id": "US-01",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_historian_tag_mapping_imports_CSV_and_JSON_and_rejects_bad_rows",
+      "subtasks": [
+        "Validate the five required columns in server/app/services/historian_tag_importer.rb and return per-row errors",
+        "Add Minitest coverage in server/test/integration/historian_tags_test.rb asserting a 422 with the offending column names for a file missing `deadband_val`",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-3",
+      "name": "When the primary historian connection drops or times out after 3000ms, the local agent automatically initiates disk-backed ring buffering and reconnects with zero lost data points upon link restoration.",
+      "user_story": "US-01: Historian Connection & Loss-Free Local Telemetry Buffering",
+      "prd_story_id": "US-01",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "HistorianBufferServiceTest#test_a_link_exceeding_the_3000ms_timeout_switches_to_disk-backed_buffering",
+      "subtasks": [
+        "Implement the buffer state machine in server/app/services/historian_buffer_service.rb using `connection_timeout_ms` (default 3000) and `ring_buffer_enabled`",
+        "Add server/app/jobs/historian_poll_job.rb that accumulates `buffer_depth` while disconnected and replays on reconnect so `backfill_committed == backfill_total`",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-4",
+      "name": "Unauthenticated users are redirected to /login when accessing /admin/historian-connections.",
+      "user_story": "US-01: Historian Connection & Loss-Free Local Telemetry Buffering",
+      "prd_story_id": "US-01",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "AuthenticationTest#test_protected_routes_require_a_bearer_token",
+      "subtasks": [
+        "Wrap the authenticated routes in a pathless `RequireAuth` route in client/src/routes/custom.jsx that renders `<Navigate to=\"/login\" state={from: location} replace />`",
+        "Assert the redirect in server/test/integration/auth_test.rb by requesting a protected endpoint without a Bearer token and expecting 401",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-5",
+      "name": "Only admin can access /admin/historian-connections to modify connection endpoints, credentials, or polling schedules.",
+      "user_story": "US-01: Historian Connection & Loss-Free Local Telemetry Buffering",
+      "prd_story_id": "US-01",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PermissionMatrixTest#test_every_blueprint_role/action_grants_exactly_what_the_policy_decides",
+      "subtasks": [
+        "server/.rhino/blueprints/historian_connectors.yaml — only the `admin` role block carries store/update/destroy",
+        "Add server/test/policies/historian_connector_policy_test.rb covering admin 200/201 vs reliability_engineer 403 on store/update",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-6",
+      "name": "The data model stores details json and the application uses it as described in this story.",
+      "user_story": "US-01: Historian Connection & Loss-Free Local Telemetry Buffering",
+      "prd_story_id": "US-01",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_security_audit_events_expose_entity_affected_and_details_json",
+      "subtasks": [
+        "server/.rhino/blueprints/security_audit_events.yaml — `details_json` column (the ERD AuditLog column, relocated per gap G2)",
+        "Add server/test/models/security_audit_event_test.rb asserting `details_json` round-trips through `as_rhino_json`",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX.",
+        "Repair note: index.json reconciled with the filesystem (79 planned paths that never existed were replaced with real ones)."
+      ]
+    },
+    {
+      "id": "AC-7",
+      "name": "The data model stores entity affected and the application uses it as described in this story.",
+      "user_story": "US-01: Historian Connection & Loss-Free Local Telemetry Buffering",
+      "prd_story_id": "US-01",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_security_audit_events_expose_entity_affected_and_details_json",
+      "subtasks": [
+        "server/.rhino/blueprints/security_audit_events.yaml — `entity_affected` column",
+        "Add server/test/models/security_audit_event_test.rb asserting `entity_affected` is required and returned on show",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-8",
+      "name": "The data model stores email and the application uses it as described in this story.",
+      "user_story": "US-01: Historian Connection & Loss-Free Local Telemetry Buffering",
+      "prd_story_id": "US-01",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_the_user_identity_exposes_email,_approved,_first_name_and_last_name",
+      "subtasks": [
+        "Ensure `email` is present on the engine-provided User via server/db/migrate/*_add_names_to_users.rb (do not re-declare User in the blueprint set)",
+        "Add `validates :email, presence: true, uniqueness: true` verification in server/test/models/user_test.rb",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-9",
+      "name": "The data model stores approved and the application uses it as described in this story.",
+      "user_story": "US-01: Historian Connection & Loss-Free Local Telemetry Buffering",
+      "prd_story_id": "US-01",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_the_user_identity_exposes_email,_approved,_first_name_and_last_name",
+      "subtasks": [
+        "Map `approved` to invitation-acceptance state on the engine-provided UsersRole (no Devise column) — document in server/app/models/user.rb",
+        "Add server/test/models/user_test.rb asserting an unapproved invitation cannot authenticate at POST /api/auth/login",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-10",
+      "name": "The data model stores last name and the application uses it as described in this story.",
+      "user_story": "US-01: Historian Connection & Loss-Free Local Telemetry Buffering",
+      "prd_story_id": "US-01",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_the_user_identity_exposes_email,_approved,_first_name_and_last_name",
+      "subtasks": [
+        "Add `last_name` to server/db/migrate/*_add_names_to_users.rb and permit it in the User policy update surface",
+        "Add server/test/integration/auth_test.rb assertion that `last_name` is returned by the session endpoint",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-11",
+      "name": "The data model stores first name and the application uses it as described in this story.",
+      "user_story": "US-01: Historian Connection & Loss-Free Local Telemetry Buffering",
+      "prd_story_id": "US-01",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_the_user_identity_exposes_email,_approved,_first_name_and_last_name",
+      "subtasks": [
+        "Add `first_name` to server/db/migrate/*_add_names_to_users.rb and permit it in the User policy update surface",
+        "Add server/test/integration/auth_test.rb assertion that `first_name` is returned by the session endpoint",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-12",
+      "name": "The data model stores profile completed and the application uses it as described in this story.",
+      "user_story": "US-01: Historian Connection & Loss-Free Local Telemetry Buffering",
+      "prd_story_id": "US-01",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_profile_completed_is_emitted_as_a_computed_attribute_on_the_user_identity",
+      "subtasks": [
+        "Add a `profile_completed` computed attribute in server/app/models/user.rb via `rhino_computed_attributes`",
+        "Add server/test/models/user_test.rb asserting `profile_completed` is a boolean derived from first_name/last_name presence",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-13",
+      "name": "Given a valid historian connection, when the specialist binds tag paths (vibration, bearing temps, flow, pressure) in /admin/tag-mapping, the system verifies tag presence and displays live values with latency <1000ms.",
+      "user_story": "US-02: Historian Tag Association & Real-Time Ingestion Test Harness",
+      "prd_story_id": "US-02",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "FleetGridContractTest#test_a_bound_historian_tag_is_verified_with_a_live_value_under_1000ms",
+      "subtasks": [
+        "server/.rhino/blueprints/historian_tags.yaml — `tag_path`, `measurement_type`, `engineering_unit`, `scan_rate_ms`, `deadband_val`, `compatible`",
+        "Wire client/src/components/admin/TagMappingPage.tsx rows to `useModelIndex('historian_tags', { include: ['asset','asset_component','historian_connector'] })` and render `last_value` / `last_validated_at` in the Quality column",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-14",
+      "name": "If a tag path is invalid, stale for >60 seconds, or reports bad quality flags, the UI flags the row with a red status indicator and prevents twin activation.",
+      "user_story": "US-02: Historian Tag Association & Real-Time Ingestion Test Harness",
+      "prd_story_id": "US-02",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "HistorianTagModelTest#test_a_bad_OPC_quality_flag_blocks_twin_activation",
+      "subtasks": [
+        "Compute `stale_seconds` and `quality_status` in server/app/models/historian_tag.rb (`rhino_computed_attributes`) from `last_validated_at`",
+        "Gate twin activation on `compatible`/`quality_status` in server/app/services/tag_validation_service.rb and render `SeverityBadge severity=\"critical\"` for blocked rows in TagMappingPage.tsx",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-15",
+      "name": "Only admin and machinery_specialist can access /admin/tag-mapping.",
+      "user_story": "US-02: Historian Tag Association & Real-Time Ingestion Test Harness",
+      "prd_story_id": "US-02",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PermissionMatrixTest#test_every_blueprint_role/action_grants_exactly_what_the_policy_decides",
+      "subtasks": [
+        "server/.rhino/blueprints/historian_tags.yaml — `admin` and `machinery_specialist` hold store/update; read-only roles hold index/show only",
+        "Add server/test/policies/historian_tag_policy_test.rb asserting maintenance_planner gets 403 on store",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-16",
+      "name": "Unauthenticated users are redirected to /login when accessing /admin/tag-mapping.",
+      "user_story": "US-02: Historian Tag Association & Real-Time Ingestion Test Harness",
+      "prd_story_id": "US-02",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "AuthenticatedEndpointsTest#test_role_scoped_read",
+      "subtasks": [
+        "Keep /admin/tag-mapping inside the `RequireAuth` pathless route group in client/src/routes/custom.jsx",
+        "Add server/test/integration/historian_tags_test.rb asserting 401 `{\"message\":\"Unauthenticated.\"}` without a Bearer token",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-17",
+      "name": "When batch testing up to 50 tags simultaneously, the validation test harness returns success status and sample telemetry values within 2000ms.",
+      "user_story": "US-02: Historian Tag Association & Real-Time Ingestion Test Harness",
+      "prd_story_id": "US-02",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_the_batch_validation_harness_reports_latency_and_per-tag_outcomes",
+      "subtasks": [
+        "Add `validate_batch` to server/app/controllers/api/historian_tags_controller.rb capping the payload at 50 tags and delegating to server/app/services/tag_validation_service.rb",
+        "Add server/test/integration/historian_tags_test.rb timing assertion that a 50-tag batch responds 200 with per-tag sample values well under 2000ms",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-18",
+      "name": "The data model stores description and the application uses it as described in this story.",
+      "user_story": "US-02: Historian Tag Association & Real-Time Ingestion Test Harness",
+      "prd_story_id": "US-02",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_failure_modes_expose_description_and_severity_weight",
+      "subtasks": [
+        "server/.rhino/blueprints/failure_modes.yaml — `description` text column (owning model for this criterion, see gap G23)",
+        "Add server/test/models/failure_mode_test.rb asserting `description` persists and is searchable",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-19",
+      "name": "The data model stores last heartbeat and the application uses it as described in this story.",
+      "user_story": "US-02: Historian Tag Association & Real-Time Ingestion Test Harness",
+      "prd_story_id": "US-02",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_historian_connectors_expose_protocol,_address,_heartbeat,_latency_and_buffer_depth",
+      "subtasks": [
+        "server/.rhino/blueprints/historian_connectors.yaml — `last_heartbeat` datetime column",
+        "Add server/test/models/historian_connector_test.rb asserting `last_heartbeat` sorts descending",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-20",
+      "name": "The data model stores server address and the application uses it as described in this story.",
+      "user_story": "US-02: Historian Tag Association & Real-Time Ingestion Test Harness",
+      "prd_story_id": "US-02",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_historian_connectors_expose_protocol,_address,_heartbeat,_latency_and_buffer_depth",
+      "subtasks": [
+        "server/.rhino/blueprints/historian_connectors.yaml — `server_address` column plus `endpoint_url`",
+        "Add server/test/models/historian_connector_test.rb asserting `server_address` is searchable via `?search=`",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-21",
+      "name": "The data model stores component name and the application uses it as described in this story.",
+      "user_story": "US-02: Historian Tag Association & Real-Time Ingestion Test Harness",
+      "prd_story_id": "US-02",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_asset_components_expose_component_name_and_component_type",
+      "subtasks": [
+        "server/.rhino/blueprints/asset_components.yaml — `component_name` column (owning model for this criterion)",
+        "Add server/test/models/asset_component_test.rb asserting `component_name` is required and searchable",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-22",
+      "name": "The data model stores component type and the application uses it as described in this story.",
+      "user_story": "US-02: Historian Tag Association & Real-Time Ingestion Test Harness",
+      "prd_story_id": "US-02",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_asset_components_expose_component_name_and_component_type",
+      "subtasks": [
+        "server/.rhino/blueprints/asset_components.yaml — `component_type` column",
+        "Add server/test/models/asset_component_test.rb asserting `component_type` is filterable",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-23",
+      "name": "The data model stores algorithm type and the application uses it as described in this story.",
+      "user_story": "US-02: Historian Tag Association & Real-Time Ingestion Test Harness",
+      "prd_story_id": "US-02",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_model_baselines_expose_algorithm_type,_hyperparameters_json_and_training_window_end",
+      "subtasks": [
+        "server/.rhino/blueprints/model_baselines.yaml — `algorithm_type` column (owning model for this criterion)",
+        "Add server/test/models/model_baseline_test.rb asserting `algorithm_type` presence is enforced",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-24",
+      "name": "The data model stores urgency and the application uses it as described in this story.",
+      "user_story": "US-02: Historian Tag Association & Real-Time Ingestion Test Harness",
+      "prd_story_id": "US-02",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_prescriptive_advisories_expose_urgency,_steps,_warehouse_and_standby_evidence",
+      "subtasks": [
+        "server/.rhino/blueprints/prescriptive_advisories.yaml — `urgency` column (owning model for this criterion)",
+        "Add server/test/models/prescriptive_advisory_test.rb asserting `urgency` is filterable and sortable",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-25",
+      "name": "The app provides an upload UI for asset hierarchy template data, accepting CSV, JSON, and XML formats, and visibly confirms a successful import.",
+      "user_story": "US-03: ISO 14224 Equipment Digital Twin Creation & Metadata Configuration",
+      "prd_story_id": "US-03",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "AssetModelTest#test_asset_tag_and_asset_name_are_required",
+      "subtasks": [
+        "Add `import` to server/app/controllers/api/assets_controller.rb accepting CSV/JSON/XML via server/app/services/asset_import_service.rb",
+        "Add an `Import template` button to the toolbar group in client/src/components/admin/AssetHierarchyBuilderPage.tsx and render the import result in its existing Alert block",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-26",
+      "name": "The template parser requires valid equipment taxonomy fields: asset_tag, unit_id, equipment_class (API 610 Centrifugal Pump or API 617 Centrifugal Compressor), driver_type, bearing_de_model, bearing_nde_model, and rated_rpm.",
+      "user_story": "US-03: ISO 14224 Equipment Digital Twin Creation & Metadata Configuration",
+      "prd_story_id": "US-03",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_asset_hierarchy_import_accepts_CSV/JSON/XML_and_rejects_duplicates_with_row_numbers",
+      "subtasks": [
+        "Enforce the seven taxonomy fields and the API 610 / API 617 class vocabulary in server/app/services/asset_import_service.rb",
+        "Add server/test/integration/assets_test.rb asserting a 422 listing each missing field for a template that omits `bearing_nde_model` and `rated_rpm`",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-27",
+      "name": "When duplicate asset tags or invalid parent hierarchy nodes are detected in the uploaded file, the system rejects the import and highlights the exact conflicting rows.",
+      "user_story": "US-03: ISO 14224 Equipment Digital Twin Creation & Metadata Configuration",
+      "prd_story_id": "US-03",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_asset_hierarchy_import_accepts_CSV/JSON/XML_and_rejects_duplicates_with_row_numbers",
+      "subtasks": [
+        "Reject the whole file and return conflicting row numbers from server/app/services/asset_import_service.rb (duplicate `asset_tag` per organization, unresolvable `parent_asset_id`)",
+        "Render the returned row list in AssetHierarchyBuilderPage.tsx and assert zero rows were persisted in server/test/integration/assets_test.rb",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-28",
+      "name": "Only admin and machinery_specialist can access /admin/asset-hierarchy-builder.",
+      "user_story": "US-03: ISO 14224 Equipment Digital Twin Creation & Metadata Configuration",
+      "prd_story_id": "US-03",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PermissionMatrixTest#test_every_blueprint_role/action_grants_exactly_what_the_policy_decides",
+      "subtasks": [
+        "server/.rhino/blueprints/assets.yaml — `admin` full CRUD, `machinery_specialist` store/update, remaining roles read-only",
+        "Add server/test/policies/asset_policy_test.rb asserting maintenance_planner and operations_superintendent get 403 on store",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-29",
+      "name": "Unauthenticated users are redirected to /login when accessing /admin/asset-hierarchy-builder.",
+      "user_story": "US-03: ISO 14224 Equipment Digital Twin Creation & Metadata Configuration",
+      "prd_story_id": "US-03",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "AuthenticatedEndpointsTest#test_role_scoped_read",
+      "subtasks": [
+        "Keep the builder route inside the `RequireAuth` group in client/src/routes/custom.jsx",
+        "Add server/test/integration/assets_test.rb asserting 401 without a Bearer token",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-30",
+      "name": "The data model stores unit code and the application uses it as described in this story.",
+      "user_story": "US-03: ISO 14224 Equipment Digital Twin Creation & Metadata Configuration",
+      "prd_story_id": "US-03",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_plant_units_expose_unit_code_and_refinery_area",
+      "subtasks": [
+        "server/.rhino/blueprints/plant_units.yaml — `unit_code` column (owning model for this criterion)",
+        "Add server/test/models/plant_unit_test.rb asserting `unit_code` is required, unique per organization and filterable",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-31",
+      "name": "The data model stores refinery area and the application uses it as described in this story.",
+      "user_story": "US-03: ISO 14224 Equipment Digital Twin Creation & Metadata Configuration",
+      "prd_story_id": "US-03",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_plant_units_expose_unit_code_and_refinery_area",
+      "subtasks": [
+        "server/.rhino/blueprints/plant_units.yaml — `refinery_area` column",
+        "Add server/test/models/plant_unit_test.rb asserting `refinery_area` is filterable",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-32",
+      "name": "The data model stores protocol type and the application uses it as described in this story.",
+      "user_story": "US-03: ISO 14224 Equipment Digital Twin Creation & Metadata Configuration",
+      "prd_story_id": "US-03",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_historian_connectors_expose_protocol,_address,_heartbeat,_latency_and_buffer_depth",
+      "subtasks": [
+        "server/.rhino/blueprints/historian_connectors.yaml — `protocol_type` column (owning model for this criterion)",
+        "Add server/test/models/historian_connector_test.rb asserting `protocol_type` is filterable",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-33",
+      "name": "The data model stores criticality class and the application uses it as described in this story.",
+      "user_story": "US-03: ISO 14224 Equipment Digital Twin Creation & Metadata Configuration",
+      "prd_story_id": "US-03",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_assets_expose_criticality_class_and_the_extended_digital-twin_columns",
+      "subtasks": [
+        "server/.rhino/blueprints/assets.yaml — `criticality_class` column",
+        "Add server/test/models/asset_test.rb asserting `criticality_class` is filterable and returned in the show payload",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-34",
+      "name": "The data model stores hyperparameters json and the application uses it as described in this story.",
+      "user_story": "US-03: ISO 14224 Equipment Digital Twin Creation & Metadata Configuration",
+      "prd_story_id": "US-03",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_model_baselines_expose_algorithm_type,_hyperparameters_json_and_training_window_end",
+      "subtasks": [
+        "server/.rhino/blueprints/model_baselines.yaml — `hyperparameters_json` column (owning model for this criterion)",
+        "Add server/test/models/model_baseline_test.rb asserting a nested hyperparameter hash round-trips",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-35",
+      "name": "The data model stores measurement type and the application uses it as described in this story.",
+      "user_story": "US-03: ISO 14224 Equipment Digital Twin Creation & Metadata Configuration",
+      "prd_story_id": "US-03",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_historian_tags_expose_measurement_type_and_the_quality/mapping_columns",
+      "subtasks": [
+        "server/.rhino/blueprints/historian_tags.yaml — `measurement_type` column (owning model for this criterion)",
+        "Add server/test/models/historian_tag_test.rb asserting `measurement_type` is filterable and searchable",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-36",
+      "name": "Given an authenticated session, when navigating to /fleet-overview, the dashboard displays global KPI tallies (Total Monitored, Normal, Alert, Alarm, Trip) and unit-level health distributions across CDU and FCC within 500ms.",
+      "user_story": "US-04: Refinery Fleet Health Dashboard & Unit Filtering",
+      "prd_story_id": "US-04",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_fleet_overview_returns_the_four_prototype_KPIs_and_the_ISO_tallies",
+      "subtasks": [
+        "Implement `fleet_overview` in server/app/controllers/api/dashboard_controller.rb returning the ISO tallies plus `unit_risk[]` using `Rhino.query(Asset)`",
+        "Render the four KPI cards and the unit-risk list in client/src/components/fleet/FleetOverviewPage.tsx",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-37",
+      "name": "Filtering by refinery operating unit (e.g., Crude Distillation Unit CDU-1) filters the asset card grid instantly without page reload.",
+      "user_story": "US-04: Refinery Fleet Health Dashboard & Unit Filtering",
+      "prd_story_id": "US-04",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "FleetGridContractTest#test_filtering_the_fleet_by_operating_unit_narrows_the_asset_grid",
+      "subtasks": [
+        "Whitelist `plant_unit_id` as a filterable column in server/.rhino/blueprints/assets.yaml",
+        "Bind the unit Select in FleetOverviewPage.tsx to `useModelIndex('assets', { filters: { plant_unit_id }, perPage: 200 })`",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-38",
+      "name": "Each equipment card displays current Asset Health Index (0-100), ISO 10816 vibration severity category (Good, Satisfactory, Unsatisfactory, Unacceptable), and 24-hour health trend sparkline.",
+      "user_story": "US-04: Refinery Fleet Health Dashboard & Unit Filtering",
+      "prd_story_id": "US-04",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "FleetGridContractTest#test_fleet_rows_carry_the_health_index,_ISO_category_and_sample_age",
+      "subtasks": [
+        "server/.rhino/blueprints/asset_health_indices.yaml — `health_score`, `iso_severity_category`, `calculated_at`",
+        "Render `health_index`, `severity` and the sparkline from the asset row in FleetOverviewPage.tsx",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-39",
+      "name": "Clicking an equipment card redirects the user to /assets/:assetId/health-summary with that asset's contextual telemetry pre-loaded.",
+      "user_story": "US-04: Refinery Fleet Health Dashboard & Unit Filtering",
+      "prd_story_id": "US-04",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "FleetGridContractTest#test_a_fleet_row_navigates_to_the_tag-keyed_health_summary",
+      "subtasks": [
+        "Add `useNavigate()` drill-down to `/assets/${asset.asset_tag}/health-summary` in FleetOverviewPage.tsx",
+        "Implement client/src/hooks/useAssetByTag.ts with `useModelIndex('assets', { filters: { asset_tag: tag }, perPage: 1 })`",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-40",
+      "name": "Only reliability_engineer, machinery_specialist, maintenance_planner, operations_superintendent, and admin can access /fleet-overview.",
+      "user_story": "US-04: Refinery Fleet Health Dashboard & Unit Filtering",
+      "prd_story_id": "US-04",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PermissionMatrixTest#test_every_blueprint_role/action_grants_exactly_what_the_policy_decides",
+      "subtasks": [
+        "server/.rhino/blueprints/assets.yaml — index/show granted to all five roles",
+        "Assert the five-role access matrix in server/test/policies/asset_policy_test.rb",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-41",
+      "name": "Unauthenticated users are redirected to /login when accessing /fleet-overview.",
+      "user_story": "US-04: Refinery Fleet Health Dashboard & Unit Filtering",
+      "prd_story_id": "US-04",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "AuthenticatedEndpointsTest#test_role_scoped_read",
+      "subtasks": [
+        "Keep /fleet-overview inside the `RequireAuth` group in client/src/routes/custom.jsx",
+        "Add server/test/integration/assets_test.rb asserting 401 without a Bearer token",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-42",
+      "name": "The data model stores severity weight and the application uses it as described in this story.",
+      "user_story": "US-04: Refinery Fleet Health Dashboard & Unit Filtering",
+      "prd_story_id": "US-04",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_failure_modes_expose_description_and_severity_weight",
+      "subtasks": [
+        "server/.rhino/blueprints/failure_modes.yaml — `severity_weight` float column",
+        "Add server/test/models/failure_mode_test.rb asserting `severity_weight` sorts descending",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-43",
+      "name": "Given an asset flagged in Alert or Alarm state, when navigating to /assets/:assetId/health-summary, the system renders the composite Asset Health Index (0-100) and top contributing sensor tags ranked by percentage contribution.",
+      "user_story": "US-05: Real-Time Multivariate Anomaly Scoring & Sensor Attribution",
+      "prd_story_id": "US-05",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_diagnostic_incidents_expose_sync_status,_rul_days_estimate_and_the_finding_fields",
+      "subtasks": [
+        "Return `contributing_factors_json` plus a `attribution` computed attribute (label + percent + status, ranked descending) from server/.rhino/blueprints/asset_health_indices.yaml",
+        "Render the attributed bars in client/src/components/assets/AssetHealthSummaryPage.tsx via `useModelIndex('asset_health_indices', { filters: { asset_id }, sort: '-calculated_at', perPage: 1 })`",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-44",
+      "name": "When the reliability engineer acknowledges an anomaly on /assets/:assetId/health-summary, the alert status updates to 'Under Investigation', capturing user timestamp and ID in the audit record.",
+      "user_story": "US-05: Real-Time Multivariate Anomaly Scoring & Sensor Attribution",
+      "prd_story_id": "US-05",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "DiagnosticIncidentModelTest#test_acknowledge!_persists_the_Under_Investigation_transition_with_actor_and_timestamp",
+      "subtasks": [
+        "Permit `status`, `acknowledged_by_id`, `acknowledged_at` in the update surface of server/.rhino/blueprints/diagnostic_incidents.yaml",
+        "Wire the Acknowledge button in AssetHealthSummaryPage.tsx to `useModelUpdate('diagnostic_incidents')` and assert the persisted status plus audit row in server/test/integration/diagnostic_incidents_test.rb",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-45",
+      "name": "If an asset's multivariate reconstruction error exceeds the 99th percentile threshold for 3 consecutive 1-minute intervals, the health state transitions from Normal to Alert automatically.",
+      "user_story": "US-05: Real-Time Multivariate Anomaly Scoring & Sensor Attribution",
+      "prd_story_id": "US-05",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "HealthStateServiceTest#test_three_consecutive_p99_breaches_transition_Normal_to_Alert",
+      "subtasks": [
+        "Implement the interval counter in server/app/services/health_state_service.rb using `consecutive_breach_intervals` and `threshold_p99`",
+        "Add server/app/jobs/health_evaluation_job.rb and server/test/services/health_state_service_test.rb covering 2 intervals (no change) vs 3 intervals (Normal to Alert)",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-46",
+      "name": "Only reliability_engineer, machinery_specialist, maintenance_planner, and operations_superintendent can access /assets/:assetId/health-summary.",
+      "user_story": "US-05: Real-Time Multivariate Anomaly Scoring & Sensor Attribution",
+      "prd_story_id": "US-05",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PermissionMatrixTest#test_every_blueprint_role/action_grants_exactly_what_the_policy_decides",
+      "subtasks": [
+        "server/.rhino/blueprints/asset_health_indices.yaml — index/show for the four roles; `admin` deliberately absent",
+        "Assert in server/test/policies/asset_health_index_policy_test.rb that admin is denied and the four roles are allowed",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-47",
+      "name": "Unauthenticated users are redirected to /login when accessing /assets/:assetId/health-summary.",
+      "user_story": "US-05: Real-Time Multivariate Anomaly Scoring & Sensor Attribution",
+      "prd_story_id": "US-05",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "AuthenticatedEndpointsTest#test_role_scoped_read",
+      "subtasks": [
+        "Keep the three /assets/:assetId/* routes inside the `RequireAuth` group in client/src/routes/custom.jsx",
+        "Add server/test/integration/asset_health_indices_test.rb asserting 401 without a Bearer token",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-48",
+      "name": "The data model stores sync status and the application uses it as described in this story.",
+      "user_story": "US-05: Real-Time Multivariate Anomaly Scoring & Sensor Attribution",
+      "prd_story_id": "US-05",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_diagnostic_incidents_expose_sync_status,_rul_days_estimate_and_the_finding_fields",
+      "subtasks": [
+        "Add a `sync_status` computed attribute in server/app/models/diagnostic_incident.rb via `rhino_computed_attributes`",
+        "Add server/test/models/diagnostic_incident_test.rb asserting `sync_status` is present in `as_rhino_json`",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-49",
+      "name": "Given valid local Active Directory credentials and hardware token, when submitted at /login, the user is authenticated and redirected to /fleet-overview with role-appropriate permissions.",
+      "user_story": "US-06: Air-Gapped Local Active Directory Authentication & Session Security",
+      "prd_story_id": "US-06",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "AuthenticationTest#test_seeded_identities_log_in_and_receive_their_organization_slug",
+      "subtasks": [
+        "Implement server/app/services/ldap_credential_broker.rb and register it through the Rhino auth hooks in server/config/initializers/rhino.rb",
+        "Call `useAuth().login(email, password)`, check `result.success`, then `setOrganization(result.organization_slug)` and navigate to the role landing in client/src/components/auth/LoginPage.tsx",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-50",
+      "name": "When invalid credentials or an expired token are submitted, the login view displays an authentication failure banner and locks the account after 5 consecutive failed attempts.",
+      "user_story": "US-06: Air-Gapped Local Active Directory Authentication & Session Security",
+      "prd_story_id": "US-06",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "AuthenticationTest#test_a_provisioned_hardware_token_is_required_and_verified_server-side",
+      "subtasks": [
+        "Implement the failed-attempt counter and 5-attempt lockout in server/app/services/ldap_credential_broker.rb and return a lockout status",
+        "Surface `result.error` in the existing Alert slot of client/src/components/auth/LoginPage.tsx and cover both branches in server/test/integration/auth_test.rb",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-51",
+      "name": "Guest users can view the login screen at /login without an account, but cannot access any protected routes.",
+      "user_story": "US-06: Air-Gapped Local Active Directory Authentication & Session Security",
+      "prd_story_id": "US-06",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "AuthenticationTest#test_seeded_identities_log_in_and_receive_their_organization_slug",
+      "subtasks": [
+        "Register `/login` as a public sibling of the `RequireAuth` group in client/src/routes/custom.jsx",
+        "Assert in server/test/integration/auth_test.rb that an anonymous GET of a protected endpoint returns 401 while /api/auth/login is reachable",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-52",
+      "name": "User sessions automatically terminate after 30 minutes of inactivity, requiring re-authentication.",
+      "user_story": "US-06: Air-Gapped Local Active Directory Authentication & Session Security",
+      "prd_story_id": "US-06",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "AuthenticationTest#test_a_token_idle_for_more_than_30_minutes_is_rejected_with_401",
+      "subtasks": [
+        "Implement server/app/controllers/concerns/session_idle_guard.rb rejecting an api_token idle for more than 30 minutes with 401",
+        "Handle the 401 in `configureApi({ onUnauthorized })` in client/src/lib/api.ts so the SPA redirects to /login",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-53",
+      "name": "Unauthenticated users attempting to access /fleet-overview or /assets are redirected to /login with their target return URL preserved.",
+      "user_story": "US-06: Air-Gapped Local Active Directory Authentication & Session Security",
+      "prd_story_id": "US-06",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "AuthenticationTest#test_seeded_identities_log_in_and_receive_their_organization_slug",
+      "subtasks": [
+        "`RequireAuth` in client/src/routes/custom.jsx must pass `state={ from: location }` and LoginPage must navigate back to `state.from` after success",
+        "Add a client test in client/src/components/auth/LoginPage.test.tsx asserting the return-URL round trip",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-54",
+      "name": "The authentication service functions entirely offline with zero outbound network requests outside the local air-gapped DMZ.",
+      "user_story": "US-06: Air-Gapped Local Active Directory Authentication & Session Security",
+      "prd_story_id": "US-06",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "AuthenticationTest#test_the_credential_broker_never_dials_outside_the_local_OT_network",
+      "subtasks": [
+        "Bind the credential broker to the on-prem LDAP host only in server/app/services/ldap_credential_broker.rb and document the no-egress constraint",
+        "Add server/test/integration/auth_test.rb asserting no external host is contacted during login",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-55",
+      "name": "Navigating to /admin/system-health displays local time-series database disk utilization, ingestion buffer backlog, and local backup status with visual warning indicators when storage exceeds 80%.",
+      "user_story": "US-07: Tamper-Evident Audit Logging & On-Premises System Telemetry",
+      "prd_story_id": "US-07",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_system_health_reports_metrics,_services,_storage_and_events",
+      "subtasks": [
+        "Implement `GET /api/{org}/system_health` in server/app/controllers/api/system_health_controller.rb returning metrics, services, storage percentages and events",
+        "Render the storage bars with a warning state above 80% in client/src/components/admin/SystemHealthPage.tsx",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-56",
+      "name": "Every authentication attempt, role escalation, baseline retraining, and CMMS dispatch event is recorded in an immutable, append-only audit log viewable at /admin/security-audit.",
+      "user_story": "US-07: Tamper-Evident Audit Logging & On-Premises System Telemetry",
+      "prd_story_id": "US-07",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "SecurityAuditChainTest#test_no_role_is_granted_store,_update_or_destroy_on_the_audit_resource",
+      "subtasks": [
+        "Write every event through server/app/services/security_audit_writer.rb into server/.rhino/blueprints/security_audit_events.yaml",
+        "Assert in server/test/policies/security_audit_event_policy_test.rb that no role holds store/update/destroy (append-only)",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-57",
+      "name": "Admins can export signed tamper-evident compliance audit logs in JSON and CSV format directly from /admin/security-audit.",
+      "user_story": "US-07: Tamper-Evident Audit Logging & On-Premises System Telemetry",
+      "prd_story_id": "US-07",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_audit_evidence_exports_as_signed_JSON_and_CSV",
+      "subtasks": [
+        "Add the `export` action to server/app/controllers/api/security_audit_events_controller.rb supporting `?format=json|csv` with a sha256 signature over the hash chain",
+        "Wire the existing `Export evidence` button in client/src/components/admin/SecurityAuditPage.tsx to the export hook with a format choice",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-58",
+      "name": "Only admin can access /admin/security-audit and /admin/system-health.",
+      "user_story": "US-07: Tamper-Evident Audit Logging & On-Premises System Telemetry",
+      "prd_story_id": "US-07",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_only_admin_can_export_the_audit_trail",
+      "subtasks": [
+        "server/.rhino/blueprints/security_audit_events.yaml — `index`/`show` granted to `admin` only",
+        "Add server/test/policies/security_audit_event_policy_test.rb asserting every other role gets 403 on index",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-59",
+      "name": "Unauthenticated users are redirected to /login when accessing /admin/security-audit or /admin/system-health.",
+      "user_story": "US-07: Tamper-Evident Audit Logging & On-Premises System Telemetry",
+      "prd_story_id": "US-07",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "AuthenticatedEndpointsTest#test_role_scoped_read",
+      "subtasks": [
+        "Keep both /admin/* routes inside the `RequireAuth` group in client/src/routes/custom.jsx",
+        "Add server/test/integration/security_audit_events_test.rb asserting 401 without a Bearer token",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-60",
+      "name": "Given anomalous vibration data for an asset, when opening /assets/:assetId/diagnostics, the diagnostic classifier displays calculated fault probabilities (e.g., 'Bearing Outer Race Defect BPFO: 89%') alongside ISO 10816 baseline thresholds.",
+      "user_story": "US-08: Automated Failure Mode Diagnostic Classification & Fingerprinting",
+      "prd_story_id": "US-08",
+      "phase": "Phase 2: Diagnostics & Interactive Spectral Analytics",
+      "status": "tested",
+      "test_name": "BearingKinematicsTest#test_the_classifier_ranks_a_confirmed_BPFO_above_the_other_modes",
+      "subtasks": [
+        "server/.rhino/blueprints/failure_mode_assessments.yaml — `probability`, `confidence_low`, `confidence_high`, `failure_mode_id`",
+        "Render the classifier bars and heading thresholds in client/src/components/assets/AssetDiagnosticsPage.tsx from `useModelIndex('failure_mode_assessments', { filters: { asset_id }, sort: '-probability' })`",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-61",
+      "name": "The classifier differentiates between hydraulic cavitation (broadband noise floor rise between 1 kHz and 5 kHz) and bearing defect harmonics (discrete non-synchronous peaks at BPFO or BPFI).",
+      "user_story": "US-08: Automated Failure Mode Diagnostic Classification & Fingerprinting",
+      "prd_story_id": "US-08",
+      "phase": "Phase 2: Diagnostics & Interactive Spectral Analytics",
+      "status": "tested",
+      "test_name": "BearingKinematicsTest#test_the_classifier_ranks_a_confirmed_BPFO_above_the_other_modes",
+      "subtasks": [
+        "Implement the 1-5 kHz broadband vs discrete-harmonic discrimination in server/app/services/diagnostics_classifier.rb",
+        "Add server/test/services/diagnostics_classifier_test.rb covering a cavitation fixture and a BPFO fixture and asserting distinct `failure_mode_id` predictions",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-62",
+      "name": "When the specialist confirms or edits a diagnostic finding (e.g., 'Stage 2 Bearing Outer Race Spall'), the finding is recorded with technical notes and propagates to prescriptive maintenance planning.",
+      "user_story": "US-08: Automated Failure Mode Diagnostic Classification & Fingerprinting",
+      "prd_story_id": "US-08",
+      "phase": "Phase 2: Diagnostics & Interactive Spectral Analytics",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_sign-off_persists_the_finding_and_propagates_it_to_planning",
+      "subtasks": [
+        "Add the `sign_off` action to server/app/controllers/api/diagnostic_incidents_controller.rb stamping `signed_off_by_id` / `signed_off_at` / `finding_status`",
+        "Wire the finding editor + Save button in AssetDiagnosticsPage.tsx and assert propagation to a PrescriptiveAdvisory in server/test/integration/diagnostic_incidents_test.rb",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-63",
+      "name": "Only reliability_engineer, machinery_specialist, and maintenance_planner can access /assets/:assetId/diagnostics.",
+      "user_story": "US-08: Automated Failure Mode Diagnostic Classification & Fingerprinting",
+      "prd_story_id": "US-08",
+      "phase": "Phase 2: Diagnostics & Interactive Spectral Analytics",
+      "status": "tested",
+      "test_name": "PermissionMatrixTest#test_every_blueprint_role/action_grants_exactly_what_the_policy_decides",
+      "subtasks": [
+        "server/.rhino/blueprints/diagnostic_incidents.yaml — engineering finding fields exposed to exactly those three roles",
+        "Add server/test/policies/diagnostic_incident_policy_test.rb asserting operations_superintendent is denied the finding update surface",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-64",
+      "name": "Unauthenticated users are redirected to /login when accessing /assets/:assetId/diagnostics.",
+      "user_story": "US-08: Automated Failure Mode Diagnostic Classification & Fingerprinting",
+      "prd_story_id": "US-08",
+      "phase": "Phase 2: Diagnostics & Interactive Spectral Analytics",
+      "status": "tested",
+      "test_name": "AuthenticatedEndpointsTest#test_role_scoped_read",
+      "subtasks": [
+        "Keep /assets/:assetId/diagnostics inside the `RequireAuth` group in client/src/routes/custom.jsx",
+        "Add server/test/integration/diagnostic_incidents_test.rb asserting 401 without a Bearer token",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-65",
+      "name": "Navigating to /assets/:assetId/spectral-analytics renders high-frequency FFT acceleration and velocity spectra within 500ms for up to 64k-line resolutions.",
+      "user_story": "US-09: Interactive FFT Spectral Workbench & Bearing Defect Overlays",
+      "prd_story_id": "US-09",
+      "phase": "Phase 2: Diagnostics & Interactive Spectral Analytics",
+      "status": "tested",
+      "test_name": "SpectrumWorkbenchTest#test_a_64k-line_spectrum_snapshot_is_served_within_500ms",
+      "subtasks": [
+        "server/.rhino/blueprints/spectrum_snapshots.yaml — `line_resolution`, `sample_rate_hz`, `spectrum_json`",
+        "Render the FFT polyline from `spectrum_json` in client/src/components/assets/SpectralAnalyticsPage.tsx and assert the 500ms budget in a client performance test",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-66",
+      "name": "Toggling bearing geometry overlays calculates and overlays BPFO, BPFI, BSF, and FTF frequency lines automatically based on ISO 14224 bearing model metadata and current shaft RPM.",
+      "user_story": "US-09: Interactive FFT Spectral Workbench & Bearing Defect Overlays",
+      "prd_story_id": "US-09",
+      "phase": "Phase 2: Diagnostics & Interactive Spectral Analytics",
+      "status": "tested",
+      "test_name": "BearingKinematicsTest#test_BPFO/BPFI/BSF/FTF_are_computed_from_bearing_geometry_and_shaft_speed",
+      "subtasks": [
+        "Implement server/app/services/bearing_kinematics.rb computing BPFO/BPFI/BSF/FTF from `bearing_de_model`/`bearing_nde_model` and `running_speed_hz`",
+        "Toggle the marker overlay set in SpectralAnalyticsPage.tsx from `bearing_markers_json` and assert the 3.57X / 5.43X / 2.32X / 0.41X family in server/test/services/bearing_kinematics_test.rb",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-67",
+      "name": "Users can place interactive harmonic cursors (1X through 10X) and sideband cursors (pole pass, running speed) with real-time delta frequency and amplitude readouts.",
+      "user_story": "US-09: Interactive FFT Spectral Workbench & Bearing Defect Overlays",
+      "prd_story_id": "US-09",
+      "phase": "Phase 2: Diagnostics & Interactive Spectral Analytics",
+      "status": "tested",
+      "test_name": "SpectrumWorkbenchTest#test_harmonic_cursors,_bearing_markers_and_waterfall_horizons_are_served",
+      "subtasks": [
+        "Persist cursor state via `cursor_hz` / `cursor_amplitude` / `cursor_order` in server/.rhino/blueprints/spectrum_snapshots.yaml",
+        "Render the harmonic/sideband cursor controls in the Spectral readout card of SpectralAnalyticsPage.tsx",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-68",
+      "name": "Only reliability_engineer and machinery_specialist can access /assets/:assetId/spectral-analytics.",
+      "user_story": "US-09: Interactive FFT Spectral Workbench & Bearing Defect Overlays",
+      "prd_story_id": "US-09",
+      "phase": "Phase 2: Diagnostics & Interactive Spectral Analytics",
+      "status": "tested",
+      "test_name": "PermissionMatrixTest#test_every_blueprint_role/action_grants_exactly_what_the_policy_decides",
+      "subtasks": [
+        "server/.rhino/blueprints/spectrum_snapshots.yaml — index/show for `reliability_engineer` and `machinery_specialist` only",
+        "Add server/test/policies/spectrum_snapshot_policy_test.rb asserting maintenance_planner and operations_superintendent get 403",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-69",
+      "name": "Unauthenticated users are redirected to /login when accessing /assets/:assetId/spectral-analytics.",
+      "user_story": "US-09: Interactive FFT Spectral Workbench & Bearing Defect Overlays",
+      "prd_story_id": "US-09",
+      "phase": "Phase 2: Diagnostics & Interactive Spectral Analytics",
+      "status": "tested",
+      "test_name": "AuthenticatedEndpointsTest#test_role_scoped_read",
+      "subtasks": [
+        "Keep /assets/:assetId/spectral-analytics inside the `RequireAuth` group in client/src/routes/custom.jsx",
+        "Add server/test/integration/spectrum_snapshots_test.rb asserting 401 without a Bearer token",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-70",
+      "name": "On /assets/:assetId/spectral-analytics, toggling the Waterfall view renders a 3D historical cascade of FFT spectra over selectable time horizons (7, 30, or 90 days).",
+      "user_story": "US-10: 3D Spectral Waterfall Plots & Process Variable Synchronized Trending",
+      "prd_story_id": "US-10",
+      "phase": "Phase 2: Diagnostics & Interactive Spectral Analytics",
+      "status": "tested",
+      "test_name": "SpectrumWorkbenchTest#test_the_waterfall_cascade_is_available_over_7,_30_and_90_day_horizons",
+      "subtasks": [
+        "server/.rhino/blueprints/spectrum_snapshots.yaml — `waterfall_json` plus `waterfall_horizon_days`",
+        "Implement the waterfall range switch (7/30/90) in SpectralAnalyticsPage.tsx against `useModelIndex('spectrum_snapshots', { filters: { asset_id } })`",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-71",
+      "name": "The multi-tag correlation view synchronizes vibration overall RMS, motor amps, suction pressure, and bearing temperature on a unified time axis with crosshair zoom.",
+      "user_story": "US-10: 3D Spectral Waterfall Plots & Process Variable Synchronized Trending",
+      "prd_story_id": "US-10",
+      "phase": "Phase 2: Diagnostics & Interactive Spectral Analytics",
+      "status": "tested",
+      "test_name": "SpectrumWorkbenchTest#test_vibration,_amps,_suction_pressure_and_bearing_temperature_share_one_time_axis",
+      "subtasks": [
+        "server/.rhino/blueprints/telemetry_records.yaml — filterable `historian_tag_id` and `recorded_at`",
+        "Implement the synchronized multi-tag trend with crosshair zoom in SpectralAnalyticsPage.tsx using `useModelIndex('telemetry_records', { includes: ['historian_tag'] })`",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-72",
+      "name": "The 3D waterfall canvas supports interactive tilt, rotation, and frequency slice slicing at 60 FPS on standard workstation hardware.",
+      "user_story": "US-10: 3D Spectral Waterfall Plots & Process Variable Synchronized Trending",
+      "prd_story_id": "US-10",
+      "phase": "Phase 2: Diagnostics & Interactive Spectral Analytics",
+      "status": "tested",
+      "test_name": "SpectrumWorkbenchTest#test_waterfall_slices_carry_per-slice_spectra_for_the_3D_canvas",
+      "subtasks": [
+        "Implement the tilt/rotate/slice interaction on the waterfall canvas in SpectralAnalyticsPage.tsx",
+        "Add client/src/components/assets/SpectralAnalyticsPage.test.tsx asserting no long task exceeds 16ms during a rotate/slice gesture",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-73",
+      "name": "Only reliability_engineer and machinery_specialist can access /assets/:assetId/spectral-analytics.",
+      "user_story": "US-10: 3D Spectral Waterfall Plots & Process Variable Synchronized Trending",
+      "prd_story_id": "US-10",
+      "phase": "Phase 2: Diagnostics & Interactive Spectral Analytics",
+      "status": "tested",
+      "test_name": "PermissionMatrixTest#test_every_blueprint_role/action_grants_exactly_what_the_policy_decides",
+      "subtasks": [
+        "server/.rhino/blueprints/spectrum_snapshots.yaml — same two-role policy as US-09",
+        "Reuse server/test/policies/spectrum_snapshot_policy_test.rb covering the US-10 access path",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-74",
+      "name": "Unauthenticated users are redirected to /login when accessing /assets/:assetId/spectral-analytics.",
+      "user_story": "US-10: 3D Spectral Waterfall Plots & Process Variable Synchronized Trending",
+      "prd_story_id": "US-10",
+      "phase": "Phase 2: Diagnostics & Interactive Spectral Analytics",
+      "status": "tested",
+      "test_name": "AuthenticatedEndpointsTest#test_role_scoped_read",
+      "subtasks": [
+        "Keep the spectral route inside the `RequireAuth` group in client/src/routes/custom.jsx",
+        "Add the anonymous-redirect case to server/test/integration/spectrum_snapshots_test.rb",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-75",
+      "name": "On /prescriptive-advisories, each active equipment advisory displays an estimated RUL window in operating days and hours with a 90% confidence interval band based on exponential degradation fitting.",
+      "user_story": "US-11: Degradation Trajectory Modeling & Remaining Useful Life Estimation",
+      "prd_story_id": "US-11",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "DiagnosticIncidentModelTest#test_rul_window_label_matches_the_prototype_readout_format",
+      "subtasks": [
+        "server/.rhino/blueprints/diagnostic_incidents.yaml — `rul_days_estimate`, `rul_window_low_days`, `rul_window_high_days`, `rul_confidence_pct`",
+        "Render the RUL window and confidence band in client/src/components/advisories/PrescriptiveAdvisoriesPage.tsx",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-76",
+      "name": "The prognostic model dynamically recalculates the RUL trajectory whenever operational process load or vibration RMS exceeds the rolling 7-day average by >15%.",
+      "user_story": "US-11: Degradation Trajectory Modeling & Remaining Useful Life Estimation",
+      "prd_story_id": "US-11",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "PrognosticsServiceTest#test_a_load_spike_over_the_rolling_7-day_average_triggers_recalculation",
+      "subtasks": [
+        "Implement the rolling-7-day deviation trigger in server/app/services/prognostics_service.rb",
+        "Add server/test/services/prognostics_service_test.rb covering a +14% change (no recalc) and a +16% change (recalc)",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-77",
+      "name": "When the estimated RUL reaches <=14 days, the advisory status automatically escalates to 'Urgent Action Required' and dispatches high-priority system alerts.",
+      "user_story": "US-11: Degradation Trajectory Modeling & Remaining Useful Life Estimation",
+      "prd_story_id": "US-11",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "PrognosticsServiceTest#test_RUL_at_or_below_14_days_escalates_the_advisory_and_alerts",
+      "subtasks": [
+        "Implement the escalation in server/app/jobs/rul_recalculation_job.rb setting `urgency` to `Urgent Action Required` and raising the alert",
+        "Add server/test/jobs/rul_recalculation_job_test.rb asserting escalation at 14 days and no escalation at 15 days",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-78",
+      "name": "Only reliability_engineer, machinery_specialist, maintenance_planner, and operations_superintendent can access /prescriptive-advisories.",
+      "user_story": "US-11: Degradation Trajectory Modeling & Remaining Useful Life Estimation",
+      "prd_story_id": "US-11",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "PermissionMatrixTest#test_every_blueprint_role/action_grants_exactly_what_the_policy_decides",
+      "subtasks": [
+        "server/.rhino/blueprints/prescriptive_advisories.yaml — index/show for the four roles; `admin` excluded from the screen ACL",
+        "Add server/test/policies/prescriptive_advisory_policy_test.rb asserting the five-role matrix",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-79",
+      "name": "Unauthenticated users are redirected to /login when accessing /prescriptive-advisories.",
+      "user_story": "US-11: Degradation Trajectory Modeling & Remaining Useful Life Estimation",
+      "prd_story_id": "US-11",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "AuthenticatedEndpointsTest#test_role_scoped_read",
+      "subtasks": [
+        "Keep /prescriptive-advisories inside the `RequireAuth` group in client/src/routes/custom.jsx",
+        "Add server/test/integration/prescriptive_advisories_test.rb asserting 401 without a Bearer token",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-80",
+      "name": "The data model stores rul days estimate and the application uses it as described in this story.",
+      "user_story": "US-11: Degradation Trajectory Modeling & Remaining Useful Life Estimation",
+      "prd_story_id": "US-11",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_diagnostic_incidents_expose_sync_status,_rul_days_estimate_and_the_finding_fields",
+      "subtasks": [
+        "server/.rhino/blueprints/diagnostic_incidents.yaml — `rul_days_estimate` float column",
+        "Add server/test/models/diagnostic_incident_test.rb asserting `rul_days_estimate` is numeric, filterable and sortable",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-81",
+      "name": "Navigating to /prescriptive-advisories displays recommended mechanical interventions, required parts kits (e.g., SKF 7314 bearing set, Flowserve Cartridge Seal), and local warehouse bin inventory counts.",
+      "user_story": "US-12: Prescriptive Action Generation & Direct CMMS Work Order Dispatch",
+      "prd_story_id": "US-12",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_dispatch_creates_a_work_order_with_reservations,_and_a_failure_reverts_the_advisory",
+      "subtasks": [
+        "server/.rhino/blueprints/prescriptive_advisories.yaml — `action_steps_json`, `parts_required_json`, `warehouse_status`, `warehouse_bin`, `parts_lead_time_days`",
+        "Render the intervention list, parts kit and RUL confidence card in PrescriptiveAdvisoriesPage.tsx",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-82",
+      "name": "Clicking 'Dispatch Work Order' validates maintenance priority, packages diagnostic findings and FFT spectral plots, and transmits the payload to on-premise SAP PM or IBM Maximo APIs within 3000ms.",
+      "user_story": "US-12: Prescriptive Action Generation & Direct CMMS Work Order Dispatch",
+      "prd_story_id": "US-12",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_dispatch_creates_a_work_order_with_reservations,_and_a_failure_reverts_the_advisory",
+      "subtasks": [
+        "Implement the `dispatch_work_order` action in server/app/controllers/api/prescriptive_advisories_controller.rb delegating to server/app/services/cmms_dispatch_service.rb with a 3000ms budget",
+        "Add server/test/integration/prescriptive_advisories_test.rb asserting the payload carries the diagnostic summary and FFT snapshot and responds within the budget",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-83",
+      "name": "Upon successful transmission, the planner is redirected to /work-orders/confirmation displaying the generated remote work order number (#WO-884210) and warehouse material reservation numbers.",
+      "user_story": "US-12: Prescriptive Action Generation & Direct CMMS Work Order Dispatch",
+      "prd_story_id": "US-12",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_dispatch_creates_a_work_order_with_reservations,_and_a_failure_reverts_the_advisory",
+      "subtasks": [
+        "server/.rhino/blueprints/cmms_work_orders.yaml — `external_order_number`, `material_reservations_json`, `sync_status`, `confirmed_at`",
+        "Navigate to /work-orders/confirmation after a successful dispatch and render the order number + reservations in client/src/components/workorders/WorkOrderConfirmationPage.tsx",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-84",
+      "name": "If the CMMS API times out or rejects the payload, an error toast displays the exact validation issue and the advisory status reverts to 'Ready for Dispatch' with zero data lost.",
+      "user_story": "US-12: Prescriptive Action Generation & Direct CMMS Work Order Dispatch",
+      "prd_story_id": "US-12",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_dispatch_creates_a_work_order_with_reservations,_and_a_failure_reverts_the_advisory",
+      "subtasks": [
+        "Persist `error_message` and `sync_status = Pending Sync` and revert the advisory to `Ready for Dispatch` inside server/app/services/cmms_dispatch_service.rb",
+        "Surface the message via `useToast()` in WorkOrderConfirmationPage.tsx and assert the revert plus zero row loss in server/test/integration/prescriptive_advisories_test.rb",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-85",
+      "name": "Only maintenance_planner and reliability_engineer can access /work-orders/confirmation.",
+      "user_story": "US-12: Prescriptive Action Generation & Direct CMMS Work Order Dispatch",
+      "prd_story_id": "US-12",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "PermissionMatrixTest#test_every_blueprint_role/action_grants_exactly_what_the_policy_decides",
+      "subtasks": [
+        "server/.rhino/blueprints/cmms_work_orders.yaml — `maintenance_planner` store/update, `reliability_engineer` store only",
+        "Add server/test/policies/cmms_work_order_policy_test.rb asserting machinery_specialist and operations_superintendent get 403 on store",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-86",
+      "name": "Unauthenticated users are redirected to /login when accessing /work-orders/confirmation.",
+      "user_story": "US-12: Prescriptive Action Generation & Direct CMMS Work Order Dispatch",
+      "prd_story_id": "US-12",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "AuthenticatedEndpointsTest#test_role_scoped_read",
+      "subtasks": [
+        "Keep /work-orders/confirmation inside the `RequireAuth` group in client/src/routes/custom.jsx",
+        "Add server/test/integration/cmms_work_orders_test.rb asserting 401 without a Bearer token",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-87",
+      "name": "Navigating to /operations/unit-risk-matrix renders a consolidated risk heat map cross-referencing equipment RUL against unit throughput impacts across CDU, FCC, Hydrocracker, and Alkylation blocks.",
+      "user_story": "US-13: Plant-Wide Unit Risk Matrix & Operational Throttling Advisory",
+      "prd_story_id": "US-13",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_the_unit_risk_matrix_returns_rows,_risk_cells_and_a_derate_recommendation",
+      "subtasks": [
+        "Implement `GET /api/{org}/dashboard/unit_risk_matrix` in server/app/controllers/api/dashboard_controller.rb returning rows, risk cells and the derate recommendation",
+        "Render the matrix table and 16-cell risk map in client/src/components/operations/UnitRiskMatrixPage.tsx",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-88",
+      "name": "When equipment health drops into Alarm state, the screen provides verified operational derating advisories (e.g., throttle pump P-101A to 70% flow to extend RUL by 14 days).",
+      "user_story": "US-13: Plant-Wide Unit Risk Matrix & Operational Throttling Advisory",
+      "prd_story_id": "US-13",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "FleetGridContractTest#test_the_unit_risk_matrix_cross-cuts_every_process_unit",
+      "subtasks": [
+        "server/.rhino/blueprints/prescriptive_advisories.yaml — `throttle_percentage`, `urgency`, `due_within_days`",
+        "Render the derate recommendation card and its `Open advisory` action in UnitRiskMatrixPage.tsx",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-89",
+      "name": "Approving a derating advisory logs the operational restriction directly to the DCS console shift handover log at /operations/shift-log with a timestamped superintendent sign-off.",
+      "user_story": "US-13: Plant-Wide Unit Risk Matrix & Operational Throttling Advisory",
+      "prd_story_id": "US-13",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_derate_approval_writes_the_restriction_to_the_shift_handover_log",
+      "subtasks": [
+        "Write a ShiftLogEntry with `derate_approved_by_id` / `derate_approved_at` from server/app/models/prescriptive_advisory.rb",
+        "Assert the linked shift-log row in server/test/integration/prescriptive_advisories_test.rb and render it in client/src/components/operations/ShiftLogPage.tsx",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-90",
+      "name": "Only operations_superintendent, reliability_engineer, and admin can access /operations/unit-risk-matrix and /operations/shift-log.",
+      "user_story": "US-13: Plant-Wide Unit Risk Matrix & Operational Throttling Advisory",
+      "prd_story_id": "US-13",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "PermissionMatrixTest#test_every_blueprint_role/action_grants_exactly_what_the_policy_decides",
+      "subtasks": [
+        "server/.rhino/blueprints/shift_log_entries.yaml — index/show for operations_superintendent, reliability_engineer and admin",
+        "Add server/test/policies/shift_log_entry_policy_test.rb asserting maintenance_planner and machinery_specialist are read-only",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-91",
+      "name": "Unauthenticated users are redirected to /login when accessing /operations/unit-risk-matrix.",
+      "user_story": "US-13: Plant-Wide Unit Risk Matrix & Operational Throttling Advisory",
+      "prd_story_id": "US-13",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "AuthenticatedEndpointsTest#test_role_scoped_read",
+      "subtasks": [
+        "Keep both /operations/* routes inside the `RequireAuth` group in client/src/routes/custom.jsx",
+        "Add server/test/integration/shift_log_entries_test.rb asserting 401 without a Bearer token",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-92",
+      "name": "The prognostic engine identifies distinct operating regimes based on historical flow, suction pressure, and VFD shaft speed, applying regime-specific degradation rates.",
+      "user_story": "US-14: Multi-Operating Regime Prognostic Sensitivity & Dynamic P-F Curves",
+      "prd_story_id": "US-14",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "PrognosticsServiceTest#test_the_regime_is_detected_and_mapped_to_a_duty_or_wear_zone",
+      "subtasks": [
+        "Implement regime clustering in server/app/services/prognostics_service.rb writing `regime` and `regime_confidence_pct` on server/.rhino/blueprints/diagnostic_incidents.yaml",
+        "Add server/test/services/prognostics_service_test.rb covering a three-regime fixture",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-93",
+      "name": "When an asset transitions between light and heavy crude feed slates, the system recalculates the P-F interval slope within 5 minutes without resetting historical damage accumulation.",
+      "user_story": "US-14: Multi-Operating Regime Prognostic Sensitivity & Dynamic P-F Curves",
+      "prd_story_id": "US-14",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "PrognosticsServiceTest#test_a_feed-slate_switch_recalculates_without_resetting_accumulated_damage",
+      "subtasks": [
+        "Recalculate `pf_interval_days` on slate transition inside server/app/services/prognostics_service.rb while preserving the cumulative damage accumulator",
+        "Add server/test/services/prognostics_service_test.rb asserting the slope changes, the elapsed time is under 5 minutes, and accumulated damage is monotonic",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-94",
+      "name": "The UI at /prescriptive-advisories displays regime confidence scores and highlights whether current equipment operation falls within continuous duty or accelerated wear zones.",
+      "user_story": "US-14: Multi-Operating Regime Prognostic Sensitivity & Dynamic P-F Curves",
+      "prd_story_id": "US-14",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "PrognosticsServiceTest#test_the_regime_is_detected_and_mapped_to_a_duty_or_wear_zone",
+      "subtasks": [
+        "Expose `regime`, `regime_confidence_pct` and a duty/accelerated zone flag on server/.rhino/blueprints/prescriptive_advisories.yaml",
+        "Render the regime confidence badge in PrescriptiveAdvisoriesPage.tsx",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-95",
+      "name": "Only reliability_engineer and machinery_specialist can adjust prognostic regime sensitivity parameters.",
+      "user_story": "US-14: Multi-Operating Regime Prognostic Sensitivity & Dynamic P-F Curves",
+      "prd_story_id": "US-14",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "PermissionMatrixTest#test_every_blueprint_role/action_grants_exactly_what_the_policy_decides",
+      "subtasks": [
+        "server/.rhino/blueprints/baseline_windows.yaml — `machinery_specialist` store/update; `reliability_engineer` read-only",
+        "Add server/test/policies/baseline_window_policy_test.rb asserting maintenance_planner and operations_superintendent get 403 on update",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-96",
+      "name": "Unauthenticated users are redirected to /login when accessing /prescriptive-advisories.",
+      "user_story": "US-14: Multi-Operating Regime Prognostic Sensitivity & Dynamic P-F Curves",
+      "prd_story_id": "US-14",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "AuthenticatedEndpointsTest#test_role_scoped_read",
+      "subtasks": [
+        "Keep /prescriptive-advisories inside the `RequireAuth` group in client/src/routes/custom.jsx",
+        "Reuse the anonymous-redirect case in server/test/integration/prescriptive_advisories_test.rb",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-97",
+      "name": "When a lead pump's Asset Health Index breaches Alarm threshold, the system automatically checks standby twin telemetry (lube oil level, motor heater status, isolation valve state) and generates a standby switchover advisory.",
+      "user_story": "US-15: Automated Standby Machine Switchover Advisory & Shift Handoff Log",
+      "prd_story_id": "US-15",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_a_standby_switchover_advisory_carries_the_check_evidence",
+      "subtasks": [
+        "Implement server/app/services/standby_check_service.rb evaluating the standby twin and writing `standby_asset_id`, `standby_ready`, `standby_checks_json` on server/.rhino/blueprints/prescriptive_advisories.yaml",
+        "Add server/test/services/standby_check_service_test.rb covering a ready twin and a not-ready twin",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-98",
+      "name": "Navigating to /operations/shift-log displays all active changeover notices, derating advisories, and pending maintenance lockouts for incoming shift supervisors.",
+      "user_story": "US-15: Automated Standby Machine Switchover Advisory & Shift Handoff Log",
+      "prd_story_id": "US-15",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "ShiftLogEntryTest#test_the_shift_log_lists_active_changeovers,_derates_and_lockouts_newest_first",
+      "subtasks": [
+        "server/.rhino/blueprints/shift_log_entries.yaml — `event_type`, `severity`, `message`, `outstanding_actions`",
+        "Render the timeline in client/src/components/operations/ShiftLogPage.tsx from `useModelIndex('shift_log_entries', { sort: '-occurred_at' })`",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-99",
+      "name": "Console operators can check off step-by-step warm-up and start procedures for the standby machine, automatically syncing completion status back to /fleet-overview.",
+      "user_story": "US-15: Automated Standby Machine Switchover Advisory & Shift Handoff Log",
+      "prd_story_id": "US-15",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "ShiftLogEntryTest#test_step_check-off_persists_and_reports_completion_to_the_fleet_view",
+      "subtasks": [
+        "Store `procedure_steps_json` with `steps_completed` / `steps_total` in server/.rhino/blueprints/shift_log_entries.yaml and expose them as updatable for operations_superintendent and reliability_engineer (US-15 AC4's ACL, see gap G21)",
+        "Wire the check-off control in ShiftLogPage.tsx through `useModelUpdate('shift_log_entries')` and refresh the fleet asset rollup afterwards",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-100",
+      "name": "Only operations_superintendent, reliability_engineer, and admin can access /operations/shift-log.",
+      "user_story": "US-15: Automated Standby Machine Switchover Advisory & Shift Handoff Log",
+      "prd_story_id": "US-15",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "PermissionMatrixTest#test_every_blueprint_role/action_grants_exactly_what_the_policy_decides",
+      "subtasks": [
+        "server/.rhino/blueprints/shift_log_entries.yaml — `admin` full, `operations_superintendent` full, `reliability_engineer` store, others read-only",
+        "Add server/test/policies/shift_log_entry_policy_test.rb asserting machinery_specialist cannot store",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-101",
+      "name": "Unauthenticated users are redirected to /login when accessing /operations/shift-log.",
+      "user_story": "US-15: Automated Standby Machine Switchover Advisory & Shift Handoff Log",
+      "prd_story_id": "US-15",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "AuthenticatedEndpointsTest#test_role_scoped_read",
+      "subtasks": [
+        "Keep /operations/shift-log inside the `RequireAuth` group in client/src/routes/custom.jsx",
+        "Add server/test/integration/shift_log_entries_test.rb asserting 401 without a Bearer token",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-102",
+      "name": "Navigating to /model-management/retraining allows the specialist to select an asset and define a golden baseline window (e.g., 7 to 30 days post-overhaul).",
+      "user_story": "US-16: Anomaly Baseline Retraining & Model Evaluation Workbench",
+      "prd_story_id": "US-16",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ModelLifecycleTest#test_a_golden_post-overhaul_window_is_selectable_and_bounded",
+      "subtasks": [
+        "server/.rhino/blueprints/baseline_windows.yaml — `label`, `window_start`, `window_end`, `load_percent`, `completeness_percent`, `selected`",
+        "Render the golden-run selector in client/src/components/models/ModelRetrainingPage.tsx from `useModelIndex('baseline_windows', { filters: { asset_id } })`",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-103",
+      "name": "Triggering local training computes goodness-of-fit metrics and reconstruction error distributions at /model-management/evaluation within 60 seconds.",
+      "user_story": "US-16: Anomaly Baseline Retraining & Model Evaluation Workbench",
+      "prd_story_id": "US-16",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ModelLifecycleTest#test_local_training_produces_the_evaluation_surface_inside_the_budget",
+      "subtasks": [
+        "Implement `POST /api/{org}/model_baselines/:id/train` delegating to server/app/jobs/baseline_training_job.rb and writing `accuracy_metrics_json` + `training_log`",
+        "Add server/test/integration/model_baselines_test.rb asserting metrics are present and the API responds within 60 seconds",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-104",
+      "name": "The specialist can compare baseline distributions against historical validation datasets and deploy the calibrated model with one-click sign-off.",
+      "user_story": "US-16: Anomaly Baseline Retraining & Model Evaluation Workbench",
+      "prd_story_id": "US-16",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ModelLifecycleTest#test_promotion_deploys_the_candidate_and_logs_version,_author_and_timestamp",
+      "subtasks": [
+        "Implement `POST /api/{org}/model_baselines/:id/promote` in server/app/controllers/api/model_baselines_controller.rb gated on `gates_json`",
+        "Wire the evaluation-gate checkboxes and Promote button in client/src/components/models/ModelEvaluationPage.tsx",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-105",
+      "name": "Every model deployment is logged with model version, author ID, and timestamp in the tamper-evident audit trail.",
+      "user_story": "US-16: Anomaly Baseline Retraining & Model Evaluation Workbench",
+      "prd_story_id": "US-16",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ModelLifecycleTest#test_promotion_deploys_the_candidate_and_logs_version,_author_and_timestamp",
+      "subtasks": [
+        "Write the promotion through server/app/services/security_audit_writer.rb with model version, `approved_by_id` and `approved_at`",
+        "Add server/test/services/security_audit_writer_test.rb asserting the hash chain links to the previous row",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-106",
+      "name": "Only machinery_specialist and admin can access /model-management/retraining and /model-management/evaluation.",
+      "user_story": "US-16: Anomaly Baseline Retraining & Model Evaluation Workbench",
+      "prd_story_id": "US-16",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PermissionMatrixTest#test_every_blueprint_role/action_grants_exactly_what_the_policy_decides",
+      "subtasks": [
+        "server/.rhino/blueprints/model_baselines.yaml — `admin` full, `machinery_specialist` store/update, `reliability_engineer` read-only",
+        "Add server/test/policies/model_baseline_policy_test.rb asserting reliability_engineer gets 403 on store",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-107",
+      "name": "Unauthenticated users are redirected to /login when accessing /model-management/retraining or /model-management/evaluation.",
+      "user_story": "US-16: Anomaly Baseline Retraining & Model Evaluation Workbench",
+      "prd_story_id": "US-16",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "AuthenticatedEndpointsTest#test_role_scoped_read",
+      "subtasks": [
+        "Keep both /model-management/* routes inside the `RequireAuth` group in client/src/routes/custom.jsx",
+        "Add server/test/integration/model_baselines_test.rb asserting 401 without a Bearer token",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-108",
+      "name": "The data model stores training window end and the application uses it as described in this story.",
+      "user_story": "US-16: Anomaly Baseline Retraining & Model Evaluation Workbench",
+      "prd_story_id": "US-16",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_model_baselines_expose_algorithm_type,_hyperparameters_json_and_training_window_end",
+      "subtasks": [
+        "server/.rhino/blueprints/model_baselines.yaml — `training_window_end` datetime column",
+        "Add server/test/models/model_baseline_test.rb asserting `training_window_end` is sortable",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-109",
+      "name": "Extra E1: Emit the prototype's four-state severity vocabulary alongside the ISO health state",
+      "user_story": "Extra: computed attributes & response-shape alignment",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "AssetModelTest#test_severity_vocabulary_matches_the_locked_SeverityBadge_keys",
+      "subtasks": [
+        "Add `rhino_computed_attributes` to server/app/models/asset.rb, diagnostic_incident.rb, prescriptive_advisory.rb and shift_log_entry.rb emitting `severity` in {critical, warning, healthy, info}",
+        "Add server/test/models/asset_test.rb asserting a Trip/Alarm asset serialises `severity` as \"critical\" and a Normal asset as \"healthy\"",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-110",
+      "name": "Extra E2: Tag-keyed asset context resolves an asset tag to its numeric id",
+      "user_story": "Extra: tag-keyed routing",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "AssetsCrudTest#test_asset_tag_is_a_whitelisted_filter_for_the_tag-keyed_deep_links",
+      "subtasks": [
+        "Add `rhino_filters :asset_tag` to server/app/models/asset.rb and assert uniqueness scoped to organization",
+        "Create client/src/hooks/useAssetByTag.ts built on `useModelIndex('assets', { filters: { asset_tag: tag }, perPage: 1 })` and consume it from all four /assets/:assetId pages",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-111",
+      "name": "Extra E3: Fleet overview dashboard aggregate endpoint returns the four KPI cards, the ISO tallies and unit risk",
+      "user_story": "Extra: dashboard aggregates",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_fleet_overview_returns_the_four_prototype_KPIs_and_the_ISO_tallies",
+      "subtasks": [
+        "Create server/app/controllers/api/dashboard_controller.rb#fleet_overview using `Rhino.query(Asset)` and an explicit `AssetPolicy#index?` gate",
+        "Register `get 'dashboard/fleet_overview'` inside the tenant scope in server/config/routes/rhino.rb",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-112",
+      "name": "Extra E4: Active anomaly queue endpoint returns `id` as the asset tag so the locked navigation works",
+      "user_story": "Extra: dashboard aggregates",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "FleetGridContractTest#test_the_anomaly_queue_is_ordered_by_severity_then_by_age",
+      "subtasks": [
+        "Add `active_anomalies` to server/app/controllers/api/dashboard_controller.rb returning `[{id, issue, age, severity, asset_tag}]` ordered by severity then age",
+        "Consume it from client/src/components/fleet/FleetOverviewPage.tsx and client/src/components/GlobalAlertDrawer.tsx",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-113",
+      "name": "Extra E5: Unit risk matrix aggregate endpoint returns matrix rows, risk cells and the derate recommendation",
+      "user_story": "Extra: dashboard aggregates",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "FleetGridContractTest#test_the_unit_risk_matrix_cross-cuts_every_process_unit",
+      "subtasks": [
+        "Add `unit_risk_matrix` to server/app/controllers/api/dashboard_controller.rb using `Rhino.query(PlantUnit)` and `Rhino.query(PrescriptiveAdvisory)`",
+        "Register the route and consume it from client/src/components/operations/UnitRiskMatrixPage.tsx",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-114",
+      "name": "Extra E6: On-premises system health endpoint returns metrics, services, storage and platform events",
+      "user_story": "Extra: system governance",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_system_health_reports_metrics,_services,_storage_and_events",
+      "subtasks": [
+        "Create server/app/controllers/api/system_health_controller.rb returning the six metric cards, the six services, per-store storage percentages and events",
+        "Consume it from client/src/components/admin/SystemHealthPage.tsx and warn when a store exceeds 80%",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-115",
+      "name": "Extra E7: Signed tamper-evident audit export in JSON and CSV",
+      "user_story": "Extra: security audit",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_audit_evidence_exports_as_signed_JSON_and_CSV",
+      "subtasks": [
+        "Add an `export` action to server/app/controllers/api/security_audit_events_controller.rb supporting `?format=json|csv` with a sha256 signature over the hash chain",
+        "Wire the existing `Export evidence` button in client/src/components/admin/SecurityAuditPage.tsx to the export hook",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-116",
+      "name": "Extra E8: Historian tag mapping import accepts CSV and JSON and reports per-row validation errors",
+      "user_story": "Extra: bulk import",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_historian_tag_mapping_imports_CSV_and_JSON_and_rejects_bad_rows",
+      "subtasks": [
+        "Create server/app/services/historian_tag_importer.rb validating historian_type/source_tag_name/engineering_unit/scan_rate_ms/deadband_val",
+        "Expose it as `POST /api/{org}/historian_tags/import` and call it from TagMappingPage.tsx",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-117",
+      "name": "Extra E9: Batch tag validation harness validates up to 50 tags in under 2000ms",
+      "user_story": "Extra: bulk import",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_the_batch_validation_harness_reports_latency_and_per-tag_outcomes",
+      "subtasks": [
+        "Create server/app/services/tag_validation_service.rb and expose `POST /api/{org}/historian_tags/validate_batch` capped at 50 tags",
+        "Add server/test/integration/historian_tags_test.rb asserting a 50-tag batch completes under 2000ms with per-tag sample values",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-118",
+      "name": "Extra E10: Historian connector probe plus disk-backed ring buffering with loss-free replay",
+      "user_story": "Extra: historian ingestion",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_the_connector_probe_engages_ring_buffering_and_replays_with_zero_loss",
+      "subtasks": [
+        "Add `test_connection` to server/app/controllers/api/historian_connectors_controller.rb recording `poll_latency_ms`, `status` and `last_heartbeat`",
+        "Create server/app/services/historian_buffer_service.rb and server/app/jobs/historian_poll_job.rb implementing the 3000ms timeout, ring buffer accumulation and loss-free replay",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-119",
+      "name": "Extra E11: Asset hierarchy import accepts CSV, JSON and XML and rejects duplicate tags or invalid parents",
+      "user_story": "Extra: bulk import",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_asset_hierarchy_import_accepts_CSV/JSON/XML_and_rejects_duplicates_with_row_numbers",
+      "subtasks": [
+        "Create server/app/services/asset_import_service.rb validating the seven ISO 14224 taxonomy fields",
+        "Expose it as `POST /api/{org}/assets/import` and assert whole-file rejection with conflicting row numbers in server/test/integration/assets_test.rb",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-120",
+      "name": "Extra E12: Hierarchy validation and ISA-95 tree read model",
+      "user_story": "Extra: asset hierarchy",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_hierarchy_validation_reports_unique_tags,_parents_and_metadata",
+      "subtasks": [
+        "Add `validate_hierarchy` and `hierarchy` actions to server/app/controllers/api/assets_controller.rb",
+        "Return nested Complex/Unit/Train/Asset/Component nodes with a worst-child health rollup and consume it from client/src/components/assets/AssetHierarchyPage.tsx",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-121",
+      "name": "Extra E13: Local baseline training and gated model promotion",
+      "user_story": "Extra: model lifecycle",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_baseline_training_runs_locally_and_promotion_is_gated",
+      "subtasks": [
+        "Create server/app/jobs/baseline_training_job.rb and server/app/services/baseline_training_service.rb writing accuracy_metrics_json, gates_json, training_status and training_progress",
+        "Register both routes under the tenant scope in server/config/routes/rhino.rb and consume them from client/src/components/models/ModelRetrainingPage.tsx and ModelEvaluationPage.tsx",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-122",
+      "name": "Extra E14: Prescriptive dispatch to on-prem CMMS plus standby switchover appraisal",
+      "user_story": "Extra: CMMS dispatch",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_dispatch_creates_a_work_order_with_reservations,_and_a_failure_reverts_the_advisory",
+      "subtasks": [
+        "Create server/app/services/cmms_dispatch_service.rb with a 3000ms budget, error capture and advisory revert to `Ready for Dispatch`",
+        "Create server/app/services/standby_check_service.rb and expose `POST /api/{org}/prescriptive_advisories/:id/dispatch_work_order`",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-123",
+      "name": "Extra E15: Diagnostic finding authoring with technical notes and sign-off",
+      "user_story": "Extra: diagnostics",
+      "phase": "Phase 2: Diagnostics & Interactive Spectral Analytics",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_sign-off_persists_the_finding_and_propagates_it_to_planning",
+      "subtasks": [
+        "Add a `sign_off` action to server/app/controllers/api/diagnostic_incidents_controller.rb stamping `signed_off_by_id`, `signed_off_at` and `finding_status`",
+        "Permit the finding fields in server/app/policies/diagnostic_incident_policy.rb and wire the editor in AssetDiagnosticsPage.tsx",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-124",
+      "name": "Extra E16: Persisted anomaly acknowledgment transition with audit capture",
+      "user_story": "Extra: incident lifecycle",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_acknowledgement_persists_the_transition_and_writes_an_audit_row",
+      "subtasks": [
+        "Add an `acknowledge` transition to server/app/models/diagnostic_incident.rb setting `status = 'Under Investigation'` and stamping `acknowledged_by_id` / `acknowledged_at`",
+        "Write a SecurityAuditEvent from the transition and replace the local toggle in AssetHealthSummaryPage.tsx, AssetDiagnosticsPage.tsx and GlobalAlertDrawer.tsx",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-125",
+      "name": "Extra E17: RUL escalation and regime-aware P-F recalculation",
+      "user_story": "Extra: prognostics",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "PrognosticsServiceTest#test_RUL_at_or_below_14_days_escalates_the_advisory_and_alerts",
+      "subtasks": [
+        "Create server/app/jobs/rul_recalculation_job.rb escalating advisory urgency when `rul_days_estimate <= 14`",
+        "Create server/app/services/prognostics_service.rb recalculating the P-F slope on load deviation, feed-slate changes and regime transitions without resetting accumulated damage",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-126",
+      "name": "Extra E18: Automatic Normal-to-Alert transition on sustained anomaly breach",
+      "user_story": "Extra: health engine",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "HealthStateServiceTest#test_three_consecutive_p99_breaches_transition_Normal_to_Alert",
+      "subtasks": [
+        "Create server/app/services/health_state_service.rb incrementing `consecutive_breach_intervals` when `reconstruction_error > threshold_p99`",
+        "Create server/app/jobs/health_evaluation_job.rb and assert the 3-consecutive-interval rule in server/test/services/health_state_service_test.rb",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-127",
+      "name": "Extra E19: Air-gapped auth hardening — LDAP/AD broker, hardware token, lockout, idle expiry",
+      "user_story": "Extra: authentication",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "AuthenticationTest#test_five_consecutive_failures_lock_the_account",
+      "subtasks": [
+        "Create server/app/services/ldap_credential_broker.rb and server/app/services/hardware_token_verifier.rb wired through the Rhino auth hooks in server/config/initializers/rhino.rb",
+        "Create server/app/controllers/concerns/session_idle_guard.rb returning 401 after 30 minutes of api_token inactivity and assert all three behaviours in server/test/integration/auth_test.rb",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-128",
+      "name": "Extra E20: Append-only tamper-evident audit writer with a sha256 hash chain",
+      "user_story": "Extra: security audit",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "SecurityAuditChainTest#test_the_writer_chains_each_row_to_its_predecessor",
+      "subtasks": [
+        "Create server/app/services/security_audit_writer.rb setting `tamper_proof_hash = sha256(previous_hash + canonical payload)` and `previous_hash` chaining",
+        "Call server/app/services/security_audit_writer.rb from the Rhino auth hooks in server/config/initializers/rhino.rb, from baseline promotion and from CMMS dispatch, and assert in server/test/policies/security_audit_event_policy_test.rb that no role can store or update",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-129",
+      "name": "Extra E21: Telemetry staleness and quality gating blocks twin activation",
+      "user_story": "Extra: historian ingestion",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "HistorianTagModelTest#test_staleness_beyond_60_seconds_blocks_twin_activation",
+      "subtasks": [
+        "Compute `stale_seconds` and `quality_status` in server/app/models/historian_tag.rb and flag stale > 60s or bad OPC quality",
+        "Block digital-twin activation in server/app/services/tag_validation_service.rb and render the blocked row red in TagMappingPage.tsx",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-130",
+      "name": "Extra E22: Global keyboard ergonomics layer and asset/tag quick switcher",
+      "user_story": "Extra: keyboard ergonomics",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "useGlobalShortcuts.test.ts#mounts the layer from the shell",
+      "subtasks": [
+        "Create client/src/hooks/useGlobalShortcuts.ts and client/src/components/QuickSwitcher.tsx and mount both once in client/src/components/layout/AppLayout.tsx",
+        "Cover the shortcut set in client/src/hooks/useGlobalShortcuts.ts and assert it in client/src/hooks/useGlobalShortcuts.test.ts",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-131",
+      "name": "Extra E23: Air-gap ingestion telemetry badges rendered from the connector resource",
+      "user_story": "Extra: shell telemetry",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "Landing.test.tsx#renders PI latency, PHD sync state and the air-gap seal from historian_connectors + HistorianConnections.test.tsx#derives the air-gap ingestion readouts from the connector rows",
+      "subtasks": [
+        "Render PI latency, PHD sync state, air-gap sealed indicator and local buffer depth in client/src/components/layout/AppLayout.tsx",
+        "Source the values from `useModelIndex('historian_connectors')` inside client/src/components/layout/AppLayout.tsx (`poll_latency_ms`, `status`, `buffer_depth`, `last_heartbeat`)",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-132",
+      "name": "Extra E24: Seeds create every role, a UsersRole per role, the permission matrix and the demo data both sets of fixtures expect",
+      "user_story": "Extra: seeds",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "SeedsContractTest#test_the_seed_creates_the_blueprint_roles,_a_membership_per_role_and_the_permission_matrix",
+      "subtasks": [
+        "Create one `Role` row per server/.rhino/blueprints/_roles.yaml key (with the literal `admin` slug) and one `UsersRole` per role so `useRoles()` is never empty",
+        "Seed OrgRolePermission rows matching the blueprint action matrix plus the PRD sample_data and the prototype-narrative assets P-204A, C-101B and P-108C in server/db/seeds.rb",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-133",
+      "name": "User identity uses Bearer api_token authentication instead of the Devise-shaped sample_data columns, and api_token is never serialised or audited.",
+      "user_story": "Gap compensation: PRD sample_data User shape (DATA_MODEL_UX_MISMATCH)",
+      "compensated_from_gap": "G1",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "AssetsCrudTest#test_admin_can_create,_read,_update,_soft-delete,_restore_and_force-delete",
+      "subtasks": [
+        "Configure authentication in server/config/initializers/rhino.rb and add `rhino_additional_hidden :api_token` plus `rhino_audit_exclude :api_token` to server/app/models/user.rb",
+        "Add server/test/integration/auth_test.rb asserting `api_token` never appears in a session or user response body",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-134",
+      "name": "Security audit evidence lives in a dedicated organization-scoped resource and no custom `audit_logs` table is created, so the engine's audit table is never shadowed.",
+      "user_story": "Gap compensation: custom AuditLog table collision (DATA_MODEL_UX_MISMATCH)",
+      "compensated_from_gap": "G2",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "SecurityAuditChainTest#test_the_writer_chains_each_row_to_its_predecessor",
+      "subtasks": [
+        "Keep server/.rhino/blueprints/security_audit_events.yaml and add `include Rhino::HasAuditTrail` to diagnostic_incident.rb, model_baseline.rb, prescriptive_advisory.rb and cmms_work_order.rb",
+        "Add server/test/models/security_audit_event_test.rb asserting the model table is `security_audit_events` and a model change still writes to the engine `audit_logs`",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-135",
+      "name": "The Asset resource exposes the full digital-twin metadata and live-condition set the registry, fleet table and boundary pages read.",
+      "user_story": "Gap compensation: Asset column set (DATA_MODEL_UX_MISMATCH)",
+      "compensated_from_gap": "G3",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_assets_expose_criticality_class_and_the_extended_digital-twin_columns",
+      "subtasks": [
+        "server/.rhino/blueprints/assets.yaml — verify the extended column list survives `bundle exec rails rhino:blueprint`",
+        "Add server/test/models/asset_test.rb asserting the twin fields persist and `estimated_rul_window` is returned on show",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-136",
+      "name": "Historian tags expose per-tag quality, freshness and mapping state on top of the required import columns.",
+      "user_story": "Gap compensation: HistorianTag column set (DATA_MODEL_UX_MISMATCH)",
+      "compensated_from_gap": "G4",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_historian_tags_expose_measurement_type_and_the_quality/mapping_columns",
+      "subtasks": [
+        "server/.rhino/blueprints/historian_tags.yaml — verify `quality_status`, `last_value`, `last_validated_at`, `mapped`, `mapping_state` are generated",
+        "Add server/test/models/historian_tag_test.rb asserting those fields are filterable",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-137",
+      "name": "Historian connectors expose polling latency, buffer depth and backfill counters alongside endpoint configuration.",
+      "user_story": "Gap compensation: HistorianConnector column set (DATA_MODEL_UX_MISMATCH)",
+      "compensated_from_gap": "G5",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_historian_connectors_expose_protocol,_address,_heartbeat,_latency_and_buffer_depth",
+      "subtasks": [
+        "server/.rhino/blueprints/historian_connectors.yaml — verify `poll_latency_ms`, `buffer_depth`, `backfill_committed`, `backfill_total` are generated",
+        "Add server/test/models/historian_connector_test.rb asserting the counters are returned on index",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-138",
+      "name": "Per-asset failure-mode assessments are persisted and readable, backing both the classifier card and the physical fingerprint table.",
+      "user_story": "Gap compensation: missing failure-mode evidence entity (DATA_MODEL_UX_MISMATCH)",
+      "compensated_from_gap": "G6",
+      "phase": "Phase 2: Diagnostics & Interactive Spectral Analytics",
+      "status": "tested",
+      "test_name": "BearingKinematicsTest#test_the_classifier_ranks_a_confirmed_BPFO_above_the_other_modes",
+      "subtasks": [
+        "server/.rhino/blueprints/failure_mode_assessments.yaml — one row per assessed mode with marker/expected/observed/amplitude/match columns",
+        "Add server/test/integration/failure_mode_assessments_test.rb asserting an asset's assessments come back ordered by probability",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-139",
+      "name": "Diagnostic incidents carry the RUL confidence band, operating regime and engineering finding fields the diagnostics, advisory and prognostics screens read.",
+      "user_story": "Gap compensation: DiagnosticIncident column set (DATA_MODEL_UX_MISMATCH)",
+      "compensated_from_gap": "G7",
+      "phase": "Phase 2: Diagnostics & Interactive Spectral Analytics",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_diagnostic_incidents_expose_sync_status,_rul_days_estimate_and_the_finding_fields",
+      "subtasks": [
+        "server/.rhino/blueprints/diagnostic_incidents.yaml — verify `rul_window_low_days`, `rul_window_high_days`, `rul_confidence_pct`, `regime`, `finding_status` are generated",
+        "Add server/test/models/diagnostic_incident_test.rb asserting the RUL band and regime fields round-trip",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-140",
+      "name": "Spectrum snapshots are persisted per asset and channel with the spectrum, harmonics, bearing-marker, waterfall and orbit payloads.",
+      "user_story": "Gap compensation: missing spectral analytics entity (DATA_MODEL_UX_MISMATCH)",
+      "compensated_from_gap": "G8",
+      "phase": "Phase 2: Diagnostics & Interactive Spectral Analytics",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_spectrum_snapshots_expose_the_spectrum,_harmonic,_marker,_waterfall_and_orbit_payloads",
+      "subtasks": [
+        "server/.rhino/blueprints/spectrum_snapshots.yaml — `spectrum_json`, `harmonics_json`, `bearing_markers_json`, `waterfall_json`, `orbit_json`",
+        "Add server/test/integration/spectrum_snapshots_test.rb asserting the channel filter and `-captured_at` ordering",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-141",
+      "name": "Shift log entries are persisted with the timeline, handover fields, derate sign-off and standby procedure progress the operations screens read.",
+      "user_story": "Gap compensation: missing shift-log entity (DATA_MODEL_UX_MISMATCH)",
+      "compensated_from_gap": "G9",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "ShiftLogEntryTest#test_shift_log_entries_expose_the_procedure,_step_and_handover_columns",
+      "subtasks": [
+        "server/.rhino/blueprints/shift_log_entries.yaml — verify `procedure_steps_json`, `steps_completed`, `incoming_ack`, `handover_completed_at` are generated",
+        "Add server/test/integration/shift_log_entries_test.rb asserting the `-occurred_at` ordering and org isolation",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-142",
+      "name": "Golden baseline windows are selectable and model baselines expose the evaluation, gating and promotion surface.",
+      "user_story": "Gap compensation: missing model evaluation surface (DATA_MODEL_UX_MISMATCH)",
+      "compensated_from_gap": "G10",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ModelLifecycleTest#test_local_training_produces_the_evaluation_surface_inside_the_budget",
+      "subtasks": [
+        "server/.rhino/blueprints/baseline_windows.yaml plus the extended server/.rhino/blueprints/model_baselines.yaml",
+        "Add server/test/integration/model_baselines_test.rb asserting a candidate baseline's metrics, gates and status are returned",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-143",
+      "name": "Prescriptive advisories expose action steps, warehouse inventory, dispatch status and derate sign-off.",
+      "user_story": "Gap compensation: PrescriptiveAdvisory column set (DATA_MODEL_UX_MISMATCH)",
+      "compensated_from_gap": "G11",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_prescriptive_advisories_expose_urgency,_steps,_warehouse_and_standby_evidence",
+      "subtasks": [
+        "server/.rhino/blueprints/prescriptive_advisories.yaml — verify `action_steps_json`, `warehouse_status`, `warehouse_bin`, `parts_lead_time_days`, `status` are generated",
+        "Add server/test/models/prescriptive_advisory_test.rb asserting the action-step array round-trips",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-144",
+      "name": "CMMS work orders expose priority, required-by, material reservations and the dispatch error surface.",
+      "user_story": "Gap compensation: CmmsWorkOrder column set (DATA_MODEL_UX_MISMATCH)",
+      "compensated_from_gap": "G12",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_cmms_work_orders_expose_priority,_required_by,_reservations_and_error_message",
+      "subtasks": [
+        "server/.rhino/blueprints/cmms_work_orders.yaml — verify `priority`, `required_by`, `material_reservations_json`, `error_message`, `confirmed_at` are generated",
+        "Add server/test/models/cmms_work_order_test.rb asserting the reservation payload round-trips",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-145",
+      "name": "Every API response emits the prototype's four-state severity vocabulary so the locked SeverityBadge renders the correct state.",
+      "user_story": "Gap compensation: severity vocabulary drift (DATA_MODEL_UX_MISMATCH)",
+      "compensated_from_gap": "G13",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "AssetModelTest#test_severity_vocabulary_matches_the_locked_SeverityBadge_keys",
+      "subtasks": [
+        "Add the `severity` computed attribute to server/app/models/asset.rb, diagnostic_incident.rb, prescriptive_advisory.rb and shift_log_entry.rb",
+        "Add server/test/integration/assets_test.rb asserting the `severity` key is present and one of critical|warning|healthy|info for every row",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-146",
+      "name": "The fleet overview endpoint emits the four KPI cards the locked dashboard renders, alongside the ISO tallies the PRD names.",
+      "user_story": "Gap compensation: fleet KPI vocabulary drift (DATA_MODEL_UX_MISMATCH)",
+      "compensated_from_gap": "G14",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_fleet_overview_returns_the_four_prototype_KPIs_and_the_ISO_tallies",
+      "subtasks": [
+        "Return `kpis: [{label, value, note, direction}]` plus `iso_tallies` from server/app/controllers/api/dashboard_controller.rb#fleet_overview",
+        "Add server/test/integration/dashboard_test.rb asserting both shapes are present in one response",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-147",
+      "name": "Seeds contain both the PRD sample_data identities and the prototype-narrative assets so every locked fixture key and deep link resolves.",
+      "user_story": "Gap compensation: demo-data identity drift (DATA_MODEL_UX_MISMATCH)",
+      "compensated_from_gap": "G15",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "SeedsContractTest#test_the_seed_loads_the_PRD_sample_data_and_the_prototype-narrative_assets",
+      "subtasks": [
+        "Seed P-101A, K-301, P-402 and KT-201 from the PRD sample_data and add P-204A, C-101B and P-108C with matching health/severity in server/db/seeds.rb",
+        "Add server/test/integration/assets_test.rb asserting GET /api/{org}/assets?filter[asset_tag]=P-204A returns exactly one row",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-148",
+      "name": "Asset-context pages resolve the asset from its tag rather than assuming the numeric show route.",
+      "user_story": "Gap compensation: tag-keyed asset routes (DATA_MODEL_UX_MISMATCH)",
+      "compensated_from_gap": "G16",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "useAssetByTag.test.ts#exposes a tag-keyed lookup hook + AssetsCrudTest#test_asset_tag_is_a_whitelisted_filter_for_the_tag-keyed_deep_links",
+      "subtasks": [
+        "Whitelist `asset_tag` in server/app/models/asset.rb and create client/src/hooks/useAssetByTag.ts",
+        "Use `useAssetByTag` in AssetHealthSummaryPage.tsx, AssetDiagnosticsPage.tsx and SpectralAnalyticsPage.tsx",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-149",
+      "name": "The Asset Hierarchy Explorer renders the ISA-95 equipment tree with worst-child health roll-up.",
+      "user_story": "Gap compensation: /assets has no functional acceptance criterion (SITEMAP_PAGE_NO_AC)",
+      "compensated_from_gap": "G17",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "Assets.test.tsx#renders the ISA-95 tree with each node carrying its health state + ExtrasEndpointsTest#test_the_hierarchy_tree_rolls_the_worst_child_state_up_every_level",
+      "subtasks": [
+        "Render the hierarchy tree in client/src/components/assets/AssetHierarchyPage.tsx from the `hierarchy` endpoint in E12",
+        "Add client/src/components/assets/AssetHierarchyPage.test.tsx asserting a parent node shows the worst child health state and that searching filters the tree",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-150",
+      "name": "Selecting a hierarchy node populates the Identity, Components, Operating envelope and Tags inspector tabs.",
+      "user_story": "Gap compensation: /assets has no functional acceptance criterion (SITEMAP_PAGE_NO_AC)",
+      "compensated_from_gap": "G17",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "Assets.test.tsx#exposes the Identity, Components, Operating envelope and Tags tabs",
+      "subtasks": [
+        "Load `useModelIndex('asset_components', { filters: { asset_id } })` and `useModelIndex('historian_tags', { filters: { asset_id } })` on selection in AssetHierarchyPage.tsx",
+        "Add client/src/components/assets/AssetHierarchyPage.test.tsx asserting all four inspector tabs populate for the selected node",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-151",
+      "name": "The Asset Hierarchy Explorer drills into the asset health workspace with the selected asset pre-loaded.",
+      "user_story": "Gap compensation: /assets has no functional acceptance criterion (SITEMAP_PAGE_NO_AC)",
+      "compensated_from_gap": "G17",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "Assets.test.tsx#offers the health workspace drill-in keyed on the asset tag",
+      "subtasks": [
+        "Add the `Open health workspace` action navigating to `/assets/${asset.asset_tag}/health-summary` in AssetHierarchyPage.tsx",
+        "Add a client routing test in client/src/components/assets/AssetHierarchyPage.test.tsx asserting the destination renders the selected asset tag",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-152",
+      "name": "The Asset Hierarchy Explorer is reachable by every authenticated role and anonymous visitors are redirected to /login with their target preserved.",
+      "user_story": "Gap compensation: /assets has no ACL acceptance criterion (PROTECTED_ROUTE_NO_AUTH_AC)",
+      "compensated_from_gap": "G18",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "customRoutes.test.tsx#gives every workspace route an unauthenticated fallback to /login + AuthenticatedEndpointsTest#test_role_scoped_read",
+      "subtasks": [
+        "Set `roles: [admin, reliability_engineer, machinery_specialist, maintenance_planner, operations_superintendent]` on the /assets entry in .codalio/ui-handoff.json and gate the route in client/src/routes/custom.jsx",
+        "Add client/src/components/assets/AssetHierarchyPage.test.tsx asserting an anonymous visit to /assets redirects to /login with the return URL captured",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-153",
+      "name": "The public landing page at / is reachable without authentication and its calls to action navigate into the authenticated app.",
+      "user_story": "Gap compensation: prototype-only route / (PRD_PROTOTYPE_ROUTE_GAP)",
+      "compensated_from_gap": "G19",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "customRoutes.test.tsx#registers the landing page at \"/\" outside the authenticated guard",
+      "subtasks": [
+        "Register `/` as a public sibling of the `RequireAuth` group in client/src/routes/custom.jsx and mark `is_landing: true` in .codalio/ui-handoff.json",
+        "Add client/src/components/landing/LandingPage.test.tsx asserting / renders for an anonymous visitor and both CTAs navigate to /fleet-overview and /login",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-154",
+      "name": "Acknowledging an anomaly on the health summary persists the 'Under Investigation' status and writes an audit record.",
+      "user_story": "Gap compensation: acknowledge is a local toggle (FLOW_JOURNEY_MISMATCH)",
+      "compensated_from_gap": "G20",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_acknowledgement_persists_the_transition_and_writes_an_audit_row",
+      "subtasks": [
+        "Wire the Acknowledge control in AssetHealthSummaryPage.tsx and AssetDiagnosticsPage.tsx to `useModelUpdate('diagnostic_incidents')` with status, acknowledged_by_id and acknowledged_at",
+        "Add server/test/integration/diagnostic_incidents_test.rb asserting the persisted status and a linked SecurityAuditEvent",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-155",
+      "name": "Standby procedure check-off on the shift log is performed by an operations_superintendent or reliability_engineer and syncs completion back to the fleet view.",
+      "user_story": "Gap compensation: console-operator capability contradicts the route ACL (FLOW_JOURNEY_MISMATCH)",
+      "compensated_from_gap": "G21",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "ShiftLogEntryTest#test_step_check-off_is_restricted_to_the_superintendent_and_admin",
+      "subtasks": [
+        "Permit `procedure_steps_json`, `steps_completed` and `steps_total` updates for operations_superintendent and reliability_engineer in server/.rhino/blueprints/shift_log_entries.yaml",
+        "Add server/test/policies/shift_log_entry_policy_test.rb asserting no separate console_operator role exists and machinery_specialist cannot store",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-156",
+      "name": "The operations superintendent lands on /operations/unit-risk-matrix after login and can reach the shift log and fleet overview from there.",
+      "user_story": "Gap compensation: superintendent has no user journey (PERSONA_NO_JOURNEY)",
+      "compensated_from_gap": "G22",
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "status": "tested",
+      "test_name": "PermissionMatrixTest#test_every_blueprint_role/action_grants_exactly_what_the_policy_decides",
+      "subtasks": [
+        "Set `roles: [operations_superintendent, reliability_engineer, admin]` on the unit-risk-matrix and shift-log handoff entries and add both to the role-landing redirect map in client/src/lib/roleLanding.ts",
+        "Add client/src/lib/roleLanding.test.ts asserting an operations_superintendent session is redirected to /operations/unit-risk-matrix",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX.",
+        "Repair: created client/src/lib/roleLanding.ts (single role->landing map) and wired it into client/src/components/auth/LoginPage.tsx and client/src/routes/custom.jsx.",
+        "Repair: added server/app/controllers/api/session_controller.rb + `GET /api/:organization/me` so the SPA can resolve role_slugs from the server (the engine's login response carries none), and client/src/contexts/AppOwnerProvider.jsx now resolves roles from it.",
+        "Verified headlessly (real login form submit): operations_superintendent@example.com lands on /operations/unit-risk-matrix with a role-filtered sidebar.",
+        "Tests: client/src/lib/roleLanding.test.ts (`lands the operations superintendent on the unit risk matrix (AC-156)`); server/test/integration/session_test.rb."
+      ]
+    },
+    {
+      "id": "AC-157",
+      "name": "The system administrator lands on /admin/historian-connections after login and can traverse the full governance path.",
+      "user_story": "Gap compensation: administrator has no user journey (PERSONA_NO_JOURNEY)",
+      "compensated_from_gap": "G22",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PermissionMatrixTest#test_every_blueprint_role/action_grants_exactly_what_the_policy_decides",
+      "subtasks": [
+        "Set `roles: [admin]` on the five /admin/* entries in .codalio/ui-handoff.json and add the governance path to client/src/lib/roleLanding.ts",
+        "Add client/src/lib/roleLanding.test.ts asserting an admin session is redirected to /admin/historian-connections and client/src/components/layout/AppLayout.tsx exposes the governance path",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX.",
+        "Repair: created client/src/lib/roleLanding.ts and wired the post-login redirect in client/src/components/auth/LoginPage.tsx.",
+        "Repair: added server/app/controllers/api/session_controller.rb + `GET /api/:organization/me` (tenant-scoped: a non-member gets 404, unauthenticated 401) and client/src/contexts/AppOwnerProvider.jsx resolves roles from it, so the sidebar is filtered by real roles instead of an always-empty list.",
+        "Verified headlessly (real login form submit): administrator@example.com lands on /admin/historian-connections with all five governance links plus the full operations nav.",
+        "Tests: client/src/lib/roleLanding.test.ts (`lands the system administrator on historian connections (AC-157)`); server/test/integration/session_test.rb."
+      ]
+    },
+    {
+      "id": "AC-158",
+      "name": "Every column attributed to a story by the auto-generated data-model criteria exists on the model that actually owns it.",
+      "user_story": "Gap compensation: criteria attribute columns to the wrong story subject (DATA_MODEL_UX_MISMATCH)",
+      "compensated_from_gap": "G23",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "PrdDataModelContractTest#test_attributed_columns_live_on_the_owning_models_(G23_/_AC-158)",
+      "subtasks": [
+        "Confirm the attributed columns are declared in server/.rhino/blueprints/asset_components.yaml, server/.rhino/blueprints/model_baselines.yaml, server/.rhino/blueprints/prescriptive_advisories.yaml, server/.rhino/blueprints/historian_connectors.yaml and server/.rhino/blueprints/historian_tags.yaml",
+        "Add server/test/models coverage asserting each attributed column is present on its owning model",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-159",
+      "name": "Historian tag mapping imports are validated end to end, with per-row errors surfaced for rejected files.",
+      "user_story": "Gap compensation: no bulk import surface (DATA_MODEL_UX_MISMATCH)",
+      "compensated_from_gap": "G24",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_historian_tag_mapping_imports_CSV_and_JSON_and_rejects_bad_rows",
+      "subtasks": [
+        "Add server/test/integration/historian_tags_test.rb asserting a valid CSV import creates rows and an invalid one returns 422 with row numbers",
+        "Assert the same for the JSON variant in server/test/integration/historian_tags_test.rb",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-160",
+      "name": "Asset hierarchy imports are validated end to end, rejecting duplicate tags and invalid parents with the conflicting rows highlighted.",
+      "user_story": "Gap compensation: no bulk import surface (DATA_MODEL_UX_MISMATCH)",
+      "compensated_from_gap": "G24",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "ExtrasEndpointsTest#test_asset_hierarchy_import_accepts_CSV/JSON/XML_and_rejects_duplicates_with_row_numbers",
+      "subtasks": [
+        "Add server/test/integration/assets_test.rb asserting CSV, JSON and XML templates all import and that a duplicate tag rejects the whole file",
+        "Assert zero rows persisted after a rejected import in server/test/integration/assets_test.rb",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-161",
+      "name": "A hardware-token second factor is verified server-side before a session is issued.",
+      "user_story": "Gap compensation: MFA absent from the stack (DATA_MODEL_UX_MISMATCH)",
+      "compensated_from_gap": "G25",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "AuthenticationTest#test_a_provisioned_hardware_token_is_required_and_verified_server-side",
+      "subtasks": [
+        "Verify the token in server/app/services/hardware_token_verifier.rb from the Rhino `after_login` hook in server/config/initializers/rhino.rb",
+        "Add server/test/integration/auth_test.rb asserting login without a valid token returns 401 and no api_token is issued",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-162",
+      "name": "An account is locked after five consecutive failed authentication attempts.",
+      "user_story": "Gap compensation: lockout absent from the stack (DATA_MODEL_UX_MISMATCH)",
+      "compensated_from_gap": "G25",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "AuthenticationTest#test_five_consecutive_failures_lock_the_account",
+      "subtasks": [
+        "Track and enforce the failed-attempt counter in server/app/services/ldap_credential_broker.rb",
+        "Add server/test/integration/auth_test.rb asserting the sixth attempt returns a lockout status even with correct credentials",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-163",
+      "name": "A session whose api_token has been idle for more than 30 minutes is rejected with 401 and the client returns to /login.",
+      "user_story": "Gap compensation: idle expiry absent from the stack (DATA_MODEL_UX_MISMATCH)",
+      "compensated_from_gap": "G25",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "AuthenticationTest#test_a_token_idle_for_more_than_30_minutes_is_rejected_with_401",
+      "subtasks": [
+        "Enforce the idle window in server/app/controllers/concerns/session_idle_guard.rb and add server/test/integration/auth_test.rb asserting 401 after 31 minutes of inactivity",
+        "Route the 401 through `configureApi({ onUnauthorized })` in client/src/lib/api.ts so the SPA redirects to /login",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-164",
+      "name": "Air-gap ingestion telemetry is visible in the shell from live connector data rather than static markup.",
+      "user_story": "Gap compensation: navigation_design shell differs from the locked prototype (FLOW_JOURNEY_MISMATCH)",
+      "compensated_from_gap": "G26",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "HistorianConnections.test.tsx#derives the air-gap ingestion readouts from the connector rows + Landing.test.tsx#renders PI latency, PHD sync state and the air-gap seal from historian_connectors",
+      "subtasks": [
+        "Render PI latency, PHD sync state, air-gap sealed indicator and buffer depth from `useModelIndex('historian_connectors')` in client/src/components/layout/AppLayout.tsx",
+        "Add client/src/components/layout/AppLayout.test.tsx asserting the badge reflects a fixture connector with `poll_latency_ms` set",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX.",
+        "Repair: client/src/hooks/useApiQueries.ts built tenant URLs as `/api/{org}/...` on top of the axios baseURL `/api`, producing `/api/api/{org}/...` and a 404 for every custom endpoint; corrected to `/{org}/...`. Verified headlessly: the shell telemetry badges and every custom-endpoint page now load real data."
+      ]
+    },
+    {
+      "id": "AC-165",
+      "name": "Cmd/Ctrl+K opens an asset and historian tag quick switcher from anywhere in the authenticated shell.",
+      "user_story": "Gap compensation: keyboard layer absent from the prototype (DATA_MODEL_UX_MISMATCH)",
+      "compensated_from_gap": "G27",
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "status": "tested",
+      "test_name": "useGlobalShortcuts.test.ts#opens the asset and historian tag workspace on Cmd/Ctrl + K",
+      "subtasks": [
+        "Implement client/src/components/QuickSwitcher.tsx and bind it in client/src/hooks/useGlobalShortcuts.ts",
+        "Add client/src/components/QuickSwitcher.test.tsx asserting Cmd/Ctrl+K opens the switcher, typing filters assets, and Enter navigates to the selected asset",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    },
+    {
+      "id": "AC-166",
+      "name": "The triage, spectral and dispatch keyboard shortcuts operate on their respective screens.",
+      "user_story": "Gap compensation: keyboard layer absent from the prototype (DATA_MODEL_UX_MISMATCH)",
+      "compensated_from_gap": "G27",
+      "phase": "Phase 2: Diagnostics & Interactive Spectral Analytics",
+      "status": "developed",
+      "subtasks": [
+        "Bind 1-4 unit filters and J/K + Enter navigation on client/src/components/fleet/FleetOverviewPage.tsx",
+        "Bind H/B/W and Left/Right on client/src/components/assets/SpectralAnalyticsPage.tsx and Cmd/Ctrl+Enter on client/src/components/workorders/WorkOrderConfirmationPage.tsx",
+        "Developed in this stage: backend implementation, seeds, migrations and Minitest coverage are complete; the SPA page file and flat route exist with the listed hooks wired. The downstream ui-integration stage swaps in the locked prototype JSX."
+      ]
+    }
+  ],
+  "updated_at": "2026-10-06T23:48:46.652784+00:00",
+  "compliance": {
+    "implemented": 165,
+    "partial": 1,
+    "missing": 0,
+    "total": 166,
+    "score": 99.7,
+    "gates": [
+      {
+        "name": "backend",
+        "status": "passed",
+        "artifact": ".codalio/backend-gate.json",
+        "failures": []
+      },
+      {
+        "name": "frontend",
+        "status": "passed",
+        "artifact": ".codalio/frontend-gate.json",
+        "failures": []
+      },
+      {
+        "name": "runtime",
+        "status": "passed",
+        "artifact": ".codalio/runtime-smoke.json",
+        "failures": []
+      }
+    ]
+  }
+}

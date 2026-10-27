@@ -1,0 +1,23 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>render probe</title></head>
+<body>
+<pre id="probe">pending</pre>
+<script>
+  // Local-only render probe: sign in against the on-prem API and persist the Rhino
+  // bearer session exactly the way the login page does, so a second headed run on
+  // the same profile lands on an authenticated route.
+  fetch('/api/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: 'administrator@example.com', password: 'password' })
+  })
+    .then(r => r.json())
+    .then(d => {
+      if (!d.token) { document.getElementById('probe').textContent = 'LOGIN FAILED ' + JSON.stringify(d); return; }
+      localStorage.setItem('token', d.token);
+      localStorage.setItem('organization_slug', d.organization_slug);
+      document.getElementById('probe').textContent = 'SIGNED IN ' + d.organization_slug;
+    })
+    .catch(e => { document.getElementById('probe').textContent = 'ERROR ' + e; });
+</script>
+</body></html>

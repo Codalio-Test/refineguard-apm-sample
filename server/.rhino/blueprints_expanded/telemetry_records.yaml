@@ -1,0 +1,69 @@
+model: TelemetryRecord
+slug: telemetry_records
+table: telemetry_records
+options:
+  belongs_to_organization: true
+  soft_deletes: false
+  pagination: true
+  per_page: 100
+columns:
+  historian_tag_id:
+    type: foreignId
+    foreign_model: HistorianTag
+    nullable: false
+    index: true
+    filterable: true
+  recorded_at:
+    type: datetime
+    nullable: false
+    filterable: true
+    sortable: true
+  recorded_value:
+    type: float
+    nullable: false
+  data_quality_flag:
+    type: string
+    nullable: true
+    filterable: true
+relationships:
+- type: belongsTo
+  model: Organization
+- type: belongsTo
+  model: HistorianTag
+permissions:
+  admin:
+    actions:
+    - index
+    - show
+    - store
+    - update
+    - destroy
+    show_fields: '*'
+    create_fields: '*'
+    update_fields: '*'
+  reliability_engineer:
+    actions:
+    - index
+    - show
+    show_fields: '*'
+    create_fields: []
+    update_fields: []
+  machinery_specialist:
+    actions:
+    - index
+    - show
+    show_fields: '*'
+    create_fields: []
+    update_fields: []
+  operations_superintendent:
+    actions:
+    - index
+    - show
+    show_fields:
+    - id
+    - historian_tag_id
+    - recorded_at
+    - recorded_value
+    - data_quality_flag
+    create_fields: []
+    update_fields: []

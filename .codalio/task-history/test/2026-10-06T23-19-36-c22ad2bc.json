@@ -1,0 +1,32 @@
+[
+  {
+    "title": "Build AC coverage checklist (covered vs needs test)",
+    "notes": "166 ACs audited; 12 were untested and several mapped to generic tests",
+    "status": "done"
+  },
+  {
+    "title": "Write integration/feature tests for uncovered ACs",
+    "notes": "7 backend + 6 client test files added; existing tests annotated with their AC ids",
+    "status": "done"
+  },
+  {
+    "title": "Run suite and fix failures (max 3 runs)",
+    "notes": "Backend 142 runs / 2071 assertions / 0 failures; client 38/38; build green",
+    "status": "done"
+  },
+  {
+    "title": "Update .codalio/acceptance-criteria.json statuses + test_name",
+    "notes": "165 tested / 1 developed (AC-166); every test_name resolves to a real test",
+    "status": "done"
+  },
+  {
+    "title": "Cross-check coverage; write test-failures.md if gaps remain",
+    "notes": "Every AC referenced by at least one test file; index.json lists all 29 test files",
+    "status": "done"
+  },
+  {
+    "title": "Run runtime smoke self-check",
+    "notes": "{\"status\":\"passed\",\"failures\":[]} exit 0 (run twice, before and after the final edits)",
+    "status": "done"
+  }
+]

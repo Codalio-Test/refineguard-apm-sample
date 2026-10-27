@@ -1,0 +1,602 @@
+{
+  "project_type": "rhino",
+  "project_name": "RefineGuard APM",
+  "stack": {
+    "backend": "rhino-rails",
+    "client": "rhino-react",
+    "runtime": "v4"
+  },
+  "ruby_version": "3.3+",
+  "node_version": "20.x",
+  "base_owner": "Organization",
+  "routing_scheme": "flat",
+  "roles": [
+    "admin",
+    "reliability_engineer",
+    "machinery_specialist",
+    "maintenance_planner",
+    "operations_superintendent"
+  ],
+  "blueprints": {
+    "roles": "server/.rhino/blueprints/_roles.yaml",
+    "models": [
+      "server/.rhino/blueprints/plant_units.yaml",
+      "server/.rhino/blueprints/assets.yaml",
+      "server/.rhino/blueprints/asset_components.yaml",
+      "server/.rhino/blueprints/failure_modes.yaml",
+      "server/.rhino/blueprints/failure_mode_assessments.yaml",
+      "server/.rhino/blueprints/historian_connectors.yaml",
+      "server/.rhino/blueprints/historian_tags.yaml",
+      "server/.rhino/blueprints/telemetry_records.yaml",
+      "server/.rhino/blueprints/asset_health_indices.yaml",
+      "server/.rhino/blueprints/diagnostic_incidents.yaml",
+      "server/.rhino/blueprints/model_baselines.yaml",
+      "server/.rhino/blueprints/baseline_windows.yaml",
+      "server/.rhino/blueprints/prescriptive_advisories.yaml",
+      "server/.rhino/blueprints/cmms_work_orders.yaml",
+      "server/.rhino/blueprints/security_audit_events.yaml",
+      "server/.rhino/blueprints/shift_log_entries.yaml",
+      "server/.rhino/blueprints/spectrum_snapshots.yaml"
+    ]
+  },
+  "models": [
+    {
+      "name": "User",
+      "file": "server/app/models/user.rb",
+      "table": "users",
+      "provided_by": "rhino-rails",
+      "generated": false
+    },
+    {
+      "name": "Organization",
+      "file": "server/app/models/organization.rb",
+      "table": "organizations",
+      "provided_by": "rhino-rails",
+      "generated": false
+    },
+    {
+      "name": "Role",
+      "file": "server/app/models/role.rb",
+      "table": "roles",
+      "provided_by": "rhino-rails",
+      "generated": false
+    },
+    {
+      "name": "UserRole",
+      "file": "server/app/models/user_role.rb",
+      "table": "user_roles",
+      "provided_by": "rhino-rails",
+      "generated": false
+    },
+    {
+      "name": "PlantUnit",
+      "file": "server/app/models/plant_unit.rb",
+      "table": "plant_units",
+      "slug": "plant_units",
+      "generated": true
+    },
+    {
+      "name": "Asset",
+      "file": "server/app/models/asset.rb",
+      "table": "assets",
+      "slug": "assets",
+      "generated": true,
+      "contract_carrier": true
+    },
+    {
+      "name": "AssetComponent",
+      "file": "server/app/models/asset_component.rb",
+      "table": "asset_components",
+      "slug": "asset_components",
+      "generated": true
+    },
+    {
+      "name": "FailureMode",
+      "file": "server/app/models/failure_mode.rb",
+      "table": "failure_modes",
+      "slug": "failure_modes",
+      "generated": true
+    },
+    {
+      "name": "FailureModeAssessment",
+      "file": "server/app/models/failure_mode_assessment.rb",
+      "table": "failure_mode_assessments",
+      "slug": "failure_mode_assessments",
+      "generated": true,
+      "new_in_plan": true
+    },
+    {
+      "name": "HistorianConnector",
+      "file": "server/app/models/historian_connector.rb",
+      "table": "historian_connectors",
+      "slug": "historian_connectors",
+      "generated": true
+    },
+    {
+      "name": "HistorianTag",
+      "file": "server/app/models/historian_tag.rb",
+      "table": "historian_tags",
+      "slug": "historian_tags",
+      "generated": true
+    },
+    {
+      "name": "TelemetryRecord",
+      "file": "server/app/models/telemetry_record.rb",
+      "table": "telemetry_records",
+      "slug": "telemetry_records",
+      "generated": true
+    },
+    {
+      "name": "AssetHealthIndex",
+      "file": "server/app/models/asset_health_index.rb",
+      "table": "asset_health_indices",
+      "slug": "asset_health_indices",
+      "generated": true
+    },
+    {
+      "name": "DiagnosticIncident",
+      "file": "server/app/models/diagnostic_incident.rb",
+      "table": "diagnostic_incidents",
+      "slug": "diagnostic_incidents",
+      "generated": true,
+      "audit_trail": true
+    },
+    {
+      "name": "ModelBaseline",
+      "file": "server/app/models/model_baseline.rb",
+      "table": "model_baselines",
+      "slug": "model_baselines",
+      "generated": true,
+      "audit_trail": true
+    },
+    {
+      "name": "BaselineWindow",
+      "file": "server/app/models/baseline_window.rb",
+      "table": "baseline_windows",
+      "slug": "baseline_windows",
+      "generated": true,
+      "new_in_plan": true
+    },
+    {
+      "name": "PrescriptiveAdvisory",
+      "file": "server/app/models/prescriptive_advisory.rb",
+      "table": "prescriptive_advisories",
+      "slug": "prescriptive_advisories",
+      "generated": true,
+      "audit_trail": true
+    },
+    {
+      "name": "CmmsWorkOrder",
+      "file": "server/app/models/cmms_work_order.rb",
+      "table": "cmms_work_orders",
+      "slug": "cmms_work_orders",
+      "generated": true,
+      "audit_trail": true
+    },
+    {
+      "name": "SecurityAuditEvent",
+      "file": "server/app/models/security_audit_event.rb",
+      "table": "security_audit_events",
+      "slug": "security_audit_events",
+      "generated": true,
+      "new_in_plan": true,
+      "replaces": "PRD AuditLog (engine owns audit_logs)"
+    },
+    {
+      "name": "ShiftLogEntry",
+      "file": "server/app/models/shift_log_entry.rb",
+      "table": "shift_log_entries",
+      "slug": "shift_log_entries",
+      "generated": true,
+      "new_in_plan": true
+    },
+    {
+      "name": "SpectrumSnapshot",
+      "file": "server/app/models/spectrum_snapshot.rb",
+      "table": "spectrum_snapshots",
+      "slug": "spectrum_snapshots",
+      "generated": true,
+      "new_in_plan": true
+    }
+  ],
+  "policies": [
+    "server/app/policies/plant_unit_policy.rb",
+    "server/app/policies/asset_policy.rb",
+    "server/app/policies/asset_component_policy.rb",
+    "server/app/policies/failure_mode_policy.rb",
+    "server/app/policies/failure_mode_assessment_policy.rb",
+    "server/app/policies/historian_connector_policy.rb",
+    "server/app/policies/historian_tag_policy.rb",
+    "server/app/policies/telemetry_record_policy.rb",
+    "server/app/policies/asset_health_index_policy.rb",
+    "server/app/policies/diagnostic_incident_policy.rb",
+    "server/app/policies/model_baseline_policy.rb",
+    "server/app/policies/baseline_window_policy.rb",
+    "server/app/policies/prescriptive_advisory_policy.rb",
+    "server/app/policies/cmms_work_order_policy.rb",
+    "server/app/policies/security_audit_event_policy.rb",
+    "server/app/policies/shift_log_entry_policy.rb",
+    "server/app/policies/spectrum_snapshot_policy.rb"
+  ],
+  "controllers": [
+    {
+      "file": "server/app/controllers/api/dashboard_controller.rb",
+      "extra": "E3/E4/E5",
+      "actions": [
+        "fleet_overview",
+        "active_anomalies",
+        "unit_risk_matrix"
+      ]
+    },
+    {
+      "file": "server/app/controllers/api/system_health_controller.rb",
+      "extra": "E6",
+      "actions": [
+        "show"
+      ]
+    },
+    {
+      "file": "server/app/controllers/api/security_audit_events_controller.rb",
+      "extra": "E7",
+      "actions": [
+        "export"
+      ]
+    },
+    {
+      "file": "server/app/controllers/api/historian_tags_controller.rb",
+      "extra": "E8/E9",
+      "actions": [
+        "import",
+        "validate_batch"
+      ]
+    },
+    {
+      "file": "server/app/controllers/api/historian_connectors_controller.rb",
+      "extra": "E10",
+      "actions": [
+        "test_connection"
+      ]
+    },
+    {
+      "file": "server/app/controllers/api/assets_controller.rb",
+      "extra": "E11/E12",
+      "actions": [
+        "import",
+        "validate_hierarchy",
+        "hierarchy"
+      ]
+    },
+    {
+      "file": "server/app/controllers/api/model_baselines_controller.rb",
+      "extra": "E13",
+      "actions": [
+        "train",
+        "promote",
+        "export"
+      ]
+    },
+    {
+      "file": "server/app/controllers/api/prescriptive_advisories_controller.rb",
+      "extra": "E14",
+      "actions": [
+        "dispatch_work_order"
+      ]
+    },
+    {
+      "file": "server/app/controllers/api/diagnostic_incidents_controller.rb",
+      "extra": "E15/E16",
+      "actions": [
+        "sign_off",
+        "acknowledge"
+      ]
+    },
+    {
+      "file": "server/app/controllers/api/session_controller.rb",
+      "extra": "session identity for the flat-route shell",
+      "actions": [
+        "show"
+      ]
+    }
+  ],
+  "services": [
+    "server/app/services/refineguard/asset_hierarchy_service.rb",
+    "server/app/services/refineguard/asset_import_service.rb",
+    "server/app/services/refineguard/auth_controller_extensions.rb",
+    "server/app/services/refineguard/auth_hooks.rb",
+    "server/app/services/refineguard/baseline_training_service.rb",
+    "server/app/services/refineguard/bearing_kinematics.rb",
+    "server/app/services/refineguard/cmms_dispatch_service.rb",
+    "server/app/services/refineguard/diagnostics_classifier.rb",
+    "server/app/services/refineguard/hardware_token_verifier.rb",
+    "server/app/services/refineguard/health_state_service.rb",
+    "server/app/services/refineguard/historian_buffer_service.rb",
+    "server/app/services/refineguard/historian_tag_importer.rb",
+    "server/app/services/refineguard/ldap_credential_broker.rb",
+    "server/app/services/refineguard/prognostics_service.rb",
+    "server/app/services/refineguard/security_audit_writer.rb",
+    "server/app/services/refineguard/severity.rb",
+    "server/app/services/refineguard/standby_check_service.rb",
+    "server/app/services/refineguard/tag_validation_service.rb"
+  ],
+  "jobs": [
+    "server/app/jobs/application_job.rb",
+    "server/app/jobs/refineguard/baseline_training_job.rb",
+    "server/app/jobs/refineguard/health_evaluation_job.rb",
+    "server/app/jobs/refineguard/historian_poll_job.rb",
+    "server/app/jobs/refineguard/rul_recalculation_job.rb"
+  ],
+  "migrations": [
+    "server/db/migrate/20261006212100_create_users.rb",
+    "server/db/migrate/20261006212101_create_organizations.rb",
+    "server/db/migrate/20261006212102_create_roles.rb",
+    "server/db/migrate/20261006212103_create_user_roles.rb",
+    "server/db/migrate/20261006212104_create_org_role_permissions.rb",
+    "server/db/migrate/20261006212105_create_audit_logs.rb",
+    "server/db/migrate/20261006213532_create_failure_modes.rb",
+    "server/db/migrate/20261006213533_create_historian_connectors.rb",
+    "server/db/migrate/20261006213534_create_plant_units.rb",
+    "server/db/migrate/20261006213535_create_assets.rb",
+    "server/db/migrate/20261006213536_create_asset_components.rb",
+    "server/db/migrate/20261006213537_create_asset_health_indices.rb",
+    "server/db/migrate/20261006213538_create_diagnostic_incidents.rb",
+    "server/db/migrate/20261006213539_create_failure_mode_assessments.rb",
+    "server/db/migrate/20261006213540_create_historian_tags.rb",
+    "server/db/migrate/20261006213541_create_model_baselines.rb",
+    "server/db/migrate/20261006213542_create_baseline_windows.rb",
+    "server/db/migrate/20261006213543_create_prescriptive_advisories.rb",
+    "server/db/migrate/20261006213544_create_cmms_work_orders.rb",
+    "server/db/migrate/20261006213545_create_security_audit_events.rb",
+    "server/db/migrate/20261006213546_create_shift_log_entries.rb",
+    "server/db/migrate/20261006213547_create_spectrum_snapshots.rb",
+    "server/db/migrate/20261006213548_create_telemetry_records.rb",
+    "server/db/migrate/20261006215000_add_refineguard_columns_to_users.rb",
+    "server/db/migrate/20261006215001_create_organization_invitations.rb",
+    "server/db/migrate/20261006215002_add_hardware_token_and_idle_tracking_to_users.rb"
+  ],
+  "frontend_routes": [
+    {
+      "path": "/",
+      "page": "client/src/components/landing/LandingPage.tsx",
+      "auth": "public",
+      "is_landing": true
+    },
+    {
+      "path": "/login",
+      "page": "client/src/components/auth/LoginPage.tsx",
+      "auth": "public"
+    },
+    {
+      "path": "/fleet-overview",
+      "page": "client/src/components/fleet/FleetOverviewPage.tsx",
+      "auth": "authenticated"
+    },
+    {
+      "path": "/assets",
+      "page": "client/src/components/assets/AssetHierarchyPage.tsx",
+      "auth": "authenticated"
+    },
+    {
+      "path": "/assets/:assetId/health-summary",
+      "page": "client/src/components/assets/AssetHealthSummaryPage.tsx",
+      "auth": "authenticated"
+    },
+    {
+      "path": "/assets/:assetId/diagnostics",
+      "page": "client/src/components/assets/AssetDiagnosticsPage.tsx",
+      "auth": "authenticated"
+    },
+    {
+      "path": "/assets/:assetId/spectral-analytics",
+      "page": "client/src/components/assets/SpectralAnalyticsPage.tsx",
+      "auth": "authenticated"
+    },
+    {
+      "path": "/prescriptive-advisories",
+      "page": "client/src/components/advisories/PrescriptiveAdvisoriesPage.tsx",
+      "auth": "authenticated"
+    },
+    {
+      "path": "/work-orders/confirmation",
+      "page": "client/src/components/workorders/WorkOrderConfirmationPage.tsx",
+      "auth": "authenticated"
+    },
+    {
+      "path": "/operations/unit-risk-matrix",
+      "page": "client/src/components/operations/UnitRiskMatrixPage.tsx",
+      "auth": "authenticated"
+    },
+    {
+      "path": "/operations/shift-log",
+      "page": "client/src/components/operations/ShiftLogPage.tsx",
+      "auth": "authenticated"
+    },
+    {
+      "path": "/model-management/retraining",
+      "page": "client/src/components/models/ModelRetrainingPage.tsx",
+      "auth": "authenticated"
+    },
+    {
+      "path": "/model-management/evaluation",
+      "page": "client/src/components/models/ModelEvaluationPage.tsx",
+      "auth": "authenticated"
+    },
+    {
+      "path": "/admin/historian-connections",
+      "page": "client/src/components/admin/HistorianConnectionsPage.tsx",
+      "auth": "authenticated"
+    },
+    {
+      "path": "/admin/tag-mapping",
+      "page": "client/src/components/admin/TagMappingPage.tsx",
+      "auth": "authenticated"
+    },
+    {
+      "path": "/admin/asset-hierarchy-builder",
+      "page": "client/src/components/admin/AssetHierarchyBuilderPage.tsx",
+      "auth": "authenticated"
+    },
+    {
+      "path": "/admin/security-audit",
+      "page": "client/src/components/admin/SecurityAuditPage.tsx",
+      "auth": "authenticated"
+    },
+    {
+      "path": "/admin/system-health",
+      "page": "client/src/components/admin/SystemHealthPage.tsx",
+      "auth": "authenticated"
+    }
+  ],
+  "frontend_components": [
+    {
+      "file": "client/src/components/GlobalAlertDrawer.tsx"
+    },
+    {
+      "file": "client/src/components/QuickSwitcher.tsx"
+    },
+    {
+      "file": "client/src/components/SeverityBadge.tsx"
+    },
+    {
+      "file": "client/src/components/TelemetryBadges.tsx"
+    },
+    {
+      "file": "client/src/components/admin/AssetHierarchyBuilderPage.tsx"
+    },
+    {
+      "file": "client/src/components/admin/HistorianConnectionsPage.tsx"
+    },
+    {
+      "file": "client/src/components/admin/SecurityAuditPage.tsx"
+    },
+    {
+      "file": "client/src/components/admin/SystemHealthPage.tsx"
+    },
+    {
+      "file": "client/src/components/admin/TagMappingPage.tsx"
+    },
+    {
+      "file": "client/src/components/advisories/PrescriptiveAdvisoriesPage.tsx"
+    },
+    {
+      "file": "client/src/components/assets/AssetDiagnosticsPage.tsx"
+    },
+    {
+      "file": "client/src/components/assets/AssetHealthSummaryPage.tsx"
+    },
+    {
+      "file": "client/src/components/assets/AssetHierarchyPage.tsx"
+    },
+    {
+      "file": "client/src/components/assets/SpectralAnalyticsPage.tsx"
+    },
+    {
+      "file": "client/src/components/auth/LoginPage.tsx"
+    },
+    {
+      "file": "client/src/components/fleet/FleetOverviewPage.tsx"
+    },
+    {
+      "file": "client/src/components/landing/LandingPage.tsx"
+    },
+    {
+      "file": "client/src/components/layout/AppLayout.tsx"
+    },
+    {
+      "file": "client/src/components/models/ModelEvaluationPage.tsx"
+    },
+    {
+      "file": "client/src/components/models/ModelRetrainingPage.tsx"
+    },
+    {
+      "file": "client/src/components/operations/ShiftLogPage.tsx"
+    },
+    {
+      "file": "client/src/components/operations/UnitRiskMatrixPage.tsx"
+    },
+    {
+      "file": "client/src/components/ui.tsx"
+    },
+    {
+      "file": "client/src/components/workorders/WorkOrderConfirmationPage.tsx"
+    },
+    {
+      "file": "client/src/contexts/AppOwnerProvider.jsx"
+    },
+    {
+      "file": "client/src/routes/custom.jsx"
+    }
+  ],
+  "frontend_hooks": [
+    "client/src/contexts/AppOwnerProvider.jsx",
+    "client/src/hooks/useApiQueries.ts",
+    "client/src/hooks/useAssetByTag.ts",
+    "client/src/hooks/useGlobalShortcuts.ts",
+    "client/src/lib/api.ts",
+    "client/src/lib/roleLanding.ts",
+    "client/src/rhino.d.ts"
+  ],
+  "key_config_files": [
+    "client/src/lib/api.ts",
+    "client/src/main.tsx",
+    "client/vite.config.ts",
+    "server/config/initializers/rhino.rb",
+    "server/config/routes.rb",
+    "server/config/routes/rhino.rb",
+    "server/db/seeds.rb"
+  ],
+  "tests": [
+    "client/src/hooks/useAssetByTag.test.ts",
+    "client/src/hooks/useGlobalShortcuts.test.ts",
+    "client/src/lib/roleLanding.test.ts",
+    "client/src/pages/Assets.test.tsx",
+    "client/src/pages/HistorianConnections.test.tsx",
+    "client/src/pages/Landing.test.tsx",
+    "client/src/routes/customRoutes.test.tsx",
+    "server/test/integration/assets_crud_test.rb",
+    "server/test/integration/authenticated_endpoints_test.rb",
+    "server/test/integration/authentication_test.rb",
+    "server/test/integration/extras_endpoints_test.rb",
+    "server/test/integration/fleet_grid_contract_test.rb",
+    "server/test/integration/per_role_write_matrix_test.rb",
+    "server/test/integration/prd_data_model_contract_test.rb",
+    "server/test/integration/seeds_contract_test.rb",
+    "server/test/integration/session_test.rb",
+    "server/test/integration/shift_log_contract_test.rb",
+    "server/test/integration/spectrum_workbench_test.rb",
+    "server/test/integration/tenant_isolation_test.rb",
+    "server/test/models/asset_test.rb",
+    "server/test/models/bearing_kinematics_test.rb",
+    "server/test/models/diagnostic_incident_test.rb",
+    "server/test/models/health_state_service_test.rb",
+    "server/test/models/historian_buffer_service_test.rb",
+    "server/test/models/historian_tag_test.rb",
+    "server/test/models/model_lifecycle_test.rb",
+    "server/test/models/prognostics_service_test.rb",
+    "server/test/models/security_audit_event_test.rb",
+    "server/test/policies/permission_matrix_test.rb"
+  ],
+  "design_root": {
+    "path": ".codalio/ui-prototype",
+    "structure": ".codalio/ui-prototype/ui_structure.json",
+    "styles": ".codalio/ui-prototype/files/styles.css",
+    "pages": ".codalio/ui-prototype/files/pages",
+    "components": ".codalio/ui-prototype/files/components",
+    "ui_primitives": ".codalio/ui-prototype/files/components/ui",
+    "page_count": 18,
+    "locked": true
+  },
+  "planning_artifacts": [
+    ".codalio/prd-integrity-report.json",
+    ".rhino-plan.md",
+    ".codalio/acceptance-criteria.json",
+    ".codalio/ui-handoff.json",
+    ".codalio/index.json"
+  ],
+  "acceptance_criteria_summary": {
+    "total": 166,
+    "from_prd": 108,
+    "extras": 24,
+    "gap_compensated": 34
+  },
+  "updated_at": "2026-10-06T23:42:04Z"
+}

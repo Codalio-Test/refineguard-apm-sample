@@ -1,0 +1,46 @@
+---
+# Mutation testing configuration (see bin/mutation).
+#
+# The scope is the code where a wrong branch is a wrong decision rather than a
+# wrong pixel: the dispatch orchestrator, the diagnostic classifier and the
+# policies that decide who may do what. `mutant-minitest` runs only the tests
+# that declare `cover '<expression>'`, so each mutation is judged by the tests
+# that claim to cover it.
+integration: minitest
+# Mutant requires an explicit usage declaration. `opensource` is free for local
+# and open-source use; switch this to `commercial` (with a licence key) before
+# running it on a commercial codebase.
+usage: opensource
+# The covering tests boot Rails and write fixture rows, so a run under contention
+# can take several seconds. The default 5s ceiling is close enough to a normal
+# run that a genuinely-surviving mutant could be recorded as a timeout, so the
+# ceiling is raised well clear of the observed run time.
+mutation_timeout: 12.0
+environment_variables:
+  RAILS_ENV: test
+  COVERAGE: "false"
+requires:
+  - ./config/environment
+  - ./test/mutation_support
+# One entry per Rails autoload root, because mutant maps a constant to a file
+# path relative to each include: `Refineguard::DiagnosticsClassifier` is only
+# found when `app/services` is a root.
+includes:
+  - app/services
+  - app/policies
+  - app/models
+  - app/controllers
+  - app/serializers
+  # `test` is on the load path only (the test files `require "test_helper"` the
+  # same way `bin/rails test` does); the subject matcher never selects it.
+  - test
+matcher:
+  subjects:
+    - Refineguard::CmmsDispatchService
+    - Refineguard::DiagnosticsClassifier
+    - AssetPolicy
+    - PrescriptiveAdvisoryPolicy
+    - DiagnosticIncidentPolicy
+    - CmmsWorkOrderPolicy
+    - HistorianConnectorPolicy
+    - SecurityAuditEventPolicy

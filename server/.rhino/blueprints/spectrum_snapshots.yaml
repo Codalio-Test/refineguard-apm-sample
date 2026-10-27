@@ -1,0 +1,133 @@
+# RefineGuard APM — SpectrumSnapshot  (NEW — prototype-driven)
+#
+# Gap compensated: G8 (DATA_MODEL_UX_MISMATCH, high).
+# /assets/:assetId/spectral-analytics has no backing entity. It must serve:
+#   US-09 AC1  64k-line FFT acceleration and velocity spectra rendered within 500ms
+#   US-09 AC2  BPFO / BPFI / BSF / FTF overlay lines calculated from ISO 14224 bearing geometry
+#              and the *current* shaft RPM
+#   US-09 AC3  interactive harmonic cursors 1X-10X and sideband cursors with live delta-frequency
+#              and amplitude readouts
+#   US-10 AC1  3D waterfall cascade over 7 / 30 / 90-day horizons
+#   US-10 AC2  synchronized multi-tag trend (RMS, motor amps, suction pressure, bearing temp)
+#   US-10 AC3  interactive tilt/rotate/frequency-slice at 60 FPS
+# The prototype additionally reads Running speed, Cursor, Amplitude, Order and Δ baseline directly.
+# One row = one captured spectrum for one channel of one tag (plus its waterfall column and orbit).
+model: SpectrumSnapshot
+slug: spectrum_snapshots
+table: spectrum_snapshots
+
+options:
+  belongs_to_organization: true
+  soft_deletes: false
+  pagination: true
+  per_page: 50
+
+columns:
+  asset_id:
+    type: foreignId
+    foreign_model: Asset
+    nullable: false
+    index: true
+    filterable: true
+  historian_tag_id:
+    type: foreignId
+    foreign_model: HistorianTag
+    nullable: true
+    index: true
+    filterable: true
+  captured_at:
+    type: datetime
+    nullable: false
+    filterable: true
+    sortable: true
+  channel:
+    type: string
+    nullable: false
+    filterable: true
+  line_resolution:
+    type: bigInteger
+    nullable: true
+  sample_rate_hz:
+    type: float
+    nullable: true
+  rms_velocity:
+    type: float
+    nullable: true
+    sortable: true
+  running_speed_hz:
+    type: float
+    nullable: true
+  cursor_hz:
+    type: float
+    nullable: true
+  cursor_amplitude:
+    type: float
+    nullable: true
+  cursor_order:
+    type: float
+    nullable: true
+  delta_baseline:
+    type: float
+    nullable: true
+  spectrum_json:
+    type: json
+    nullable: true
+  harmonics_json:
+    type: json
+    nullable: true
+  bearing_markers_json:
+    type: json
+    nullable: true
+  waterfall_json:
+    type: json
+    nullable: true
+  orbit_json:
+    type: json
+    nullable: true
+  waterfall_horizon_days:
+    type: integer
+    nullable: true
+    filterable: true
+
+relationships:
+  - type: belongsTo
+    model: Organization
+  - type: belongsTo
+    model: Asset
+  - type: belongsTo
+    model: HistorianTag
+
+permissions:
+  admin:
+    actions: [index, show, store, update, destroy]
+    show_fields: "*"
+    create_fields: "*"
+    update_fields: "*"
+  machinery_specialist:
+    actions: [index, show, store]
+    show_fields: "*"
+    create_fields: &spectrum_writable
+      - asset_id
+      - historian_tag_id
+      - captured_at
+      - channel
+      - line_resolution
+      - sample_rate_hz
+      - rms_velocity
+      - running_speed_hz
+      - cursor_hz
+      - cursor_amplitude
+      - cursor_order
+      - delta_baseline
+      - spectrum_json
+      - harmonics_json
+      - bearing_markers_json
+      - waterfall_json
+      - orbit_json
+      - waterfall_horizon_days
+    update_fields: []
+  reliability_engineer:
+    actions: [index, show]
+    show_fields: "*"
+    create_fields: []
+    update_fields: []

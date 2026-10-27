@@ -1,0 +1,16 @@
+roles:
+  admin:
+    name: System Administrator
+    description: Industrial OT/IT systems engineer. Owns historian connectors, tag mapping, the asset hierarchy, model registry, security audit and on-prem system health. Full CRUD on registry + configuration resources; read-only on live diagnostic evidence.
+  reliability_engineer:
+    name: Reliability Engineer
+    description: Certified machinery reliability engineer (CMRP/CRE). Morning fleet triage, anomaly attribution and acknowledgment, RUL review, prescriptive advisory approval. Read-heavy on fleet/health surfaces; write on incident acknowledgment and advisory state.
+  machinery_specialist:
+    name: Rotating Equipment & Vibration Specialist
+    description: Vibration analyst (ISO 18436 Cat III/IV). FFT spectral workbench, bearing fault overlays, diagnostic finding authoring and sign-off, model baseline retraining and evaluation. Write on diagnostic findings, spectrum snapshots, baselines and tag mappings.
+  maintenance_planner:
+    name: Maintenance & Turnaround Planning Coordinator
+    description: Plans work packages and spares. Review prescriptive advisories, verify warehouse inventory, dispatch CMMS work orders to SAP PM / IBM Maximo. Write on advisories and work orders.
+  operations_superintendent:
+    name: Plant Operations Superintendent
+    description: Operations leadership. Plant-wide unit risk matrix, derating approvals, shift handover log and standby switchover advisories. Write on shift log entries and advisory derate approvals.

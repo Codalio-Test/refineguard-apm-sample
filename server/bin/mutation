@@ -1,0 +1,54 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Mutation testing for the decisions that must not be wrong: the CMMS dispatch
+# orchestrator, the diagnostics classifier, and the policies that decide who may
+# do what. The scope, the matcher and the minitest integration live in
+# `.mutant.yml`; this wrapper makes the invocation reproducible and turns the
+# reported mutation score into an exit status.
+#
+#   bin/mutation                 # run the whole scope
+#   bin/mutation --fail-fast     # stop at the first surviving mutant
+#   bin/mutation Refineguard::CmmsDispatchService   # one subject
+#
+# Mutant reports the mutation score as "Coverage:" (killed / total mutations).
+# A score below MINIMUM_SCORE fails the run, so a weak test is a failing build
+# rather than a footnote.
+
+require "open3"
+
+MINIMUM_SCORE = 80.0
+
+command = [ "bundle", "exec", "mutant", "run", "--usage", "opensource", *ARGV ]
+
+puts "==> #{command.join(' ')}"
+
+score = nil
+kills = nil
+alive = nil
+status = nil
+
+Open3.popen2e(*command) do |stdin, output, wait_thread|
+  stdin.close
+
+  output.each_line do |line|
+    print line
+    score = line[/Coverage:\s+([\d.]+)%/, 1].to_f if line.include?("Coverage:")
+    kills = line[/Kills:\s+(\d+)/, 1].to_i if line.include?("Kills:")
+    alive = line[/Alive:\s+(\d+)/, 1].to_i if line.include?("Alive:")
+  end
+
+  status = wait_thread.value
+end
+
+if score.nil?
+  warn "==> mutant produced no score line; treating the run as failed"
+  exit(status.exitstatus || 1)
+end
+
+puts format("==> mutation score: %.2f%% (%s killed / %s total), floor %.2f%%",
+            score, kills, kills.to_i + alive.to_i, MINIMUM_SCORE)
+
+exit(1) if score < MINIMUM_SCORE
+
+exit(status.exitstatus || 0)

@@ -1,0 +1,111 @@
+# RefineGuard APM — AssetHealthIndex
+# PRD: schema.asset_health_indices + US-04 AC3 (health index 0-100, ISO severity category,
+#      24h trend sparkline) + US-05 AC1 (top contributing sensor tags ranked by contribution)
+#      + US-05 AC3 (reconstruction error over the 99th percentile for 3 consecutive 1-min intervals
+#      transitions Normal -> Alert).
+# Gap compensated: G13 (severity vocabulary emitted alongside the ISO state).
+model: AssetHealthIndex
+slug: asset_health_indices
+table: asset_health_indices
+
+options:
+  belongs_to_organization: true
+  soft_deletes: false
+  pagination: true
+  per_page: 100
+
+columns:
+  asset_id:
+    type: foreignId
+    foreign_model: Asset
+    nullable: false
+    index: true
+    filterable: true
+  calculated_at:
+    type: datetime
+    nullable: false
+    filterable: true
+    sortable: true
+  health_score:
+    type: float
+    nullable: false
+    filterable: true
+    sortable: true
+  health_delta:
+    type: float
+    nullable: true
+  anomaly_confidence:
+    type: float
+    nullable: true
+    sortable: true
+  health_state:
+    type: string
+    nullable: true
+    default: "Normal"
+    filterable: true
+  contributing_factors_json:
+    type: json
+    nullable: true
+  envelope_checks_json:
+    type: json
+    nullable: true
+  reconstruction_error:
+    type: float
+    nullable: true
+    sortable: true
+  threshold_p99:
+    type: float
+    nullable: true
+  consecutive_breach_intervals:
+    type: integer
+    nullable: true
+    default: 0
+  iso_severity_category:
+    type: string
+    nullable: true
+    filterable: true
+
+relationships:
+  - type: belongsTo
+    model: Organization
+  - type: belongsTo
+    model: Asset
+
+permissions:
+  admin:
+    actions: [index, show, store, update, destroy]
+    show_fields: "*"
+    create_fields: "*"
+    update_fields: "*"
+  reliability_engineer:
+    actions: [index, show, store]
+    show_fields: "*"
+    create_fields: &ahi_engine_writable
+      - asset_id
+      - calculated_at
+      - health_score
+      - health_delta
+      - anomaly_confidence
+      - health_state
+      - contributing_factors_json
+      - envelope_checks_json
+      - reconstruction_error
+      - threshold_p99
+      - consecutive_breach_intervals
+      - iso_severity_category
+    update_fields: []
+  machinery_specialist:
+    actions: [index, show, store]
+    show_fields: "*"
+    create_fields: *ahi_engine_writable
+    update_fields: []
+  maintenance_planner:
+    actions: [index, show]
+    show_fields: [id, asset_id, calculated_at, health_score, health_delta, health_state, iso_severity_category, anomaly_confidence]
+    create_fields: []
+    update_fields: []
+  operations_superintendent:
+    actions: [index, show]
+    show_fields: [id, asset_id, calculated_at, health_score, health_delta, health_state, iso_severity_category]
+    create_fields: []
+    update_fields: []

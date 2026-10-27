@@ -1,0 +1,149 @@
+model: FailureModeAssessment
+slug: failure_mode_assessments
+table: failure_mode_assessments
+options:
+  belongs_to_organization: true
+  soft_deletes: false
+  pagination: true
+  per_page: 100
+columns:
+  asset_id:
+    type: foreignId
+    foreign_model: Asset
+    nullable: false
+    index: true
+    filterable: true
+  diagnostic_incident_id:
+    type: foreignId
+    foreign_model: DiagnosticIncident
+    nullable: true
+    index: true
+    filterable: true
+  failure_mode_id:
+    type: foreignId
+    foreign_model: FailureMode
+    nullable: true
+    index: true
+    filterable: true
+  probability:
+    type: float
+    nullable: false
+    filterable: true
+    sortable: true
+  confidence_low:
+    type: float
+    nullable: true
+  confidence_high:
+    type: float
+    nullable: true
+  marker_label:
+    type: string
+    nullable: true
+    filterable: true
+  expected_hz:
+    type: float
+    nullable: true
+  observed_hz:
+    type: float
+    nullable: true
+  amplitude:
+    type: float
+    nullable: true
+  match_score:
+    type: float
+    nullable: true
+    sortable: true
+  assigned_to_id:
+    type: foreignId
+    foreign_model: User
+    nullable: true
+    index: true
+  assessed_at:
+    type: datetime
+    nullable: false
+    sortable: true
+  assessed_by_id:
+    type: foreignId
+    foreign_model: User
+    nullable: true
+    index: true
+relationships:
+- type: belongsTo
+  model: Organization
+- type: belongsTo
+  model: Asset
+- type: belongsTo
+  model: DiagnosticIncident
+- type: belongsTo
+  model: FailureMode
+- type: belongsTo
+  model: User
+permissions:
+  admin:
+    actions:
+    - index
+    - show
+    - store
+    - update
+    - destroy
+    show_fields: '*'
+    create_fields: '*'
+    update_fields: '*'
+  machinery_specialist:
+    actions:
+    - index
+    - show
+    - store
+    - update
+    show_fields: '*'
+    create_fields:
+    - asset_id
+    - diagnostic_incident_id
+    - failure_mode_id
+    - probability
+    - confidence_low
+    - confidence_high
+    - marker_label
+    - expected_hz
+    - observed_hz
+    - amplitude
+    - match_score
+    - assessed_at
+    update_fields:
+    - asset_id
+    - diagnostic_incident_id
+    - failure_mode_id
+    - probability
+    - confidence_low
+    - confidence_high
+    - marker_label
+    - expected_hz
+    - observed_hz
+    - amplitude
+    - match_score
+    - assessed_at
+  reliability_engineer:
+    actions:
+    - index
+    - show
+    show_fields: '*'
+    create_fields: []
+    update_fields: []
+  maintenance_planner:
+    actions:
+    - index
+    - show
+    show_fields:
+    - id
+    - asset_id
+    - diagnostic_incident_id
+    - failure_mode_id
+    - probability
+    - marker_label
+    - expected_hz
+    - observed_hz
+    - amplitude
+    - match_score
+    - assessed_at
+    create_fields: []
+    update_fields: []

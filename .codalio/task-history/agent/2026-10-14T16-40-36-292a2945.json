@@ -1,0 +1,102 @@
+[
+  {
+    "title": "Recon: read all relevant server/client files",
+    "notes": "",
+    "status": "done"
+  },
+  {
+    "title": "Security: derate sign-off policy + custom action authorization (items 1,2)",
+    "notes": "",
+    "status": "done"
+  },
+  {
+    "title": "Idle-session guard on BaseController (item 3)",
+    "notes": "",
+    "status": "done"
+  },
+  {
+    "title": "Remove simulate_failure hook (item 4)",
+    "notes": "",
+    "status": "done"
+  },
+  {
+    "title": "Dispatch idempotency + DB sequence for WO numbers (item 5)",
+    "notes": "",
+    "status": "done"
+  },
+  {
+    "title": "Money decimal migration for exposure_usd_per_day (item 6)",
+    "notes": "",
+    "status": "done"
+  },
+  {
+    "title": "Serializers for hand-built JSON (item 7)",
+    "notes": "",
+    "status": "done"
+  },
+  {
+    "title": "CMMS + LDAP real/simulated adapters with SIMULATED surfacing (item 8)",
+    "notes": "",
+    "status": "done"
+  },
+  {
+    "title": "Shared importer base (item 9)",
+    "notes": "",
+    "status": "done"
+  },
+  {
+    "title": "Shared auth-card component + type anys (item 10)",
+    "notes": "",
+    "status": "done"
+  },
+  {
+    "title": "Shared data-loading hooks (item 11)",
+    "notes": "",
+    "status": "done"
+  },
+  {
+    "title": "Private loader/before_action for find-and-authorize (item 12)",
+    "notes": "",
+    "status": "done"
+  },
+  {
+    "title": "Split complex methods <=10 + classes >100 lines (item 13)",
+    "notes": "",
+    "status": "done"
+  },
+  {
+    "title": "rubocop -a and fix offenses (item 14)",
+    "notes": "",
+    "status": "done"
+  },
+  {
+    "title": "Pin deps + upgrade vitest (item 15)",
+    "notes": "",
+    "status": "done"
+  },
+  {
+    "title": "Remove ticket/story IDs from comments (item 16)",
+    "notes": "",
+    "status": "done"
+  },
+  {
+    "title": "Zod schema validation on forms (item 17)",
+    "notes": "",
+    "status": "done"
+  },
+  {
+    "title": "Code-split routes with lazy loading <500kB (item 18)",
+    "notes": "",
+    "status": "done"
+  },
+  {
+    "title": "Coverage: SimpleCov + Vitest >=80% (item 19)",
+    "notes": "",
+    "status": "done"
+  },
+  {
+    "title": "Deny-direction policy tests (item 20)",
+    "notes": "",
+    "status": "done"
+  }
+]

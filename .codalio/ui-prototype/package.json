@@ -1,0 +1,31 @@
+{
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "cmdk": "latest",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "lucide-react": "^0.468.0",
+    "tailwind-merge": "^2.6.0",
+    "react-router-dom": "^6.26.2",
+    "@radix-ui/react-slot": "1.0.2",
+    "@radix-ui/react-tabs": "latest",
+    "@radix-ui/react-label": "latest",
+    "@radix-ui/react-avatar": "latest",
+    "@radix-ui/react-dialog": "1.0.5",
+    "@radix-ui/react-select": "2.0.0",
+    "@radix-ui/react-slider": "latest",
+    "@radix-ui/react-switch": "latest",
+    "@radix-ui/react-toggle": "latest",
+    "@radix-ui/react-tooltip": "latest",
+    "@radix-ui/react-checkbox": "latest",
+    "@radix-ui/react-progress": "latest",
+    "class-variance-authority": "^0.7.1",
+    "@radix-ui/react-accordion": "latest",
+    "@radix-ui/react-separator": "latest",
+    "@radix-ui/react-scroll-area": "latest",
+    "@radix-ui/react-context-menu": "latest",
+    "@radix-ui/react-toggle-group": "latest",
+    "@radix-ui/react-dropdown-menu": "2.0.6",
+    "@radix-ui/react-navigation-menu": "1.1.4"
+  }
+}

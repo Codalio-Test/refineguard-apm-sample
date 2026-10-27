@@ -1,0 +1,193 @@
+{
+  "version": 1,
+  "generated_at": "2026-10-06T21:35:32+00:00",
+  "files": {
+    "failure_modes.yaml": {
+      "content_hash": "9da1a0301691d6fd30eecdf5077de0e3aeed9e7cab5466a154be927e21a3846e",
+      "generated_files": [
+        "app/models/failure_mode.rb",
+        "db/migrate/20261006213532_create_failure_modes.rb",
+        "spec/factories/failure_modes.rb",
+        "app/models/scopes/failure_mode_scope.rb",
+        "app/policies/failure_mode_policy.rb"
+      ],
+      "generated_at": "2026-10-06T21:35:32+00:00"
+    },
+    "historian_connectors.yaml": {
+      "content_hash": "922e0621d821271cbf17f067d6a272f80f20d7ba1f37aebc2316f27da329f9f3",
+      "generated_files": [
+        "app/models/historian_connector.rb",
+        "db/migrate/20261006213533_create_historian_connectors.rb",
+        "spec/factories/historian_connectors.rb",
+        "app/models/scopes/historian_connector_scope.rb",
+        "app/policies/historian_connector_policy.rb"
+      ],
+      "generated_at": "2026-10-06T21:35:32+00:00"
+    },
+    "plant_units.yaml": {
+      "content_hash": "010196bf9104f9bc56e4d6b2222d2a03e335fd53f6da6fc4facaddd48a07cb68",
+      "generated_files": [
+        "app/models/plant_unit.rb",
+        "db/migrate/20261006213534_create_plant_units.rb",
+        "spec/factories/plant_units.rb",
+        "app/models/scopes/plant_unit_scope.rb",
+        "app/policies/plant_unit_policy.rb"
+      ],
+      "generated_at": "2026-10-06T21:35:32+00:00"
+    },
+    "assets.yaml": {
+      "content_hash": "2036da771e2e2e545ebd1741b0555e8dd5e384dba2a831d0f64e62b326eba5b4",
+      "generated_files": [
+        "app/models/asset.rb",
+        "db/migrate/20261006213535_create_assets.rb",
+        "spec/factories/assets.rb",
+        "app/models/scopes/asset_scope.rb",
+        "app/policies/asset_policy.rb"
+      ],
+      "generated_at": "2026-10-06T21:35:32+00:00"
+    },
+    "asset_components.yaml": {
+      "content_hash": "c6b621b721a575ca24305c5303bb1b9f8210fbd4352845e3c65119ff89f95e23",
+      "generated_files": [
+        "app/models/asset_component.rb",
+        "db/migrate/20261006213536_create_asset_components.rb",
+        "spec/factories/asset_components.rb",
+        "app/models/scopes/asset_component_scope.rb",
+        "app/policies/asset_component_policy.rb"
+      ],
+      "generated_at": "2026-10-06T21:35:32+00:00"
+    },
+    "asset_health_indices.yaml": {
+      "content_hash": "ee2ad8531b0aab0fa2a4d63ecd73ec9465b369ea378b14dc348df0f2220539b6",
+      "generated_files": [
+        "app/models/asset_health_index.rb",
+        "db/migrate/20261006213537_create_asset_health_indices.rb",
+        "spec/factories/asset_health_indices.rb",
+        "app/models/scopes/asset_health_index_scope.rb",
+        "app/policies/asset_health_index_policy.rb"
+      ],
+      "generated_at": "2026-10-06T21:35:32+00:00"
+    },
+    "diagnostic_incidents.yaml": {
+      "content_hash": "e017d90212c9b957e5e0a495b38ebd88f7e9a87ce669983c639cdf43e449d959",
+      "generated_files": [
+        "app/models/diagnostic_incident.rb",
+        "db/migrate/20261006213538_create_diagnostic_incidents.rb",
+        "spec/factories/diagnostic_incidents.rb",
+        "app/models/scopes/diagnostic_incident_scope.rb",
+        "app/policies/diagnostic_incident_policy.rb"
+      ],
+      "generated_at": "2026-10-06T21:35:32+00:00"
+    },
+    "failure_mode_assessments.yaml": {
+      "content_hash": "a9299e9a5eebeb5a3ec0500c630b14facb30bc74d2e6af212bd13d841beae15e",
+      "generated_files": [
+        "app/models/failure_mode_assessment.rb",
+        "db/migrate/20261006213539_create_failure_mode_assessments.rb",
+        "spec/factories/failure_mode_assessments.rb",
+        "app/models/scopes/failure_mode_assessment_scope.rb",
+        "app/policies/failure_mode_assessment_policy.rb"
+      ],
+      "generated_at": "2026-10-06T21:35:32+00:00"
+    },
+    "historian_tags.yaml": {
+      "content_hash": "d29def0a7551f563adb963f0558bcf8b9ee789b7f7dd427b9c338292c22f3c5e",
+      "generated_files": [
+        "app/models/historian_tag.rb",
+        "db/migrate/20261006213540_create_historian_tags.rb",
+        "spec/factories/historian_tags.rb",
+        "app/models/scopes/historian_tag_scope.rb",
+        "app/policies/historian_tag_policy.rb"
+      ],
+      "generated_at": "2026-10-06T21:35:32+00:00"
+    },
+    "model_baselines.yaml": {
+      "content_hash": "396ba7a3be8e9f4137a7ccedc9a0b0d1935cd08e08e611c7d8a5a094d489c446",
+      "generated_files": [
+        "app/models/model_baseline.rb",
+        "db/migrate/20261006213541_create_model_baselines.rb",
+        "spec/factories/model_baselines.rb",
+        "app/models/scopes/model_baseline_scope.rb",
+        "app/policies/model_baseline_policy.rb"
+      ],
+      "generated_at": "2026-10-06T21:35:32+00:00"
+    },
+    "baseline_windows.yaml": {
+      "content_hash": "7ebaa56ba0cb99a940ca8c38940fae8aa4267501fa8ed4405785b4f098a6b95c",
+      "generated_files": [
+        "app/models/baseline_window.rb",
+        "db/migrate/20261006213542_create_baseline_windows.rb",
+        "spec/factories/baseline_windows.rb",
+        "app/models/scopes/baseline_window_scope.rb",
+        "app/policies/baseline_window_policy.rb"
+      ],
+      "generated_at": "2026-10-06T21:35:32+00:00"
+    },
+    "prescriptive_advisories.yaml": {
+      "content_hash": "38401fcd555f6cb348ec5236a0252e19f0da229fcbb561ee4db2bac8f00119b9",
+      "generated_files": [
+        "app/models/prescriptive_advisory.rb",
+        "db/migrate/20261006213543_create_prescriptive_advisories.rb",
+        "spec/factories/prescriptive_advisories.rb",
+        "app/models/scopes/prescriptive_advisory_scope.rb",
+        "app/policies/prescriptive_advisory_policy.rb"
+      ],
+      "generated_at": "2026-10-06T21:35:32+00:00"
+    },
+    "cmms_work_orders.yaml": {
+      "content_hash": "8722b44297c176e5d8775c1721f9fa5e2ea83532d4af6be60f34cb461db3a499",
+      "generated_files": [
+        "app/models/cmms_work_order.rb",
+        "db/migrate/20261006213544_create_cmms_work_orders.rb",
+        "spec/factories/cmms_work_orders.rb",
+        "app/models/scopes/cmms_work_order_scope.rb",
+        "app/policies/cmms_work_order_policy.rb"
+      ],
+      "generated_at": "2026-10-06T21:35:32+00:00"
+    },
+    "security_audit_events.yaml": {
+      "content_hash": "75250a71530a5bee2e8d5fc9262700104d0cfdcc41bf2ab46f3f719b9d7f10a0",
+      "generated_files": [
+        "app/models/security_audit_event.rb",
+        "db/migrate/20261006213545_create_security_audit_events.rb",
+        "spec/factories/security_audit_events.rb",
+        "app/models/scopes/security_audit_event_scope.rb",
+        "app/policies/security_audit_event_policy.rb"
+      ],
+      "generated_at": "2026-10-06T21:35:32+00:00"
+    },
+    "shift_log_entries.yaml": {
+      "content_hash": "6b54c838fa87069ecd5e5c9c41d0e3cd979789fe9acaf715de87e7957a3b5555",
+      "generated_files": [
+        "app/models/shift_log_entry.rb",
+        "db/migrate/20261006213546_create_shift_log_entries.rb",
+        "spec/factories/shift_log_entries.rb",
+        "app/models/scopes/shift_log_entry_scope.rb",
+        "app/policies/shift_log_entry_policy.rb"
+      ],
+      "generated_at": "2026-10-06T21:35:32+00:00"
+    },
+    "spectrum_snapshots.yaml": {
+      "content_hash": "48f896c18b40c43baadbd7a8bb03dc36c275798c6d318e44e94cc5dd7b3f2b18",
+      "generated_files": [
+        "app/models/spectrum_snapshot.rb",
+        "db/migrate/20261006213547_create_spectrum_snapshots.rb",
+        "spec/factories/spectrum_snapshots.rb",
+        "app/models/scopes/spectrum_snapshot_scope.rb",
+        "app/policies/spectrum_snapshot_policy.rb"
+      ],
+      "generated_at": "2026-10-06T21:35:32+00:00"
+    },
+    "telemetry_records.yaml": {
+      "content_hash": "367f4fd39863d386fca002b0c2690dce7ba38bc82b44d5002b90746380e711f4",
+      "generated_files": [
+        "app/models/telemetry_record.rb",
+        "db/migrate/20261006213548_create_telemetry_records.rb",
+        "spec/factories/telemetry_records.rb",
+        "app/models/scopes/telemetry_record_scope.rb",
+        "app/policies/telemetry_record_policy.rb"
+      ],
+      "generated_at": "2026-10-06T21:35:32+00:00"
+    }
+  }
+}

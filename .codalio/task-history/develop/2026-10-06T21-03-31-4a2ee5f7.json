@@ -1,0 +1,37 @@
+[
+  {
+    "title": "Diagnose the frontend build-evidence contract violation",
+    "notes": "Root cause: the type-export artifact lived only at client/src/types/rhino.d.ts; the host contract requires client/src/rhino.d.ts",
+    "status": "done"
+  },
+  {
+    "title": "Repair client/src/rhino.d.ts (nonempty regular file)",
+    "notes": "client/src/rhino.d.ts created (13,964 bytes, regular file); types/rhino.d.ts is now `export * from '../rhino'`",
+    "status": "done"
+  },
+  {
+    "title": "Reconcile type imports/consumers with the repaired path",
+    "notes": "tsc -b clean; all 20 @/types/rhino imports resolve; npm run build green (207 modules)",
+    "status": "done"
+  },
+  {
+    "title": "Verify frontend build and that the app mounts (#root non-trivial)",
+    "notes": "Headless chromium: unauthenticated landing renders, built dist bundle renders, served tunnel bundle renders, real login form submit renders the admin shell with live data",
+    "status": "done"
+  },
+  {
+    "title": "Verify backend runtime + acceptance-criteria state",
+    "notes": "PHASE_C_RUNTIME OK; SEED_CONTRACT OK; migrations all up; /me verified 200/401/404",
+    "status": "done"
+  },
+  {
+    "title": "Repair integration defects found during verification",
+    "notes": "Repaired: doubled /api baseURL (18 custom endpoints 404'd), missing server-side role source, missing roleLanding.ts. Backend 100 runs/1585 assertions/0 failures; vitest 6/6",
+    "status": "done"
+  },
+  {
+    "title": "Final contract audit and finish",
+    "notes": "Contract file verified, index.json reconciled to 0 dangling paths, AC JSON valid and no AC below `developed`, preview renders",
+    "status": "done"
+  }
+]

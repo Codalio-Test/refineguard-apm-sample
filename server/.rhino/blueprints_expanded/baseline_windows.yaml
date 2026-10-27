@@ -1,0 +1,106 @@
+model: BaselineWindow
+slug: baseline_windows
+table: baseline_windows
+options:
+  belongs_to_organization: true
+  soft_deletes: false
+  pagination: true
+  per_page: 50
+columns:
+  asset_id:
+    type: foreignId
+    foreign_model: Asset
+    nullable: false
+    index: true
+    filterable: true
+  model_baseline_id:
+    type: foreignId
+    foreign_model: ModelBaseline
+    nullable: true
+    index: true
+    filterable: true
+  label:
+    type: string
+    nullable: false
+    sortable: true
+    searchable: true
+  window_start:
+    type: datetime
+    nullable: false
+    filterable: true
+    sortable: true
+  window_end:
+    type: datetime
+    nullable: false
+    sortable: true
+  load_percent:
+    type: float
+    nullable: true
+    sortable: true
+  completeness_percent:
+    type: float
+    nullable: true
+    sortable: true
+  selected:
+    type: boolean
+    nullable: true
+    default: false
+    filterable: true
+  eligible:
+    type: boolean
+    nullable: true
+    default: true
+    filterable: true
+relationships:
+- type: belongsTo
+  model: Organization
+- type: belongsTo
+  model: Asset
+- type: belongsTo
+  model: ModelBaseline
+permissions:
+  admin:
+    actions:
+    - index
+    - show
+    - store
+    - update
+    - destroy
+    show_fields: '*'
+    create_fields: '*'
+    update_fields: '*'
+  machinery_specialist:
+    actions:
+    - index
+    - show
+    - store
+    - update
+    - destroy
+    show_fields: '*'
+    create_fields:
+    - asset_id
+    - model_baseline_id
+    - label
+    - window_start
+    - window_end
+    - load_percent
+    - completeness_percent
+    - selected
+    - eligible
+    update_fields:
+    - asset_id
+    - model_baseline_id
+    - label
+    - window_start
+    - window_end
+    - load_percent
+    - completeness_percent
+    - selected
+    - eligible
+  reliability_engineer:
+    actions:
+    - index
+    - show
+    show_fields: '*'
+    create_fields: []
+    update_fields: []

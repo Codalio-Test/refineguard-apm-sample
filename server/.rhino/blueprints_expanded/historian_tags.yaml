@@ -1,0 +1,177 @@
+model: HistorianTag
+slug: historian_tags
+table: historian_tags
+options:
+  belongs_to_organization: true
+  soft_deletes: true
+  pagination: true
+  per_page: 100
+columns:
+  asset_id:
+    type: foreignId
+    foreign_model: Asset
+    nullable: true
+    index: true
+    filterable: true
+  asset_component_id:
+    type: foreignId
+    foreign_model: AssetComponent
+    nullable: true
+    index: true
+    filterable: true
+  historian_connector_id:
+    type: foreignId
+    foreign_model: HistorianConnector
+    nullable: true
+    index: true
+    filterable: true
+  historian_type:
+    type: string
+    nullable: false
+    filterable: true
+  source_tag_name:
+    type: string
+    nullable: false
+    sortable: true
+    searchable: true
+  tag_path:
+    type: string
+    nullable: false
+    filterable: true
+    sortable: true
+    searchable: true
+  measurement_type:
+    type: string
+    nullable: true
+    filterable: true
+    searchable: true
+  engineering_unit:
+    type: string
+    nullable: true
+  scan_rate_ms:
+    type: integer
+    nullable: true
+    default: 1000
+  deadband_val:
+    type: float
+    nullable: true
+  scan_frequency_hz:
+    type: float
+    nullable: true
+  quality_status:
+    type: string
+    nullable: true
+    default: Good
+    filterable: true
+  last_value:
+    type: float
+    nullable: true
+  last_validated_at:
+    type: datetime
+    nullable: true
+    sortable: true
+  stale_seconds:
+    type: integer
+    nullable: true
+  mapped:
+    type: boolean
+    nullable: true
+    default: false
+    filterable: true
+  mapping_state:
+    type: string
+    nullable: true
+    default: Unmapped
+    filterable: true
+  compatible:
+    type: boolean
+    nullable: true
+    default: true
+    filterable: true
+relationships:
+- type: belongsTo
+  model: Organization
+- type: belongsTo
+  model: Asset
+- type: belongsTo
+  model: AssetComponent
+- type: belongsTo
+  model: HistorianConnector
+- type: hasMany
+  model: TelemetryRecord
+- type: hasMany
+  model: SpectrumSnapshot
+permissions:
+  admin:
+    actions:
+    - index
+    - show
+    - store
+    - update
+    - destroy
+    - trashed
+    - restore
+    - forceDelete
+    show_fields: '*'
+    create_fields: '*'
+    update_fields: '*'
+  machinery_specialist:
+    actions:
+    - index
+    - show
+    - store
+    - update
+    show_fields: '*'
+    create_fields:
+    - asset_id
+    - asset_component_id
+    - historian_connector_id
+    - historian_type
+    - source_tag_name
+    - tag_path
+    - measurement_type
+    - engineering_unit
+    - scan_rate_ms
+    - deadband_val
+    - scan_frequency_hz
+    - mapped
+    - mapping_state
+    update_fields:
+    - asset_id
+    - asset_component_id
+    - historian_connector_id
+    - historian_type
+    - source_tag_name
+    - tag_path
+    - measurement_type
+    - engineering_unit
+    - scan_rate_ms
+    - deadband_val
+    - scan_frequency_hz
+    - mapped
+    - mapping_state
+  reliability_engineer:
+    actions:
+    - index
+    - show
+    show_fields: '*'
+    create_fields: []
+    update_fields: []
+  maintenance_planner:
+    actions:
+    - index
+    - show
+    show_fields:
+    - id
+    - asset_id
+    - asset_component_id
+    - historian_type
+    - source_tag_name
+    - tag_path
+    - measurement_type
+    - engineering_unit
+    - quality_status
+    - last_value
+    - last_validated_at
+    create_fields: []
+    update_fields: []

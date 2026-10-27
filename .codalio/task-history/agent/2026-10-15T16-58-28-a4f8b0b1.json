@@ -1,0 +1,102 @@
+[
+  {
+    "title": "Audit working tree against all 16 items",
+    "notes": "Previous session's diff covers items 1-15; verified by reading code + running suites.",
+    "status": "done"
+  },
+  {
+    "title": "Item 1: derate throttle bounds 0-100 + 422 + tests",
+    "notes": "Model validates 0..100; approve_derate 422; tests for 250/-40/0/100 in extras_endpoints_test + error_contract_test.",
+    "status": "done"
+  },
+  {
+    "title": "Item 2: dispatch race with advisory.with_lock + test",
+    "notes": "advisory.with_lock wraps check+record; concurrency test asserts one work order; live 409 confirmed.",
+    "status": "done"
+  },
+  {
+    "title": "Item 3: System health measured-only values + not_measured + tests",
+    "notes": "Measured-only metrics, not_measured/null, SIMULATED services; server + client tests; live payload verified.",
+    "status": "done"
+  },
+  {
+    "title": "Item 4: sign-off + propagation in one transaction",
+    "notes": "sign_off + propagate_to_planning in one transaction; rollback test present.",
+    "status": "done"
+  },
+  {
+    "title": "Item 5: uniform {errors:[...]} shape end-to-end",
+    "notes": "{errors:[...]} from BaseController 401/403/404 + actions; apiErrorMessage flattens; error_contract_test.",
+    "status": "done"
+  },
+  {
+    "title": "Item 6: WorkOrderConfirmation response shape + typed hook + tests",
+    "notes": "Reads work_order.external_order_number, apiErrorMessage, typed CmmsDispatchResult; 3 tests incl 409/422.",
+    "status": "done"
+  },
+  {
+    "title": "Item 7: LDAP TLS + RFC4514 DN escaping + tests",
+    "notes": "StartTLS/LDAPS configurable, plaintext refused, RFC4514 escaping; DN + refusal tests.",
+    "status": "done"
+  },
+  {
+    "title": "Item 8: SecurityAuditEventPolicy create/update []",
+    "notes": "Policy returns [] for create/update matching blueprint; policy test asserts.",
+    "status": "done"
+  },
+  {
+    "title": "Item 9: SecurityAudit useMemo deps + late-data test",
+    "notes": "filteredEvents useMemo deps include auditEvents; late-data test added.",
+    "status": "done"
+  },
+  {
+    "title": "Item 10: all oxlint warnings fixed + JSX->TS conversion",
+    "notes": "oxlint clean; routes split (custom.tsx/lazyPages/RouteGuards); JSX->TS; impure render calls removed.",
+    "status": "done"
+  },
+  {
+    "title": "Item 11: de-duplicate auth fields, validation refinement, hooks",
+    "notes": "AuthCredentialFields/AuthCard, shared confirmedPassword, useFileImport/useRecordAction; any removed.",
+    "status": "done"
+  },
+  {
+    "title": "Item 12: remove comment residue",
+    "notes": "dashboard_controller comment fixed; no stray-punctuation comments remain.",
+    "status": "done"
+  },
+  {
+    "title": "Item 13: remove .codalio/review/*.log",
+    "notes": ".codalio/review/*.log deleted (staged) and gitignored.",
+    "status": "done"
+  },
+  {
+    "title": "Item 14: docs/architecture.md",
+    "notes": "docs/architecture.md covers layering, tenancy, per-action authz, adapters, session model.",
+    "status": "done"
+  },
+  {
+    "title": "Item 15: server+client branch coverage >=85% enforced",
+    "notes": "Server 87.64% branch / client 88.11% branch; thresholds enforced in SimpleCov + vitest config.",
+    "status": "done"
+  },
+  {
+    "title": "Item 16: mutation testing (mutant + stryker) >=80%",
+    "notes": "Stryker 98.81% (3 optional-chain survivors, kill-tests added). mutant full run in progress (3573 mutations).",
+    "status": "in_progress"
+  },
+  {
+    "title": "Guardrail F: run all 6 checks green",
+    "notes": "Re-run all six commands after final edits; server test run pending mutant completion (shared test DB).",
+    "status": "in_progress"
+  },
+  {
+    "title": "Guardrail G: exercise pages/endpoints as allowed+forbidden roles",
+    "notes": "All custom endpoints exercised as allowed + forbidden roles; pages 200 + component tests.",
+    "status": "done"
+  },
+  {
+    "title": "Guardrail H: self-review diff for regressions",
+    "notes": "Diff reviewed file by file; only comment/test-cleanup deletions; no weakened assertions.",
+    "status": "in_progress"
+  }
+]

@@ -1,0 +1,52 @@
+[
+  {
+    "title": "Survey design root + handoff + client state",
+    "notes": "ui-prototype is the design root; 18 pages, Tailwind v4 + shadcn primitives, react-router-dom, flat routes",
+    "status": "done"
+  },
+  {
+    "title": "Install design styling stack + prototype deps",
+    "notes": "Tailwind v4 + @tailwindcss/vite + 26 prototype deps installed; styles.css copied verbatim to client/src/index.css",
+    "status": "done"
+  },
+  {
+    "title": "Vendor prototype pages/components/assets verbatim",
+    "notes": "Pages/components/hooks/lib/images copied from the prototype; skeleton components removed",
+    "status": "done"
+  },
+  {
+    "title": "Wire data reads per page (data_contract)",
+    "notes": "Fixtures replaced with useModelIndex/Show + useApiQueries hooks on all 18 pages",
+    "status": "done"
+  },
+  {
+    "title": "Wire actions/mutations per page (action_contract)",
+    "notes": "Mutations/actions wired per action_contract; every Button has a handler or navigation",
+    "status": "done"
+  },
+  {
+    "title": "Register routers/routes + catch-all + flat owner context",
+    "notes": "custom.jsx mirrors the design routes; AppOwnerProvider wraps Layout; catch-all added; /auth/* standalone",
+    "status": "done"
+  },
+  {
+    "title": "Wire auth slots + auth routes",
+    "notes": "Layout identity/sign-out from the Rhino session; Login wired to useAuth; three required auth routes exist",
+    "status": "done"
+  },
+  {
+    "title": "Scaffold missing required screens in design language",
+    "notes": "AuthSignUp (invitation) + AuthResetPassword invented in the design language, outside the shell",
+    "status": "done"
+  },
+  {
+    "title": "Verify diff vs design root + build + runtime smoke",
+    "notes": "100% className survival across all 51 design files; single CSS graph; no tanstack; catch-all present; runtime_app_smoke.py exits 0 twice",
+    "status": "done"
+  },
+  {
+    "title": "Render probe (anti white-screen) in browser",
+    "notes": "Headless chromium CDP probe: / (12484 chars), /1/222 iframe URL (catch-all -> /), /login, real login submit -> /fleet-overview with 11 nav links, authed /fleet-overview 66992, /assets 44300, /admin/security-audit 42508; non-admin roles redirect to their own landing with rendered content. PROBE OK",
+    "status": "done"
+  }
+]

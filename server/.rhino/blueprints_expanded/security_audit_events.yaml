@@ -1,0 +1,80 @@
+model: SecurityAuditEvent
+slug: security_audit_events
+table: security_audit_events
+options:
+  belongs_to_organization: true
+  soft_deletes: false
+  pagination: true
+  per_page: 100
+columns:
+  user_id:
+    type: foreignId
+    foreign_model: User
+    nullable: true
+    index: true
+    filterable: true
+  actor_name:
+    type: string
+    nullable: true
+    filterable: true
+    sortable: true
+    searchable: true
+  actor_role:
+    type: string
+    nullable: true
+    filterable: true
+    searchable: true
+  action_type:
+    type: string
+    nullable: false
+    filterable: true
+    sortable: true
+    searchable: true
+  entity_affected:
+    type: string
+    nullable: true
+    filterable: true
+    searchable: true
+  source_host:
+    type: string
+    nullable: true
+    filterable: true
+    searchable: true
+  severity:
+    type: string
+    nullable: true
+    default: info
+    filterable: true
+    sortable: true
+  result:
+    type: string
+    nullable: true
+    default: Success
+    filterable: true
+  recorded_at:
+    type: datetime
+    nullable: false
+    filterable: true
+    sortable: true
+  tamper_proof_hash:
+    type: string
+    nullable: false
+  previous_hash:
+    type: string
+    nullable: true
+  details_json:
+    type: json
+    nullable: true
+relationships:
+- type: belongsTo
+  model: Organization
+- type: belongsTo
+  model: User
+permissions:
+  admin:
+    actions:
+    - index
+    - show
+    show_fields: '*'
+    create_fields: []
+    update_fields: []

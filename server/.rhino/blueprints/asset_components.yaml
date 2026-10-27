@@ -1,0 +1,86 @@
+# RefineGuard APM — AssetComponent
+# PRD: schema.asset_components + /assets inspector "Components" tab + US-02 AC
+#       "The data model stores component name / component type".
+model: AssetComponent
+slug: asset_components
+table: asset_components
+
+options:
+  belongs_to_organization: true
+  soft_deletes: true
+  pagination: true
+  per_page: 50
+
+columns:
+  asset_id:
+    type: foreignId
+    foreign_model: Asset
+    nullable: false
+    index: true
+    filterable: true
+  component_name:
+    type: string
+    nullable: false
+    sortable: true
+    searchable: true
+  component_type:
+    type: string
+    nullable: true
+    filterable: true
+  position:
+    type: string
+    nullable: true
+    filterable: true
+  bearing_model:
+    type: string
+    nullable: true
+  seal_type:
+    type: string
+    nullable: true
+  health_state:
+    type: string
+    nullable: true
+    default: "Normal"
+    filterable: true
+
+relationships:
+  - type: belongsTo
+    model: Organization
+  - type: belongsTo
+    model: Asset
+  - type: hasMany
+    model: HistorianTag
+
+permissions:
+  admin:
+    actions: [index, show, store, update, destroy, trashed, restore, forceDelete]
+    show_fields: "*"
+    create_fields: "*"
+    update_fields: "*"
+  machinery_specialist:
+    actions: [index, show, store, update]
+    show_fields: "*"
+    create_fields: &component_writable
+      - asset_id
+      - component_name
+      - component_type
+      - position
+      - bearing_model
+      - seal_type
+      - health_state
+    update_fields: *component_writable
+  reliability_engineer:
+    actions: [index, show]
+    show_fields: "*"
+    create_fields: []
+    update_fields: []
+  maintenance_planner:
+    actions: [index, show]
+    show_fields: [id, asset_id, component_name, component_type, position, bearing_model, seal_type]
+    create_fields: []
+    update_fields: []
+  operations_superintendent:
+    actions: [index, show]
+    show_fields: [id, asset_id, component_name, component_type, position, health_state]
+    create_fields: []
+    update_fields: []

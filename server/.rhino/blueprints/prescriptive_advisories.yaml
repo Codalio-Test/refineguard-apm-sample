@@ -1,0 +1,144 @@
+# RefineGuard APM — PrescriptiveAdvisory
+# PRD: schema.prescriptive_advisories + US-12 AC1 (recommended intervention + required parts kit +
+#      local warehouse bin inventory counts) + US-11 AC1/AC3 (RUL window, escalation to
+#      'Urgent Action Required' at <=14 days) + US-13 AC2/AC3 (verified derating advisory, e.g.
+#      throttle P-101A to 70% flow, approved with a timestamped superintendent sign-off written to
+#      the shift log) + US-15 AC1 (standby switchover advisory).
+# Backs: /prescriptive-advisories, /operations/unit-risk-matrix, /work-orders/confirmation.
+# Gaps compensated: G11 (missing fields), G13 (severity vocabulary).
+model: PrescriptiveAdvisory
+slug: prescriptive_advisories
+table: prescriptive_advisories
+
+options:
+  belongs_to_organization: true
+  soft_deletes: true
+  audit_trail: true
+  pagination: true
+  per_page: 100
+
+columns:
+  diagnostic_incident_id:
+    type: foreignId
+    foreign_model: DiagnosticIncident
+    nullable: false
+    index: true
+    filterable: true
+  advisory_code:
+    type: string
+    nullable: true
+    filterable: true
+    sortable: true
+    searchable: true
+  recommended_action:
+    type: text
+    nullable: true
+    searchable: true
+  action_steps_json:
+    type: json
+    nullable: true
+  throttle_percentage:
+    type: float
+    nullable: true
+    sortable: true
+  parts_required_json:
+    type: json
+    nullable: true
+  warehouse_status:
+    type: string
+    nullable: true
+    filterable: true
+  warehouse_bin:
+    type: string
+    nullable: true
+  parts_lead_time_days:
+    type: integer
+    nullable: true
+  urgency:
+    type: string
+    nullable: true
+    default: "Routine"
+    filterable: true
+    sortable: true
+  status:
+    type: string
+    nullable: false
+    default: "Ready for Dispatch"
+    filterable: true
+    sortable: true
+  due_within_days:
+    type: integer
+    nullable: true
+    filterable: true
+    sortable: true
+  standby_asset_id:
+    type: foreignId
+    foreign_model: Asset
+    nullable: true
+    index: true
+  standby_ready:
+    type: boolean
+    nullable: true
+    filterable: true
+  standby_checks_json:
+    type: json
+    nullable: true
+  derate_approved_by_id:
+    type: foreignId
+    foreign_model: User
+    nullable: true
+    index: true
+  derate_approved_at:
+    type: datetime
+    nullable: true
+
+relationships:
+  - type: belongsTo
+    model: Organization
+  - type: belongsTo
+    model: DiagnosticIncident
+  - type: belongsTo
+    model: Asset
+  - type: belongsTo
+    model: User
+  - type: hasMany
+    model: CmmsWorkOrder
+
+permissions:
+  admin:
+    actions: [index, show, store, update, destroy, trashed, restore, forceDelete]
+    show_fields: "*"
+    create_fields: "*"
+    update_fields: "*"
+  maintenance_planner:
+    actions: [index, show, store, update]
+    show_fields: "*"
+    create_fields: &advisory_writable
+      - diagnostic_incident_id
+      - advisory_code
+      - recommended_action
+      - action_steps_json
+      - throttle_percentage
+      - parts_required_json
+      - warehouse_status
+      - warehouse_bin
+      - parts_lead_time_days
+      - urgency
+      - status
+      - due_within_days
+    update_fields: *advisory_writable
+  reliability_engineer:
+    actions: [index, show, update]
+    show_fields: "*"
+    create_fields: []
+    update_fields: [urgency, status, due_within_days, recommended_action]
+  machinery_specialist:
+    actions: [index, show]
+    show_fields: "*"
+    create_fields: []
+    update_fields: []
+  operations_superintendent:
+    actions: [index, show, update]
+    show_fields: "*"
+    create_fields: []
+    update_fields: [throttle_percentage, derate_approved_at, status, standby_asset_id, standby_ready]

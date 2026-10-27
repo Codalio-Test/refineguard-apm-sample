@@ -1,0 +1,2148 @@
+{
+  "name": "RefineGuard APM",
+  "elevator_pitch": "In modern petroleum refining, an unexpected pump or compressor trip can trigger flaring, production curtailments, or catastrophic seal blowouts costing millions of dollars per day. RefineGuard APM is an industrial-grade, strictly on-premises predictive maintenance and asset performance platform engineered specifically for critical refinery rotating machinery. Operating entirely within air-gapped Purdue Model Level 3/3.5 OT networks, RefineGuard ingests high-frequency process and vibration telemetry directly from OSIsoft PI and Honeywell PHD historians, running multivariate anomaly detection and physics-informed failure mode diagnostics to detect mechanical degradation 14 to 30 days before functional failure. By eliminating cloud dependencies while slashing false alarms by over 60%, RefineGuard empowers reliability teams to extend MTBF, avert uncontained hydrocarbon releases, and shift from reactive firefights to high-confidence prescriptive maintenance.",
+  "problem_statement": "Refineries operate under intense operational pressure, where thousands of rotating machinery assets—including multi-stage centrifugal feed pumps, catalytic cracking wet gas compressors, hydrogen make-up reciprocating compressors, and steam turbine drivers—run continuously under extreme pressures, temperatures, and corrosive hydrocarbon environments. Today's operations suffer from critical vulnerabilities:\n\n1. Catastrophic Mechanical Failures: Sudden mechanical seal blowouts, bearing cage disintegrations, and impeller rubs frequently result in immediate unit shutdowns, dangerous hydrocarbon vapor leaks, emergency flaring, and OSHA/EPA compliance violations costing $1M-$5M per incident in lost gross margins and maintenance overhaul.\n2. Ineffective Time-Based and Route-Based Maintenance: Plants rely heavily on manual handheld vibration routes performed every 30 to 60 days, leaving wide blind spots where rapid degradation occurs unmonitored. Conversely, premature overhaul of healthy assets introduces secondary maintenance-induced failure risks and inflated turnaround costs.\n3. Severe SCADA/Historian Alarm Fatigue: Control room DCS and historian threshold alarms only trigger once parameters (such as vibration velocity or bearing metal temperature) breach high-high static trip points, leaving operators with minutes rather than weeks to intervene before emergency shutdowns.\n4. The Cloud SaaS Impasse: While modern machine learning APM exists in commercial cloud ecosystems, strict refinery cybersecurity frameworks (Purdue Model Level 3/3.5 DMZ, IEC 62443, NIS2) strictly forbid streaming raw process and operational telemetry to external cloud servers. Refineries are left stranded without modern predictive AI because standard SaaS tools cannot operate within air-gapped, zero-outbound-internet architectures.",
+  "solution": "RefineGuard APM delivers a zero-cloud, fully autonomous on-premises Asset Performance Management platform deployed inside the refinery's OT/IT Level 3/3.5 perimeter. It bridges plant historians with cutting-edge machine learning and deterministic machinery diagnostics:\n\n1. High-Throughput On-Prem Data Connectors: Natively integrates with OSIsoft PI System / AVEVA PI AF, Honeywell PHD, and Yokogawa Exaquantum historians via OPC UA, native SDKs, and REST/AF SDK without modifying DCS controls or introducing network latency.\n2. Multivariate Asset Health Index: Combines high-frequency vibration spectrums, bearing/winding temperatures, motor current signatures, lube oil differential pressures, suction/discharge pressures, and seal buffer pressures into a unified dynamic Asset Health Index (0-100) aligned with ISO 10816-3/7 and ISO 14224 failure taxonomy.\n3. Unsupervised & Semi-Supervised Anomaly Detection: Employs autoencoders, principal component analysis, and dynamic time warping calibrated against clean baseline operating regimes (accounting for process swings, feed gravity changes, and throughput variations) to pinpoint micro-deviations 14-30 days before threshold exceedance.\n4. Diagnostic Classifier & Failure Mode Fingerprinting: Identifies specific failure mechanisms—including cavitation, unbalance, angular misalignment, bearing inner/outer race spalling, seal flush degradation, and impeller blade pass defects—distinguishing between process anomalies and mechanical distress.\n5. Remaining Useful Life (RUL) & Prescriptive Action: Calculates prognostic degradation trajectories and estimates time-to-functional-failure, automatically prescribing operational throttles and generating maintenance work-order payloads ready for export into enterprise CMMS/EAM systems (SAP PM, IBM Maximo).",
+  "vision": "RefineGuard APM's long-term vision is to transform oil refinery rotating equipment operations from reactive condition monitoring into a fully autonomous, closed-loop Asset Performance Ecosystem. \n\nOver the next 3 to 5 years, RefineGuard will evolve to:\n1. Autonomous Operational Optimization: Move beyond advisory alerting to closed-loop DCS communication, where safe operating envelopes are dynamically negotiated with Advanced Process Control (APC) systems to automatically de-stress degraded machinery while preserving refinery throughput.\n2. Federated Enterprise Fleet Intelligence: Enable multi-refinery operators to share anonymized, fleet-wide failure models and degradation physics across decentralized air-gapped sites via privacy-preserving federated learning—without moving raw operational data outside site boundaries.\n3. Full Lifecycle Digital Twins: Integrate engineering design data, 3D spatial models, acoustic sensor telemetry, and lubricant lab spectroscopy into an all-encompassing machinery digital twin that optimizes turnaround intervals, capital spare parts holding, and total cost of ownership across decades of refinery operations.",
+  "competitors": "1. GE Vernova / Bently Nevada System 1:\n- Comparison: System 1 is an industry-standard online condition monitoring system widely deployed for turbomachinery protection and rack-based vibration diagnostics.\n- Differentiation: While System 1 excels at API 670 machinery protection and specialized vibration rack analysis, it is notoriously complex, expensive to scale across general balance-of-plant (BOP) pumps and motors, and lacks modern multivariate anomaly detection that merges process telemetry (temperatures, flow, pressure) with vibration. RefineGuard APM offers intuitive multivariate AI, covers both critical turbomachinery and fleet-wide BOP assets, and integrates seamlessly without requiring proprietary edge hardware.\n\n2. AspenTech Mtell:\n- Comparison: Mtell provides agent-based pattern recognition for industrial equipment and operates on-premises.\n- Differentiation: Mtell requires laborious configuration of 'failure agents' and 'normal agents' for every machine, leading to high professional services overhead and brittle models that break when process conditions shift. RefineGuard APM uses self-calibrating unsupervised multivariate autoencoders combined with ISO 14224/10816 machinery physics heuristics, drastically shortening time-to-value without manual agent programming.\n\n3. AVEVA Predictive Analytics (formerly PRiSM):\n- Comparison: Leading APM platform using empirical similarity modeling (ESM) that integrates with OSIsoft PI.\n- Differentiation: AVEVA Predictive Analytics relies heavily on legacy ESM algorithms that struggle with non-linear transient states and complex rotating vibration harmonics. Furthermore, AVEVA's modern roadmap is aggressively shifting toward cloud SaaS (AVEVA Connect), which conflicts with air-gapped refinery OT policies. RefineGuard is built ground-up for high-frequency spectral analytics and committed to a pure on-premises, air-gapped lifecycle.\n\n4. Uptake / Baker Hughes Cordant:\n- Comparison: Cloud-native enterprise AI APM offerings.\n- Differentiation: Uptake and Cordant depend heavily on multi-tenant cloud infrastructure and outbound cloud data gateways. Because oil refinery OT security strictly enforces Purdue Level 3 isolation and prohibits cloud connectivity, these solutions are non-viable or require extreme compliance exceptions. RefineGuard operates natively on local bare-metal or private cluster hardware with zero cloud dependencies.",
+  "success_metrics": "1. Unplanned Downtime Reduction: Achieve a 25% to 40% reduction in rotating equipment-related unplanned unit shutdowns, slowdowns, and flaring incidents within 12 months of deployment.\n2. Advance Warning Lead Time (MTTD): Deliver early anomaly warnings 14 to 30 days prior to functional equipment failure, expanding the operational P-F interval to enable planned turnarounds.\n3. False Alarm Suppression: Decrease false positive machinery alerts by >=60% compared to legacy DCS/historian static threshold alarms, restoring engineer trust.\n4. Mean Time Between Failures (MTBF) Extension: Increase rotating equipment MTBF across monitored units by 20% to 35% through early defect remediation and vibration harm prevention.\n5. Maintenance Cost Savings: Reduce emergency maintenance spend and reactive overtime repairs by 30%, saving an estimated $1.8M to $4.5M annually for a typical 250,000 BPD refinery.\n6. Zero Cloud / Security Compliance: Maintain 100% on-premises operational continuity with zero outbound internet network packets, achieving 100% compliance with IEC 62443 Level 3 cybersecurity audits.",
+  "design_principles": "### 1. High-Density Data Architecture with Progressive Disclosure\nRefineGuard APM operates in 24/7 mission-critical petrochemical control rooms and reliability engineering workspaces where seconds matter. The interface maximizes operational situational awareness through compact, information-dense visual layouts that aggregate hundreds of historian tags into coherent asset representations. Key telemetry (overall RMS velocity, peak-to-peak displacement, bearing temperatures, discharge pressures, motor current) is visible at a glance without decorative whitespace or gratuitous padding. Deep analytical detail (FFT spectral charts, harmonic sidebands, Nyquist/Bode plots, and fault frequency markers) is progressively disclosed via structured drill-downs and docked analytical drawers, preventing cognitive overload during upset conditions.\n\n### 2. ISO 10816 & Petrochemical Telemetry Color Semantics (Strict 4-State Chroma)\nColors convey operational severity with strict adherence to industrial standards (ISO 10816-3/7 and API 670 machinery vibration states). Color is never used purely for decoration. Visual states are rigorously mapped:\n- **Normal / Healthy (ISO Zone A/B):** Desaturated Emerald Green (`#10B981` / Dark token `#059669`). Stable baseline operation within permissible limits.\n- **Alert / Degraded (ISO Zone C - Advisory):** Muted Amber/Yellow (`#F59E0B` / Dark token `#D97706`). Long-term degradation requiring engineering review; non-imminent intervention.\n- **Alarm / Restricted (ISO Zone D - High):** High-Chroma Orange (`#F97316` / Dark token `#EA580C`). Actionable machine distress requiring planned operational derate or maintenance within 14-30 days.\n- **Trip / Critical (ISO Zone D - Severe/Shutdown):** Vivid Vermilion Red (`#EF4444` / Dark token `#DC2626`). Imminent failure threshold with hazard of catastrophic trip; immediate mitigation required.\nAll colored states are accompanied by redundant shape, text, and iconography cues (ISO 7000 symbols) to maintain 100% clarity for colorblind operators and high-stress glare conditions.\n\n### 3. Control-Room Dark Mode & 24/7 Ergonomic Visual Budget\nEngineered natively for low-ambient illumination refinery DCS console rooms and dual/quad-monitor engineering benches. The default interface is an ergonomic deep neutral slate dark mode (base `#0F172A`, surface `#1E293B`, elevation border `#334155`), eliminating retinal fatigue and glare during 12-hour rotating shift cycles. Contrast ratios exceed WCAG AAA standards (7:1 minimum for data labels and numeric readings, 4.5:1 for structural hierarchy). A high-contrast light mode (`#F8FAFC`) is provided for sunlit field trailer inspections and office reporting environments.\n\n### 4. Explainable Diagnostics & Deterministic Cues (No \"Black-Box\" Alerts)\nMachine learning anomaly scores and Remaining Useful Life (RUL) projections must be deterministic, transparent, and defensible to vibration specialists and operations superintendents. Every health index degradation or diagnostic alert explicitly displays its root-cause telemetry drivers (e.g., \"78% attribution to Outboard Bearing 1X harmonic amplitude surge; 22% attribution to DE Bearing RTD thermal drift\"). Probabilistic predictions are paired with physical failure mechanism fingerprints (e.g., ISO 13373-3 bearing ball-pass frequencies: BPFO, BPFI, BSF, FTF) and confidence intervals.\n\n### 5. Keyboard-Centric Ergonomics & Rapid Triage Efficiency\nEngineered for rapid keyboard-only navigation during high-stress operational reviews and shift handovers. Operators and engineers can execute multi-step workflows without touching the mouse: global asset quick-switcher (`Cmd/Ctrl + K`), unit filtering (`1`-`4`), alert acknowledgment (`Space` / `A`), spectral cursor harmonic snapping (`H`), waterfall timeline scrub (`[` / `]`), and CMMS work order generation (`Cmd/Ctrl + Enter`). Focus rings are prominent and unmistakable.\n\n### 6. Air-Gapped Resiliency & Deterministic State Reflection\nDesigned specifically for OT/IT Purdue Model Level 3/3.5 air-gapped refinery networks. The interface provides continuous, prominent local telemetry connection indicators (OSIsoft PI AF and Honeywell PHD polling latency, local buffer depths, and synchronization health). All offline transitions, local cache states, and batch historian backfills are deterministically reflected in the UI header, ensuring operators never act on stale or desynchronized data.",
+  "sitemap": "- Operator & Engineer Login (/login) - Air-gapped single sign-on and local Active Directory / LDAP authentication gateway with multi-factor hardware token validation.\n- Fleet Overview & Health Dashboard (/fleet-overview) - Real-time refinery-wide rotating machinery health console displaying aggregate health scores, ISO 10816 vibration severity cards, unit health breakdowns, and active anomaly tallies.\n- Asset Hierarchy Explorer (/assets) - Interactive ISA-95 and ISO 14224 plant tree browser spanning refinery operating units, process systems, equipment trains, and skid components.\n  - Asset Health Summary & Anomaly Attribution (/assets/:assetId/health-summary) - Comprehensive equipment digital twin dashboard showing composite Asset Health Index (0-100), primary sensor trends, multivariate anomaly attribution bars, and operating envelope limits.\n  - Asset Diagnostic Classifier & Failure Fingerprints (/assets/:assetId/diagnostics) - Automated physics-informed failure mode diagnostic screen displaying identified fault probabilities (unbalance, misalignment, bearing defects, cavitation) and engineering notes.\n  - Spectral Workbench & Multi-Sensor Analytics (/assets/:assetId/spectral-analytics) - High-performance vibration engineering workspace featuring interactive FFT spectrum charts, bearing fault markers (BPFO/BPFI/BSF/FTF), 3D waterfall plots, orbit trajectories, and synchronized process trending.\n- Prescriptive Advisories & Action Center (/prescriptive-advisories) - Centralized queue of actionable maintenance advisories featuring Remaining Useful Life (RUL) projections, P-F interval timelines, spare parts readiness, and direct CMMS dispatch controls.\n  - CMMS Work Order Dispatch Confirmation (/work-orders/confirmation) - Verification screen confirming work order injection into SAP PM / IBM Maximo, displaying remote order numbers, reserved warehouse parts, and attached diagnostic reports.\n- Operations Unit Risk Matrix (/operations/unit-risk-matrix) - Executive and superintendent operational matrix mapping rotating equipment risks across refinery units (CDU, FCC, Hydrocracker, Alkylation) against production targets and derating options.\n  - Operations Shift Handover Log (/operations/shift-log) - Integrated console operator handover log communicating rotating equipment operational restrictions, throttles, and standby equipment changeovers.\n- Model Calibration & Baseline Retraining (/model-management/retraining) - ML lifecycle workbench for selecting golden operational training windows, recalculating normal baseline boundaries post-overhaul, and updating feature weights.\n  - Model Evaluation & Reconstruction Error Thresholds (/model-management/evaluation) - Validation dashboard evaluating model goodness-of-fit, false-positive curves, and reconstruction error distributions against historical verification datasets prior to deployment.\n- Historian & SCADA Connectors Administration (/admin/historian-connections) - Configuration console for on-premise OSIsoft PI AF, Honeywell PHD, and OPC UA data collectors, polling rate schedules, and local buffer health.\n- Asset Digital Twin & Hierarchy Builder (/admin/asset-hierarchy-builder) - Administrative editor for ISO 14224 equipment taxonomies, driver-coupling-driven machine configurations, design specs (API 610/617), and bearing models.\n- Historian Tag Mapping & Ingestion Validation (/admin/tag-mapping) - Tag association tool mapping historian sensor points to digital twin vibration, thermal, pressure, and electrical variables with live telemetry test harnesses.\n- Security Audit & Access Governance (/admin/security-audit) - Air-gapped audit trail viewer inspecting LDAP/AD authentication events, role escalations, model configuration modifications, and system access logs for IEC 62443 compliance.\n- On-Premises Infrastructure & System Health (/admin/system-health) - Local bare-metal/Kubernetes node telemetry monitor displaying on-prem time-series database disk usage, ingestion queue backlog, and local backup execution statuses.",
+  "navigation_design": "### 1. Global Layout Architecture\n\nRefineGuard APM implements a high-density, low-latency layout engineered for multi-monitor industrial engineering benches and DCS control room displays. The layout consists of four persistent structural zones:\n\n```\n+----------------------------------------------------------------------------------------------------------+\n| Persistent Top Application Header (Status, Air-Gap Telemetry, Quick Switcher, Alert Drawer, User)      |\n+-------------------+--------------------------------------------------------------------------------------+\n| Collapsible Left  | Contextual Breadcrumb & Scope Navigation                                                |\n| ISA-95 Hierarchy  +--------------------------------------------------------------------------------------+\n| Navigation Tree   | Asset Context Tab Bar (Health Summary | Diagnostics | Spectral Analytics)               |\n|                   +--------------------------------------------------------------------------------------+\n|                   | Primary High-Density Workspace Area                                                  |\n|                   |                                                                                      |\n|                   |                                                                                      |\n+-------------------+--------------------------------------------------------------------------------------+\n| Global Status Footer (Historian Sync Latency: 420ms | Local DB: Healthy | Active Buffer: 0 KB | Rev 3.2.1)   |\n+----------------------------------------------------------------------------------------------------------+\n```\n\n---\n\n### 2. Persistent Top Header & Air-Gapped Health Badges\n\nThe 52px high top header remains anchored across all application states, providing global situational context and rapid utility controls:\n- **Product Brand & Refinery Facility Selector:** Displays \"RefineGuard APM\" alongside current refinery facility identifier (e.g., \"Baton Rouge Refinery - Zone 1\").\n- **Air-Gapped Ingestion Telemetry Badges:**\n  - *OSIsoft PI AF Status:* Live connection dot (Green `#10B981` / Flashing Amber `#F59E0B`), ingestion latency in milliseconds (e.g., `PI: 380ms`), and polling buffer state.\n  - *Honeywell PHD Status:* Live state pill indicator (e.g., `PHD: Sync OK`).\n  - *Air-Gap Governance Badge:* Shield indicator denoting \"Local OT Air-Gap Sealed - Outbound Blocked\".\n- **Global Asset & Tag Quick Switcher (`Cmd/Ctrl + K`):** Omnibox search modal enabling immediate fuzzy-search access to any plant asset tag, equipment number (e.g., `P-101A`, `K-201`), or historian sensor tag (`101_VIB_OB_R`).\n- **Global Alert & Advisory Drawer Trigger:** Bell icon with live counter badge showing active ISO Alarm (`4`) and Trip (`1`) conditions. Clicking expands a right-side docked triage flyout.\n- **Role & Profile Menu:** Displays logged-in operator name, current active application role (`reliability_engineer`, `machinery_specialist`, etc.), local domain identifier, and sign-out action.\n\n---\n\n### 3. Collapsible Left Navigation (ISA-95 Hierarchy Browser)\n\nA 280px wide collapsible sidebar supporting dual navigation modes:\n\n#### A. Primary Module Navigation Links\n- **Fleet Overview** (`/fleet-overview`) — Global asset triage matrix\n- **Asset Hierarchy** (`/assets`) — Deep ISA-95 equipment navigation\n- **Prescriptive Advisories** (`/prescriptive-advisories`) — RUL, recommendations, and CMMS dispatch\n- **Operations Risk Matrix** (`/operations/unit-risk-matrix`) — Plant throughput risk & shift log\n- **Model Management** (`/model-management/retraining`) — Baseline training & evaluation\n- **System Administration** (`/admin/historian-connections`) — Connectors, tag mapping, security audit\n\n#### B. Hierarchical Plant Tree (ISA-95 & ISO 14224)\nCollapsible accordion tree browser structured strictly by refinery topology:\n- **Refinery Complex**\n  - **Crude Distillation Unit (CDU-1)**\n    - Crude Feed Pumping Train\n      - `P-101A` — Crude Charge Pump A *(Pill: ISO Alarm / Orange)*\n      - `P-101B` — Crude Charge Pump B *(Pill: ISO Normal / Green)*\n      - `M-101A` — Primary Electric Driver\n    - Atmospheric Fractionator Reflux Train\n      - `P-104A/B` — Column Overhead Reflux Pumps\n  - **Fluid Catalytic Cracking (FCCU)**\n    - Main Air Blower Train\n      - `C-201` — FCC Multi-Stage Axial Air Compressor *(Pill: Normal)*\n      - `T-201` — Gas Expansion Driver Turbine\n    - Wet Gas Compression Train\n      - `K-201` — Two-Stage Wet Gas Centrifugal Compressor\n  - **Hydrocracker Complex (HCU)**\n    - Reactor Recycle Gas Compression\n      - `K-301A/B` — High-Pressure Recycle Gas Compressor Trains\n  - **Alkylation & Acid Plant (ALKY)**\n    - Depropanizer Circulation Pumps\n\nEach node displays an instant health dot badge reflecting the worst child asset state. Clicking any equipment node immediately mounts that asset into the active workspace. The sidebar can be collapsed to an 56px icon rail via `[` or mouse toggle.\n\n---\n\n### 4. Contextual Tab Bar for Asset Deep-Dive Views\n\nWhen navigating within any asset context (`/assets/:assetId/*`), a persistent sub-navigation tab bar displays below the breadcrumb, allowing seamless transitions without losing equipment context:\n1. **Health Summary** (`/assets/:assetId/health-summary`): Overview of composite Asset Health Index, sensor trend sparks, multivariate anomaly attribution bars, and operating envelope limits.\n2. **Diagnostics & Failure Fingerprints** (`/assets/:assetId/diagnostics`): Diagnostic classifier probabilities, automated root-cause failure signatures, and engineering sign-off records.\n3. **Spectral Workbench** (`/assets/:assetId/spectral-analytics`): Full-screen FFT spectrum analysis, harmonic markers (1X, 2X, 3X), bearing fault overlays (BPFO, BPFI, BSF, FTF), 3D waterfall plots, and orbit visualization.\n\n---\n\n### 5. Role-Specific Navigation Paths & Entry Points\n\n#### Reliability Engineer (`reliability_engineer`)\n- **Default Entry Route:** `/fleet-overview`\n- **Primary Daily Nav Path:** `/fleet-overview` -> `/assets/:assetId/health-summary` -> `/prescriptive-advisories`\n- **Quick Links:** CDU, FCC, Hydrocracker unit filters; active anomaly queue; unacknowledged alert drawer.\n\n#### Rotating Equipment Specialist (`machinery_specialist`)\n- **Default Entry Route:** `/assets/P-101A/spectral-analytics` (or active diagnostic triage item)\n- **Primary Deep-Dive Nav Path:** `/assets/:assetId/diagnostics` -> `/assets/:assetId/spectral-analytics` -> `/model-management/retraining` -> `/model-management/evaluation`\n- **Specialist Tools:** Bearing defect frequency overlay selectors, waterfall timeline scrubber, multi-tag historian trend comparison, model baseline recalibration workbench.\n\n#### Maintenance Planner (`maintenance_planner`)\n- **Default Entry Route:** `/prescriptive-advisories`\n- **Primary Dispatch Nav Path:** `/prescriptive-advisories` -> `/work-orders/confirmation`\n- **Planning Views:** P-F interval timelines, spare seal/bearing stock verification widgets, one-click SAP PM / IBM Maximo payload generators.\n\n#### Plant Operations Superintendent (`operations_superintendent`)\n- **Default Entry Route:** `/operations/unit-risk-matrix`\n- **Operational Nav Path:** `/operations/unit-risk-matrix` -> `/operations/shift-log` -> `/fleet-overview`\n- **Operational Tools:** Unit production derating matrix, cross-unit trip risk forecast, DCS console shift handover notes.\n\n#### System Administrator (`admin`)\n- **Default Entry Route:** `/admin/historian-connections`\n- **Governance Nav Path:** `/admin/historian-connections` -> `/admin/tag-mapping` -> `/admin/asset-hierarchy-builder` -> `/admin/security-audit` -> `/admin/system-health`\n- **Admin Tools:** Local LDAP/AD user access mapping, time-series buffer health, IEC 62443 audit export, on-prem database disk volume monitoring.\n\n---\n\n### 6. Industrial Keyboard Navigation Shortcuts\n\nTo maximize efficiency during high-stress operational reviews, RefineGuard APM provides direct keyboard control:\n\n| Keystroke | Scope | Action |\n|:---|:---|:---|\n| `Cmd/Ctrl + K` | Global | Open Asset & Historian Tag Quick Switcher Modal |\n| `[` | Global | Toggle Collapse / Expand ISA-95 Hierarchy Sidebar |\n| `1` - `4` | Fleet Overview | Quick filter by Operating Unit (1: CDU, 2: FCC, 3: HCU, 4: ALKY) |\n| `A` / `Space` | Asset View | Acknowledge active anomaly alert / Open triage drawer |\n| `J` / `K` | Asset List / Tree | Navigate down / up asset rows |\n| `Enter` | Asset List / Tree | Open currently highlighted asset |\n| `H` | Spectral Workbench | Toggle Harmonic Peak Overlay Markers (1X, 2X, 3X... harmonics) |\n| `B` | Spectral Workbench | Toggle Bearing Kinematic Defect Markers (BPFO, BPFI, BSF, FTF) |\n| `W` | Spectral Workbench | Toggle 2D Spectrum vs 3D Waterfall Visualization |\n| `Left` / `Right` | Spectral Waterfall | Scrub historical time slices forward / backward |\n| `Cmd/Ctrl + Enter`| Prescriptive View| Confirm and Dispatch Work Order to CMMS (SAP PM / Maximo) |\n| `Esc` | Modal / Drawer | Close active modal, drawer, or cancel selection |",
+  "key_features": [
+    {
+      "feature_name": "Historian & SCADA Connectors",
+      "feature_description": "Robust on-premises connectors for OSIsoft PI System / AVEVA PI AF, Honeywell PHD, and Yokogawa Exaquantum, ingesting high-frequency time-series and condition monitoring streams with sub-second buffering, tag mapping validation, and loss-free failover."
+    },
+    {
+      "feature_name": "Asset Hierarchy & Digital Twin Builder",
+      "feature_description": "Standardized asset hierarchy builder based on ISO 14224 and ISA-95, enabling rapid digital twin modeling of pumps, compressors, turbines, and motors with metadata for driver type, bearing geometry, seal plan, and nominal operating envelopes."
+    },
+    {
+      "feature_name": "Multivariate Anomaly Detection & Health Index Engine",
+      "feature_description": "Multivariate unsupervised anomaly detection engine calculating continuous dynamic Asset Health Index (0-100) scores by correlating vibration, bearing temperatures, motor amps, differential pressure, and lube oil conditions against learned normal baselines."
+    },
+    {
+      "feature_name": "Diagnostic Classifier & Failure Mode Fingerprinting",
+      "feature_description": "Automated machine diagnostic classifier using spectral peak matching and physics heuristics to identify specific failure modes such as unbalance, misalignment, bearing race degradation, seal flush loss, and cavitation."
+    },
+    {
+      "feature_name": "Prognostics & Remaining Useful Life (RUL) Estimation",
+      "feature_description": "Degradation trajectory modeling and machine learning-driven Remaining Useful Life (RUL) estimation providing probabilistic time-to-failure windows (P-F interval tracking) under current operational loads."
+    },
+    {
+      "feature_name": "Interactive Spectral & Time-Series Analytics",
+      "feature_description": "High-performance time-series trending, multi-tag overlays, FFT spectrum analysis, harmonic markers, waterfall plots, and orbit visualization designed for machinery vibration specialists."
+    },
+    {
+      "feature_name": "Prescriptive Alerting & CMMS Dispatch",
+      "feature_description": "Multi-channel prescriptive alerts delivering recommended operational adjustments (e.g., derating speed, switching pumps) and one-click dispatch to enterprise CMMS (SAP PM, IBM Maximo) with pre-populated diagnostics and spare parts lists."
+    },
+    {
+      "feature_name": "Air-Gapped Security & Local Governance Engine",
+      "feature_description": "Self-contained, air-gapped platform architecture running on local bare-metal or private Kubernetes clusters with local LDAP/Active Directory RBAC, automated model retraining, and zero outbound network requirements."
+    }
+  ],
+  "user_personas": [
+    {
+      "name": "Marcus Vance",
+      "goals": [
+        "Triage fleet-wide rotating equipment health within 15 minutes during morning operational review",
+        "Detect early mechanical degradation 4-6 weeks prior to catastrophic failure",
+        "Eliminate DCS alarm fatigue by relying on multivariate Asset Health Index scores",
+        "Acknowledge and track flagged anomalies cleanly across shift transitions"
+      ],
+      "age_role": "41, Senior Reliability Engineer (application role: reliability_engineer)",
+      "pain_points": [
+        "Overwhelmed by thousands of uncontextualized raw historian tags across crude and cracking units",
+        "False positive alarms from traditional static DCS threshold exceedances during normal process transitions",
+        "Time wasted manually aggregating vibration spectral files and bearing RTD spreadsheets"
+      ],
+      "preferred_device": "Dual 27-inch 4K control room monitors and ruggedized field workstation (Windows 11 LTSC)"
+    },
+    {
+      "name": "Dr. Elena Rostova",
+      "goals": [
+        "Perform high-resolution FFT spectral, waterfall, and orbit analyses on anomalous machinery",
+        "Differentiate process-induced hydraulic anomalies (cavitation, recirculation) from mechanical defect frequencies (BPFO, BPFI, 2X unbalance)",
+        "Calibrate and retrain post-overhaul machine learning baselines using validated golden operational runs",
+        "Author rigorous diagnostic failure-mode findings with exact physical defect attribution"
+      ],
+      "age_role": "46, Rotating Equipment & Vibration Specialist (application role: machinery_specialist)",
+      "pain_points": [
+        "Legacy condition monitoring applications are sluggish, crash on multi-tag historical overlays, and lack air-gapped responsiveness",
+        "Inability to overlay historical healthy baseline spectra directly over live anomaly snapshots",
+        "Cumbersome manual calculation of bearing kinematic defect frequencies when shaft speeds fluctuate under VFD control"
+      ],
+      "preferred_device": "High-performance triple-monitor engineering workstation (32-inch 4K primary, dual 24-inch portrait displays)"
+    },
+    {
+      "name": "Dave Kalu",
+      "goals": [
+        "Translate reliability diagnostics into actionable, structured maintenance work packages",
+        "Track Remaining Useful Life (RUL) and P-F intervals against equipment spare parts lead times",
+        "Verify warehouse inventory for mechanical seal cartridges, bearings, and coupling elements prior to scheduling outages",
+        "Dispatch comprehensive work orders into SAP PM / IBM Maximo with one-click diagnostic and tag trend attachments"
+      ],
+      "age_role": "38, Maintenance & Turnaround Planning Coordinator (application role: maintenance_planner)",
+      "pain_points": [
+        "Emergency plant shutdowns caused by unpredicted rotating equipment failures wreck planned turnaround schedules",
+        "Vague diagnostic notes in legacy work requests cause delays in ordering long-lead API 682 seal assemblies",
+        "Manual copy-pasting of tag trends, vibration numbers, and technician notes into CMMS systems"
+      ],
+      "preferred_device": "Ultra-wide 34-inch curved monitor in maintenance planning trailer and ruggedized field tablet"
+    }
+  ],
+  "user_stories": [
+    {
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "title": "US-01: Historian Connection & Loss-Free Local Telemetry Buffering [Must Have, 8 pts]",
+      "user_story": {
+        "as_a": "admin",
+        "i_want": "to configure on-premises connections to OSIsoft PI System and Honeywell PHD with resilient local ring-buffering",
+        "so_that": "continuous high-frequency time-series telemetry is ingested into the air-gapped system without data loss during historian maintenance or network interruptions"
+      },
+      "key_feature": "Historian & SCADA Connectors",
+      "acceptance_criteria": [
+        "The app provides an upload UI for historian tag mapping data, accepting CSV and JSON formats, and visibly confirms a successful import.",
+        "The historian tag mapping file must validate required columns: historian_type (OSIsoft_PI or Honeywell_PHD), source_tag_name, engineering_unit, scan_rate_ms, and deadband_val.",
+        "When the primary historian connection drops or times out after 3000ms, the local agent automatically initiates disk-backed ring buffering and reconnects with zero lost data points upon link restoration.",
+        "Unauthenticated users are redirected to /login when accessing /admin/historian-connections.",
+        "Only admin can access /admin/historian-connections to modify connection endpoints, credentials, or polling schedules.",
+        "The data model stores details json and the application uses it as described in this story.",
+        "The data model stores entity affected and the application uses it as described in this story.",
+        "The data model stores email and the application uses it as described in this story.",
+        "The data model stores approved and the application uses it as described in this story.",
+        "The data model stores last name and the application uses it as described in this story.",
+        "The data model stores first name and the application uses it as described in this story.",
+        "The data model stores profile completed and the application uses it as described in this story."
+      ]
+    },
+    {
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "title": "US-02: Historian Tag Association & Real-Time Ingestion Test Harness [Must Have, 5 pts]",
+      "user_story": {
+        "as_a": "machinery_specialist",
+        "i_want": "to associate ingested historian points with equipment sensor parameters and test stream health",
+        "so_that": "live vibration, temperature, and hydraulic signals stream into the asset model with verified sampling rates and latency"
+      },
+      "key_feature": "Historian & SCADA Connectors",
+      "acceptance_criteria": [
+        "Given a valid historian connection, when the specialist binds tag paths (vibration, bearing temps, flow, pressure) in /admin/tag-mapping, the system verifies tag presence and displays live values with latency <1000ms.",
+        "If a tag path is invalid, stale for >60 seconds, or reports bad quality flags, the UI flags the row with a red status indicator and prevents twin activation.",
+        "Only admin and machinery_specialist can access /admin/tag-mapping.",
+        "Unauthenticated users are redirected to /login when accessing /admin/tag-mapping.",
+        "When batch testing up to 50 tags simultaneously, the validation test harness returns success status and sample telemetry values within 2000ms.",
+        "The data model stores description and the application uses it as described in this story.",
+        "The data model stores last heartbeat and the application uses it as described in this story.",
+        "The data model stores server address and the application uses it as described in this story.",
+        "The data model stores component name and the application uses it as described in this story.",
+        "The data model stores component type and the application uses it as described in this story.",
+        "The data model stores algorithm type and the application uses it as described in this story.",
+        "The data model stores urgency and the application uses it as described in this story."
+      ]
+    },
+    {
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "title": "US-03: ISO 14224 Equipment Digital Twin Creation & Metadata Configuration [Must Have, 5 pts]",
+      "user_story": {
+        "as_a": "admin",
+        "i_want": "to construct hierarchical asset digital twins for refinery rotating machinery based on ISO 14224 and ISA-95 standards",
+        "so_that": "pumps, compressors, turbines, and motors possess structured physical metadata, bearing geometries, and operating envelopes"
+      },
+      "key_feature": "Asset Hierarchy & Digital Twin Builder",
+      "acceptance_criteria": [
+        "The app provides an upload UI for asset hierarchy template data, accepting CSV, JSON, and XML formats, and visibly confirms a successful import.",
+        "The template parser requires valid equipment taxonomy fields: asset_tag, unit_id, equipment_class (API 610 Centrifugal Pump or API 617 Centrifugal Compressor), driver_type, bearing_de_model, bearing_nde_model, and rated_rpm.",
+        "When duplicate asset tags or invalid parent hierarchy nodes are detected in the uploaded file, the system rejects the import and highlights the exact conflicting rows.",
+        "Only admin and machinery_specialist can access /admin/asset-hierarchy-builder.",
+        "Unauthenticated users are redirected to /login when accessing /admin/asset-hierarchy-builder.",
+        "The data model stores unit code and the application uses it as described in this story.",
+        "The data model stores refinery area and the application uses it as described in this story.",
+        "The data model stores protocol type and the application uses it as described in this story.",
+        "The data model stores criticality class and the application uses it as described in this story.",
+        "The data model stores hyperparameters json and the application uses it as described in this story.",
+        "The data model stores measurement type and the application uses it as described in this story."
+      ]
+    },
+    {
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "title": "US-04: Refinery Fleet Health Dashboard & Unit Filtering [Must Have, 8 pts]",
+      "user_story": {
+        "as_a": "reliability_engineer",
+        "i_want": "to view refinery-wide rotating machinery health on a unified dashboard with quick unit filters and ISO 10816 vibration severity cards",
+        "so_that": "I can triage 20-50 critical assets within minutes during morning operational reviews and prioritize degrading equipment"
+      },
+      "key_feature": "Multivariate Anomaly Detection & Health Index Engine",
+      "acceptance_criteria": [
+        "Given an authenticated session, when navigating to /fleet-overview, the dashboard displays global KPI tallies (Total Monitored, Normal, Alert, Alarm, Trip) and unit-level health distributions across CDU and FCC within 500ms.",
+        "Filtering by refinery operating unit (e.g., Crude Distillation Unit CDU-1) filters the asset card grid instantly without page reload.",
+        "Each equipment card displays current Asset Health Index (0-100), ISO 10816 vibration severity category (Good, Satisfactory, Unsatisfactory, Unacceptable), and 24-hour health trend sparkline.",
+        "Clicking an equipment card redirects the user to /assets/:assetId/health-summary with that asset's contextual telemetry pre-loaded.",
+        "Only reliability_engineer, machinery_specialist, maintenance_planner, operations_superintendent, and admin can access /fleet-overview.",
+        "Unauthenticated users are redirected to /login when accessing /fleet-overview.",
+        "The data model stores severity weight and the application uses it as described in this story."
+      ]
+    },
+    {
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "title": "US-05: Real-Time Multivariate Anomaly Scoring & Sensor Attribution [Must Have, 8 pts]",
+      "user_story": {
+        "as_a": "reliability_engineer",
+        "i_want": "to inspect continuous multivariate anomaly scores and sensor attribution rankings on anomalous machines",
+        "so_that": "I can pinpoint which specific vibration, temperature, or process variables deviate from learned normal baselines"
+      },
+      "key_feature": "Multivariate Anomaly Detection & Health Index Engine",
+      "acceptance_criteria": [
+        "Given an asset flagged in Alert or Alarm state, when navigating to /assets/:assetId/health-summary, the system renders the composite Asset Health Index (0-100) and top contributing sensor tags ranked by percentage contribution.",
+        "When the reliability engineer acknowledges an anomaly on /assets/:assetId/health-summary, the alert status updates to 'Under Investigation', capturing user timestamp and ID in the audit record.",
+        "If an asset's multivariate reconstruction error exceeds the 99th percentile threshold for 3 consecutive 1-minute intervals, the health state transitions from Normal to Alert automatically.",
+        "Only reliability_engineer, machinery_specialist, maintenance_planner, and operations_superintendent can access /assets/:assetId/health-summary.",
+        "Unauthenticated users are redirected to /login when accessing /assets/:assetId/health-summary.",
+        "The data model stores sync status and the application uses it as described in this story."
+      ]
+    },
+    {
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "title": "US-06: Air-Gapped Local Active Directory Authentication & Session Security [Must Have, 5 pts]",
+      "user_story": {
+        "as_a": "reliability_engineer",
+        "i_want": "to log in using air-gapped corporate domain credentials via local Active Directory/LDAP with hardware security tokens",
+        "so_that": "refinery OT personnel securely access the APM platform without external internet connectivity"
+      },
+      "key_feature": "Air-Gapped Security & Local Governance Engine",
+      "acceptance_criteria": [
+        "Given valid local Active Directory credentials and hardware token, when submitted at /login, the user is authenticated and redirected to /fleet-overview with role-appropriate permissions.",
+        "When invalid credentials or an expired token are submitted, the login view displays an authentication failure banner and locks the account after 5 consecutive failed attempts.",
+        "Guest users can view the login screen at /login without an account, but cannot access any protected routes.",
+        "User sessions automatically terminate after 30 minutes of inactivity, requiring re-authentication.",
+        "Unauthenticated users attempting to access /fleet-overview or /assets are redirected to /login with their target return URL preserved.",
+        "The authentication service functions entirely offline with zero outbound network requests outside the local air-gapped DMZ."
+      ]
+    },
+    {
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "title": "US-07: Tamper-Evident Audit Logging & On-Premises System Telemetry [Must Have, 5 pts]",
+      "user_story": {
+        "as_a": "admin",
+        "i_want": "to monitor local bare-metal / Kubernetes cluster health and inspect tamper-evident audit logs",
+        "so_that": "the air-gapped platform maintains continuous reliability and complies with IEC 62443 industrial cybersecurity standards"
+      },
+      "key_feature": "Air-Gapped Security & Local Governance Engine",
+      "acceptance_criteria": [
+        "Navigating to /admin/system-health displays local time-series database disk utilization, ingestion buffer backlog, and local backup status with visual warning indicators when storage exceeds 80%.",
+        "Every authentication attempt, role escalation, baseline retraining, and CMMS dispatch event is recorded in an immutable, append-only audit log viewable at /admin/security-audit.",
+        "Admins can export signed tamper-evident compliance audit logs in JSON and CSV format directly from /admin/security-audit.",
+        "Only admin can access /admin/security-audit and /admin/system-health.",
+        "Unauthenticated users are redirected to /login when accessing /admin/security-audit or /admin/system-health."
+      ]
+    },
+    {
+      "phase": "Phase 2: Diagnostics & Interactive Spectral Analytics",
+      "title": "US-08: Automated Failure Mode Diagnostic Classification & Fingerprinting [Must Have, 8 pts]",
+      "user_story": {
+        "as_a": "machinery_specialist",
+        "i_want": "an automated diagnostic classifier that maps spectral peaks, harmonics, and process signatures to specific failure modes (unbalance, misalignment, bearing race defects, seal flush loss, cavitation)",
+        "so_that": "I can immediately identify the underlying physical mechanical fault without manual kinematic calculations"
+      },
+      "key_feature": "Diagnostic Classifier & Failure Mode Fingerprinting",
+      "acceptance_criteria": [
+        "Given anomalous vibration data for an asset, when opening /assets/:assetId/diagnostics, the diagnostic classifier displays calculated fault probabilities (e.g., 'Bearing Outer Race Defect BPFO: 89%') alongside ISO 10816 baseline thresholds.",
+        "The classifier differentiates between hydraulic cavitation (broadband noise floor rise between 1 kHz and 5 kHz) and bearing defect harmonics (discrete non-synchronous peaks at BPFO or BPFI).",
+        "When the specialist confirms or edits a diagnostic finding (e.g., 'Stage 2 Bearing Outer Race Spall'), the finding is recorded with technical notes and propagates to prescriptive maintenance planning.",
+        "Only reliability_engineer, machinery_specialist, and maintenance_planner can access /assets/:assetId/diagnostics.",
+        "Unauthenticated users are redirected to /login when accessing /assets/:assetId/diagnostics."
+      ]
+    },
+    {
+      "phase": "Phase 2: Diagnostics & Interactive Spectral Analytics",
+      "title": "US-09: Interactive FFT Spectral Workbench & Bearing Defect Overlays [Must Have, 8 pts]",
+      "user_story": {
+        "as_a": "machinery_specialist",
+        "i_want": "an interactive vibration workbench displaying high-resolution FFT spectra, harmonic markers (1X, 2X, 3X), sideband cursors, and bearing kinematic defect overlays (BPFO, BPFI, BSF, FTF)",
+        "so_that": "I can confirm specific mechanical degradation frequencies and sidebands on rotating assets"
+      },
+      "key_feature": "Interactive Spectral & Time-Series Analytics",
+      "acceptance_criteria": [
+        "Navigating to /assets/:assetId/spectral-analytics renders high-frequency FFT acceleration and velocity spectra within 500ms for up to 64k-line resolutions.",
+        "Toggling bearing geometry overlays calculates and overlays BPFO, BPFI, BSF, and FTF frequency lines automatically based on ISO 14224 bearing model metadata and current shaft RPM.",
+        "Users can place interactive harmonic cursors (1X through 10X) and sideband cursors (pole pass, running speed) with real-time delta frequency and amplitude readouts.",
+        "Only reliability_engineer and machinery_specialist can access /assets/:assetId/spectral-analytics.",
+        "Unauthenticated users are redirected to /login when accessing /assets/:assetId/spectral-analytics."
+      ]
+    },
+    {
+      "phase": "Phase 2: Diagnostics & Interactive Spectral Analytics",
+      "title": "US-10: 3D Spectral Waterfall Plots & Process Variable Synchronized Trending [Should Have, 5 pts]",
+      "user_story": {
+        "as_a": "machinery_specialist",
+        "i_want": "to inspect 3D spectral waterfall plots over time and synchronize vibration trends with process operating variables (suction pressure, flow, motor current)",
+        "so_that": "I can evaluate historical degradation trajectories and correlate mechanical spikes with operational transients"
+      },
+      "key_feature": "Interactive Spectral & Time-Series Analytics",
+      "acceptance_criteria": [
+        "On /assets/:assetId/spectral-analytics, toggling the Waterfall view renders a 3D historical cascade of FFT spectra over selectable time horizons (7, 30, or 90 days).",
+        "The multi-tag correlation view synchronizes vibration overall RMS, motor amps, suction pressure, and bearing temperature on a unified time axis with crosshair zoom.",
+        "The 3D waterfall canvas supports interactive tilt, rotation, and frequency slice slicing at 60 FPS on standard workstation hardware.",
+        "Only reliability_engineer and machinery_specialist can access /assets/:assetId/spectral-analytics.",
+        "Unauthenticated users are redirected to /login when accessing /assets/:assetId/spectral-analytics."
+      ]
+    },
+    {
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "title": "US-11: Degradation Trajectory Modeling & Remaining Useful Life Estimation [Must Have, 8 pts]",
+      "user_story": {
+        "as_a": "reliability_engineer",
+        "i_want": "to view probabilistic Remaining Useful Life (RUL) projections and P-F interval degradation curves",
+        "so_that": "I can forecast exact failure windows weeks in advance under varying operational loads and prevent catastrophic trips"
+      },
+      "key_feature": "Prognostics & Remaining Useful Life (RUL) Estimation",
+      "acceptance_criteria": [
+        "On /prescriptive-advisories, each active equipment advisory displays an estimated RUL window in operating days and hours with a 90% confidence interval band based on exponential degradation fitting.",
+        "The prognostic model dynamically recalculates the RUL trajectory whenever operational process load or vibration RMS exceeds the rolling 7-day average by >15%.",
+        "When the estimated RUL reaches <=14 days, the advisory status automatically escalates to 'Urgent Action Required' and dispatches high-priority system alerts.",
+        "Only reliability_engineer, machinery_specialist, maintenance_planner, and operations_superintendent can access /prescriptive-advisories.",
+        "Unauthenticated users are redirected to /login when accessing /prescriptive-advisories.",
+        "The data model stores rul days estimate and the application uses it as described in this story."
+      ]
+    },
+    {
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "title": "US-12: Prescriptive Action Generation & Direct CMMS Work Order Dispatch [Must Have, 8 pts]",
+      "user_story": {
+        "as_a": "maintenance_planner",
+        "i_want": "to review prescriptive maintenance tasks with verified warehouse spare parts and dispatch work orders directly into SAP PM or IBM Maximo",
+        "so_that": "craft labor and replacement parts are scheduled with diagnostic reports attached before equipment reaches trip thresholds"
+      },
+      "key_feature": "Prescriptive Alerting & CMMS Dispatch",
+      "acceptance_criteria": [
+        "Navigating to /prescriptive-advisories displays recommended mechanical interventions, required parts kits (e.g., SKF 7314 bearing set, Flowserve Cartridge Seal), and local warehouse bin inventory counts.",
+        "Clicking 'Dispatch Work Order' validates maintenance priority, packages diagnostic findings and FFT spectral plots, and transmits the payload to on-premise SAP PM or IBM Maximo APIs within 3000ms.",
+        "Upon successful transmission, the planner is redirected to /work-orders/confirmation displaying the generated remote work order number (#WO-884210) and warehouse material reservation numbers.",
+        "If the CMMS API times out or rejects the payload, an error toast displays the exact validation issue and the advisory status reverts to 'Ready for Dispatch' with zero data lost.",
+        "Only maintenance_planner and reliability_engineer can access /work-orders/confirmation.",
+        "Unauthenticated users are redirected to /login when accessing /work-orders/confirmation."
+      ]
+    },
+    {
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "title": "US-13: Plant-Wide Unit Risk Matrix & Operational Throttling Advisory [Should Have, 5 pts]",
+      "user_story": {
+        "as_a": "operations_superintendent",
+        "i_want": "a plant-wide operational risk matrix that maps rotating equipment degradation across refinery process units against production targets",
+        "so_that": "I can evaluate derating options and approve equipment throttling to keep units running safely until planned turnarounds"
+      },
+      "key_feature": "Prescriptive Alerting & CMMS Dispatch",
+      "acceptance_criteria": [
+        "Navigating to /operations/unit-risk-matrix renders a consolidated risk heat map cross-referencing equipment RUL against unit throughput impacts across CDU, FCC, Hydrocracker, and Alkylation blocks.",
+        "When equipment health drops into Alarm state, the screen provides verified operational derating advisories (e.g., throttle pump P-101A to 70% flow to extend RUL by 14 days).",
+        "Approving a derating advisory logs the operational restriction directly to the DCS console shift handover log at /operations/shift-log with a timestamped superintendent sign-off.",
+        "Only operations_superintendent, reliability_engineer, and admin can access /operations/unit-risk-matrix and /operations/shift-log.",
+        "Unauthenticated users are redirected to /login when accessing /operations/unit-risk-matrix."
+      ]
+    },
+    {
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "title": "US-14: Multi-Operating Regime Prognostic Sensitivity & Dynamic P-F Curves [Should Have, 5 pts]",
+      "user_story": {
+        "as_a": "machinery_specialist",
+        "i_want": "prognostic models that adjust P-F degradation curves according to variable process operating regimes (crude gravity shifts, VFD speed steps, and flow recirculation)",
+        "so_that": "remaining useful life calculations remain accurate during off-design operating conditions and feed slate switches"
+      },
+      "key_feature": "Prognostics & Remaining Useful Life (RUL) Estimation",
+      "acceptance_criteria": [
+        "The prognostic engine identifies distinct operating regimes based on historical flow, suction pressure, and VFD shaft speed, applying regime-specific degradation rates.",
+        "When an asset transitions between light and heavy crude feed slates, the system recalculates the P-F interval slope within 5 minutes without resetting historical damage accumulation.",
+        "The UI at /prescriptive-advisories displays regime confidence scores and highlights whether current equipment operation falls within continuous duty or accelerated wear zones.",
+        "Only reliability_engineer and machinery_specialist can adjust prognostic regime sensitivity parameters.",
+        "Unauthenticated users are redirected to /login when accessing /prescriptive-advisories."
+      ]
+    },
+    {
+      "phase": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory",
+      "title": "US-15: Automated Standby Machine Switchover Advisory & Shift Handoff Log [Should Have, 5 pts]",
+      "user_story": {
+        "as_a": "operations_superintendent",
+        "i_want": "automated standby pump changeover advisories and integrated shift handover communication",
+        "so_that": "field operators seamlessly start unspared standby equipment (e.g., P-101B) prior to shutting down degrading primary assets (P-101A)"
+      },
+      "key_feature": "Prescriptive Alerting & CMMS Dispatch",
+      "acceptance_criteria": [
+        "When a lead pump's Asset Health Index breaches Alarm threshold, the system automatically checks standby twin telemetry (lube oil level, motor heater status, isolation valve state) and generates a standby switchover advisory.",
+        "Navigating to /operations/shift-log displays all active changeover notices, derating advisories, and pending maintenance lockouts for incoming shift supervisors.",
+        "Console operators can check off step-by-step warm-up and start procedures for the standby machine, automatically syncing completion status back to /fleet-overview.",
+        "Only operations_superintendent, reliability_engineer, and admin can access /operations/shift-log.",
+        "Unauthenticated users are redirected to /login when accessing /operations/shift-log."
+      ]
+    },
+    {
+      "phase": "Phase 1: MVP / Refinery Pilot",
+      "title": "US-16: Anomaly Baseline Retraining & Model Evaluation Workbench [Should Have, 5 pts]",
+      "user_story": {
+        "as_a": "machinery_specialist",
+        "i_want": "to select post-overhaul golden operating windows and retrain anomaly detection baselines locally",
+        "so_that": "the Asset Health Index reflects renewed mechanical baseline conditions without generating false positive alerts after equipment maintenance"
+      },
+      "key_feature": "Multivariate Anomaly Detection & Health Index Engine",
+      "acceptance_criteria": [
+        "Navigating to /model-management/retraining allows the specialist to select an asset and define a golden baseline window (e.g., 7 to 30 days post-overhaul).",
+        "Triggering local training computes goodness-of-fit metrics and reconstruction error distributions at /model-management/evaluation within 60 seconds.",
+        "The specialist can compare baseline distributions against historical validation datasets and deploy the calibrated model with one-click sign-off.",
+        "Every model deployment is logged with model version, author ID, and timestamp in the tamper-evident audit trail.",
+        "Only machinery_specialist and admin can access /model-management/retraining and /model-management/evaluation.",
+        "Unauthenticated users are redirected to /login when accessing /model-management/retraining or /model-management/evaluation.",
+        "The data model stores training window end and the application uses it as described in this story."
+      ]
+    }
+  ],
+  "user_flows": [
+    {
+      "steps": [
+        "[Reliability Engineer] Navigate to /login",
+        "[Reliability Engineer] Enter air-gapped corporate domain credentials via local Active Directory/LDAP integration",
+        "[Reliability Engineer] Complete local multi-factor verification and navigate to /fleet-overview"
+      ],
+      "flow_name": "Operator & Engineer Authentication",
+      "primary_role": "reliability_engineer",
+      "auth_required": false
+    },
+    {
+      "steps": [
+        "[Reliability Engineer] Navigate to /fleet-overview and filter assets by refinery operating unit (e.g., Crude Distillation Unit)",
+        "[Reliability Engineer] Review composite Asset Health Index cards and identify equipment flagged in Degraded or Critical state",
+        "[Reliability Engineer] Select anomalous pump P-101A and navigate to /assets/P-101A/health-summary to review multivariate anomaly scores and contributing sensor tags",
+        "[Reliability Engineer] Acknowledge alert and transition status to Under Investigation"
+      ],
+      "flow_name": "Daily Fleet Health Triage & Anomaly Investigation",
+      "primary_role": "reliability_engineer",
+      "auth_required": true
+    },
+    {
+      "steps": [
+        "[Rotating Equipment Specialist] Navigate to /assets/P-101A/diagnostics",
+        "[Rotating Equipment Specialist] Open FFT spectral view at /assets/P-101A/spectral-analytics to inspect vibration velocity versus baseline harmonics",
+        "[Rotating Equipment Specialist] Apply bearing defect frequency overlays (BPFO, BPFI, BSF, FTF) to confirm outer race defect on outboard bearing",
+        "[Rotating Equipment Specialist] Correlate vibration trends with discharge pressure and motor current over the preceding 30 days",
+        "[Rotating Equipment Specialist] Save diagnostic finding as 'Stage 2 Bearing Outer Race Spall' with technical notes"
+      ],
+      "flow_name": "Spectral & Multi-Sensor Deep-Dive Root Cause Analysis",
+      "primary_role": "machinery_specialist",
+      "auth_required": true
+    },
+    {
+      "steps": [
+        "[Maintenance Planner] Navigate to /prescriptive-advisories and select active advisory for pump P-101A",
+        "[Maintenance Planner] Review estimated Remaining Useful Life (RUL: 18 days) and recommended maintenance action: replace outboard bearing assembly and inspect seal flush plan 11",
+        "[Maintenance Planner] Verify warehouse availability for required bearing kit and mechanical seal assembly",
+        "[Maintenance Planner] Click 'Dispatch Work Order' to generate maintenance request in SAP PM / IBM Maximo with attached diagnostic report and navigate to /work-orders/confirmation"
+      ],
+      "flow_name": "Prescriptive Action Verification & Work Order Dispatch",
+      "primary_role": "maintenance_planner",
+      "auth_required": true
+    },
+    {
+      "steps": [
+        "[Plant Operations Superintendent] Navigate to /operations/unit-risk-matrix to evaluate active rotating equipment risks across all refinery blocks",
+        "[Plant Operations Superintendent] Review operational throttle advisory for pump P-101A recommending running standby pump P-101B and reducing P-101A throughput to 70% to extend RUL through scheduled turnaround",
+        "[Plant Operations Superintendent] Approve advisory and notify DCS console operators via internal shift log integration at /operations/shift-log"
+      ],
+      "flow_name": "Unit Risk Assessment & Operational Derating Advisory",
+      "primary_role": "operations_superintendent",
+      "auth_required": true
+    },
+    {
+      "steps": [
+        "[System Administrator] Navigate to /admin/historian-connections and verify connectivity to on-prem OSIsoft PI and Honeywell PHD servers",
+        "[System Administrator] Navigate to /admin/asset-hierarchy-builder and import ISO 14224 template for new centrifugal pump twin",
+        "[System Administrator] Map historian tag paths (overall vibration, bearing temps, flow, pressures) to the digital twin parameters at /admin/tag-mapping",
+        "[System Administrator] Validate real-time tag stream latency and save configuration"
+      ],
+      "flow_name": "Historian Tag Ingestion & Asset Twin Configuration",
+      "primary_role": "admin",
+      "auth_required": true
+    },
+    {
+      "steps": [
+        "[Rotating Equipment Specialist] Navigate to /model-management/retraining for asset P-101A following planned overhaul",
+        "[Rotating Equipment Specialist] Select clean 14-day post-commissioning operating window as the new golden baseline period",
+        "[Rotating Equipment Specialist] Trigger local model re-training and evaluate goodness-of-fit and reconstruction error thresholds at /model-management/evaluation",
+        "[Rotating Equipment Specialist] Deploy calibrated model to live inference engine"
+      ],
+      "flow_name": "Anomaly Model Calibration & Baseline Retraining",
+      "primary_role": "machinery_specialist",
+      "auth_required": true
+    },
+    {
+      "steps": [
+        "[System Administrator] Navigate to /admin/security-audit to inspect user access records and session logs",
+        "[System Administrator] Review air-gapped node telemetry, disk utilization for on-prem time-series database, and local backup status at /admin/system-health",
+        "[System Administrator] Export signed tamper-evident compliance audit report for industrial cyber governance (IEC 62443)"
+      ],
+      "flow_name": "Air-Gapped Audit Log & Security Governance Review",
+      "primary_role": "admin",
+      "auth_required": true
+    }
+  ],
+  "target_audience": [
+    {
+      "name": "Reliability Engineer",
+      "pain_points": [
+        "Overwhelmed by thousands of uncontextualized historian tags",
+        "Lack of automated anomaly detection inside the air-gapped OT network",
+        "Time lost manually compiling vibration and temperature trends across spreadsheets"
+      ],
+      "demographics": "Certified machinery reliability engineers (CMRP/CRE) with 5-15 years refinery experience, responsible for rotating equipment health across crude distillation, FCC, hydrocracker, and alkylation units.",
+      "needs_and_goals": [
+        "Detect early mechanical degradation weeks before catastrophic failure",
+        "Eliminate false positive alarms and alarm fatigue from DCS thresholds",
+        "Prioritize maintenance interventions based on quantitative asset health scoring",
+        "Correlate vibration signatures with process variables like suction head and flow"
+      ]
+    },
+    {
+      "name": "Rotating Equipment Specialist",
+      "pain_points": [
+        "Legacy condition monitoring tools have clunky, sluggish interfaces and poor historian integration",
+        "Inability to overlay historical baseline spectrums against current anomaly states",
+        "Manual diagnostic calculation is tedious and prone to human oversight during plant upsets"
+      ],
+      "demographics": "Vibration analysts (ISO 18436 Category III/IV) and rotating machinery subject matter experts specializing in turbomachinery, mechanical seals, and dynamic balancing.",
+      "needs_and_goals": [
+        "Inspect detailed FFT spectrums, waterfalls, orbits, and Bode plots quickly",
+        "Differentiate process-induced cavitation from mechanical bearing defect frequencies (BPFO/BPFI)",
+        "Validate asset operating limits against API 610, API 617, and ISO 10816 standards",
+        "Fine-tune ML anomaly baselines following mechanical overhauls or impellor changes"
+      ]
+    },
+    {
+      "name": "Maintenance Planner",
+      "pain_points": [
+        "Emergency repairs caused by unexpected failures disrupt scheduled work schedules",
+        "Incomplete technical notes in legacy alerts cause delays in ordering long-lead spare parts",
+        "Uncertainty regarding remaining useful life forces conservative, costly equipment swaps"
+      ],
+      "demographics": "Maintenance leads and planning coordinators responsible for daily work orders, turnaround planning, spare parts staging, and craft scheduling.",
+      "needs_and_goals": [
+        "Receive clear prescriptive failure summaries and lead-time estimations",
+        "Integrate actionable diagnostic alerts directly into SAP PM or IBM Maximo work orders",
+        "Verify spare seal cartridges, bearings, and motor inventory before scheduling outages",
+        "Optimize turnaround scopes by eliminating unnecessary open-and-inspect overhauls"
+      ]
+    },
+    {
+      "name": "Plant Operations Superintendent",
+      "pain_points": [
+        "Conflict between production targets and reliability warnings with ambiguous risk levels",
+        "Lack of high-level fleet health summaries during morning operational meetings",
+        "Catastrophic trip events resulting in severe financial loss and safety scrutiny"
+      ],
+      "demographics": "Operations leadership overseeing unit throughput, safety compliance, environmental flaring, and production yield targets.",
+      "needs_and_goals": [
+        "Real-time visibility into rotating equipment risks across critical operating units",
+        "Actionable operational derating recommendations to keep equipment running safely until planned shutdowns",
+        "Zero unplanned unit curtailments or environmental flaring events caused by rotating equipment trips"
+      ]
+    },
+    {
+      "name": "System Administrator",
+      "pain_points": [
+        "Cloud SaaS solutions violate company OT security guidelines",
+        "Complex custom scripts for historian data extraction break frequently",
+        "Difficult configuration processes for thousands of industrial tags and asset models"
+      ],
+      "demographics": "Industrial OT/IT systems engineers and refinery cybersecurity managers responsible for Purdue Level 3/3.5 DMZ infrastructure, Active Directory/LDAP, and backup operations.",
+      "needs_and_goals": [
+        "Maintain a strictly air-gapped system adhering to IEC 62443 and internal cybersecurity policies",
+        "Ensure continuous, low-latency ingestion from OSIsoft PI and Honeywell PHD historians",
+        "Manage granular RBAC tied to refinery Active Directory/LDAP systems",
+        "Execute backup, model registry maintenance, and system health checks without internet connectivity"
+      ]
+    }
+  ],
+  "user_journeys": [
+    {
+      "steps": [
+        {
+          "actor": "Reliability Engineer",
+          "description": "Navigates to /login, authenticates via local air-gapped Active Directory credentials with hardware security key, and lands on /fleet-overview."
+        },
+        {
+          "actor": "Reliability Engineer",
+          "description": "Reviews the global fleet status KPI strip (242 Assets Monitored, 218 Normal, 19 Alert, 4 Alarm, 1 Trip) and uses unit quick-filter to isolate Crude Distillation Unit (CDU-1)."
+        },
+        {
+          "actor": "Reliability Engineer",
+          "description": "Spots Crude Charge Pump P-101A flagged in 'Alarm' state with an Asset Health Index drop from 94 to 61 over the preceding 48 hours."
+        },
+        {
+          "actor": "Reliability Engineer",
+          "description": "Clicks P-101A card or presses 'Enter' to navigate to /assets/P-101A/health-summary to examine multivariate sensor telemetry."
+        },
+        {
+          "actor": "Reliability Engineer",
+          "description": "Inspects the Anomaly Attribution panel, observing that outboard bearing radial vibration (tag: 101_VIB_OB_R) and drive-end bearing temperature (tag: 101_TI_DE) account for 84% of the anomaly score."
+        },
+        {
+          "actor": "Reliability Engineer",
+          "description": "Acknowledges the active alarm, changes investigation state to 'Under Investigation', assigns diagnostic deep-dive to Rotating Equipment Specialist Dr. Elena Rostova, and inputs triage notes."
+        }
+      ],
+      "context": "Marcus Vance performs his routine morning fleet triage across 240+ refinery rotating assets, identifying an incipient bearing degradation on Crude Distillation Unit charge pump P-101A.",
+      "trigger": "Shift handover begins at 06:45; Marcus logs into the morning engineering console to evaluate overnight asset health anomalies before the 07:15 cross-functional operations standup."
+    },
+    {
+      "steps": [
+        {
+          "actor": "Rotating Equipment Specialist",
+          "description": "Navigates directly to /assets/P-101A/diagnostics and reviews the automated Diagnostic Classifier card indicating 'High Probability (89%) Bearing Outer Race Defect (BPFO)'."
+        },
+        {
+          "actor": "Rotating Equipment Specialist",
+          "description": "Navigates to /assets/P-101A/spectral-analytics to inspect high-frequency vibration acceleration and velocity FFT spectra."
+        },
+        {
+          "actor": "Rotating Equipment Specialist",
+          "description": "Toggles the ISO 14224 bearing geometry overlay (SKF 7314 BECBM), activating automated kinematic markers for BPFO (3.57X), BPFI (5.43X), BSF (2.32X), and FTF (0.41X)."
+        },
+        {
+          "actor": "Rotating Equipment Specialist",
+          "description": "Identifies distinct, elevated non-synchronous peaks at 106.8 Hz (matching BPFO at 1,795 RPM shaft speed) with 1X running speed sidebands indicating early spalling on the outer raceway."
+        },
+        {
+          "actor": "Rotating Equipment Specialist",
+          "description": "Switches to 3D Waterfall view over the past 30 days to verify degradation trajectory, noting that defect energy emerged 9 days ago and accelerated following a brief process cavitation surge."
+        },
+        {
+          "actor": "Rotating Equipment Specialist",
+          "description": "Correlates vibration signatures against suction pressure (tag: 101_PI_SUCT) and motor amps (tag: 101_II_MTR) in the multi-tag synchronized trend view."
+        },
+        {
+          "actor": "Rotating Equipment Specialist",
+          "description": "Saves and signs off the diagnostic finding as 'Stage 2 Bearing Outer Race Spall - Outboard Bearing', recommending bearing assembly replacement within 18-21 days and notifying Maintenance Planning."
+        }
+      ],
+      "context": "Dr. Elena Rostova conducts an advanced spectral diagnostic investigation on CDU Charge Pump P-101A to isolate the exact mechanical root cause and validate degradation severity.",
+      "trigger": "Elena receives an internal triage assignment notification from Marcus regarding the sudden vibration spike and thermal rise on P-101A."
+    },
+    {
+      "steps": [
+        {
+          "actor": "Maintenance Planner",
+          "description": "Navigates to /prescriptive-advisories and opens the active advisory card for P-101A (Advisory ADV-2024-0891)."
+        },
+        {
+          "actor": "Maintenance Planner",
+          "description": "Reviews the Prognostics & RUL panel displaying an estimated P-F interval window of 18 days (confidence interval: 14 to 22 days at current operating load) before vibration reaches ISO Zone D trip threshold."
+        },
+        {
+          "actor": "Maintenance Planner",
+          "description": "Examines the system-generated recommended action: 'Replace Outboard Angular Contact Bearing Pair (SKF 7314 BECBM) and inspect Plan 11 seal flush piping'."
+        },
+        {
+          "actor": "Maintenance Planner",
+          "description": "Checks the integrated on-prem warehouse inventory widget, verifying that two SKF 7314 bearing sets and one Flowserve cartridge seal kit are in stock at Refinery Central Warehouse Bin C-14."
+        },
+        {
+          "actor": "Maintenance Planner",
+          "description": "Sets maintenance priority to 'Priority 2 - Urgent (Within 7 Days)', attaches the automated diagnostic summary and FFT spectral snapshot, and clicks 'Dispatch Work Order'."
+        },
+        {
+          "actor": "Maintenance Planner",
+          "description": "System generates work order #WO-884210 in the air-gapped SAP PM connector and redirects Dave to /work-orders/confirmation with synched SAP order status and reservation codes."
+        }
+      ],
+      "context": "Dave Kalu reviews the validated diagnostic advisory for P-101A, assesses component lead times against RUL, verifies warehouse inventory, and dispatches a prioritized CMMS work package.",
+      "trigger": "Elena signs off on the Stage 2 bearing defect finding, triggering an automated high-priority prescriptive maintenance advisory."
+    }
+  ],
+  "phasing": [
+    {
+      "features": [
+        "Historian & SCADA Connectors",
+        "Asset Hierarchy & Digital Twin Builder",
+        "Multivariate Anomaly Detection & Health Index Engine",
+        "Air-Gapped Security & Local Governance Engine"
+      ],
+      "rationale": "Target Timeline: Months 1-4. Establishes the core air-gapped platform architecture, high-frequency industrial data connectors (OSIsoft PI System / AVEVA PI AF, Honeywell PHD), ISO 14224 asset digital twin modeling, and unsupervised multivariate anomaly detection for an initial pilot cohort of 20-50 critical rotating machines (Crude Charge Pumps, FCC Wet Gas Compressors, Coker Feed Pumps) across CDU and FCC units. Key deliverables include /login with local AD/LDAP, /fleet-overview with dynamic Asset Health Index (0-100), /admin tag configuration and health monitoring, and IEC 62443 air-gapped security governance. Prerequisites: Purdue Level 3 historian read-access, network provisioning in DMZ, and ISO 14224 equipment taxonomies. Success criteria: Zero data loss under network jitter, sub-second telemetry ingestion latency, >95% anomaly capture on seeded historical fault replays, and zero outbound network packet leakage.",
+      "phase_name": "Phase 1: MVP / Refinery Pilot"
+    },
+    {
+      "features": [
+        "Diagnostic Classifier & Failure Mode Fingerprinting",
+        "Interactive Spectral & Time-Series Analytics"
+      ],
+      "rationale": "Target Timeline: Months 5-8. Delivers deep vibration diagnostic capabilities and interactive spectral visualization tailored for Level III/IV vibration specialists (Dr. Elena Rostova). Features automated kinematic fault fingerprinting for common rotating equipment failure modes (bearing outer/inner race spall BPFO/BPFI, unbalance 1X, misalignment 2X, impeller vane pass, cavitation) and a high-performance vibration workbench (/assets/:assetId/spectral-analytics and /assets/:assetId/diagnostics) featuring interactive FFT spectra, harmonic cursors, 3D waterfall plots, and multi-sensor correlation. Prerequisites: Phase 1 calibrated baseline streams, bearing kinematic geometry database (SKF, FAG, Timken), and raw vibration waveform access. Success criteria: Automated diagnosis accuracy ≥90% validated against historical plant turnaround teardown reports, and sub-500ms spectrum rendering for 64k-line FFT datasets.",
+      "phase_name": "Phase 2: Diagnostics & Interactive Spectral Analytics"
+    },
+    {
+      "features": [
+        "Prognostics & Remaining Useful Life (RUL) Estimation",
+        "Prescriptive Alerting & CMMS Dispatch"
+      ],
+      "rationale": "Target Timeline: Months 9-12. Expands the platform refinery-wide across Hydrocracker, Alkylation, and Utilities units (200+ rotating trains), delivering remaining useful life (RUL) trajectory projections, prescriptive mitigation advisories, bidirectional CMMS work order generation (SAP PM / IBM Maximo), and operations superintendent risk matrices. Features include /prescriptive-advisories, /work-orders/confirmation, /operations/unit-risk-matrix, and automated air-gapped model recalibration workflows post-overhaul. Prerequisites: Phase 2 diagnostic sign-offs, CMMS API connectivity in DMZ, and operations shift log hooks. Success criteria: Accurate RUL lead time estimation within ±15% of actual P-F interval, >80% reduction in unplanned rotating equipment trip events, and 100% automated population of diagnostic evidence in CMMS work notifications.",
+      "phase_name": "Phase 3: Prognostics, CMMS Dispatch & Plant-Wide Operational Advisory"
+    }
+  ],
+  "mermaid_erd_diagram": "erDiagram\nUser {\n  INT id\n  TIMESTAMP created_at\n  TIMESTAMP updated_at\n}\nOrganization {\n  INT id\n  TIMESTAMP created_at\n  TIMESTAMP updated_at\n}\nRole {\n  INT id\n  TIMESTAMP created_at\n  TIMESTAMP updated_at\n}\nUsersRole {\n  INT id\n  TIMESTAMP created_at\n  TIMESTAMP updated_at\n}\nAuditLog {\n  INT organization_id\n  INT user_id\n  VARCHAR action_type\n  VARCHAR entity_affected\n  TIMESTAMP recorded_at\n  VARCHAR tamper_proof_hash\n  JSONB details_json\n}\nPlantUnit {\n  INT organization_id\n  VARCHAR unit_code\n  VARCHAR unit_name\n  VARCHAR refinery_area\n  TEXT description\n}\nFailureMode {\n  INT organization_id\n  VARCHAR iso_code\n  VARCHAR failure_name\n  VARCHAR equipment_category\n  FLOAT severity_weight\n  TEXT description\n}\nHistorianConnector {\n  INT organization_id\n  VARCHAR connector_name\n  VARCHAR protocol_type\n  VARCHAR server_address\n  INT port\n  VARCHAR status\n  TIMESTAMP last_heartbeat\n}\nAsset {\n  INT organization_id\n  INT plant_unit_id\n  VARCHAR asset_tag\n  VARCHAR asset_name\n  VARCHAR equipment_type\n  VARCHAR criticality_class\n  FLOAT design_speed_rpm\n  VARCHAR bearing_type\n  VARCHAR seal_plan\n  VARCHAR operating_status\n}\nAssetComponent {\n  INT organization_id\n  INT asset_id\n  VARCHAR component_name\n  VARCHAR component_type\n  VARCHAR position\n}\nModelBaseline {\n  INT organization_id\n  INT asset_id\n  VARCHAR model_version\n  VARCHAR algorithm_type\n  TIMESTAMP training_window_start\n  TIMESTAMP training_window_end\n  JSONB hyperparameters_json\n  BOOLEAN is_active\n}\nDiagnosticIncident {\n  INT organization_id\n  INT asset_id\n  INT failure_mode_id\n  VARCHAR status\n  VARCHAR severity_level\n  FLOAT rul_days_estimate\n  TIMESTAMP detected_at\n  TIMESTAMP resolved_at\n}\nAssetHealthIndex {\n  INT organization_id\n  INT asset_id\n  TIMESTAMP calculated_at\n  FLOAT health_score\n  FLOAT anomaly_confidence\n  JSONB contributing_factors_json\n}\nHistorianTag {\n  INT organization_id\n  INT asset_id\n  INT asset_component_id\n  INT historian_connector_id\n  VARCHAR tag_path\n  VARCHAR measurement_type\n  VARCHAR engineering_unit\n  FLOAT scan_frequency_hz\n}\nPrescriptiveAdvisory {\n  INT organization_id\n  INT diagnostic_incident_id\n  TEXT recommended_action\n  FLOAT throttle_percentage\n  JSONB parts_required_json\n  VARCHAR urgency\n}\nTelemetryRecord {\n  INT organization_id\n  INT historian_tag_id\n  TIMESTAMP recorded_at\n  FLOAT recorded_value\n  VARCHAR data_quality_flag\n}\nCmmsWorkOrder {\n  INT organization_id\n  INT prescriptive_advisory_id\n  INT user_id\n  VARCHAR cmms_type\n  VARCHAR external_order_number\n  VARCHAR sync_status\n  TIMESTAMP dispatched_at\n  JSONB work_order_payload\n}\nOrganization }o--o{ User : \"M:N\"\nUser ||--o{ UsersRole : \"1:N\"\nOrganization ||--o{ UsersRole : \"1:N\"\nRole ||--o{ UsersRole : \"1:N\"\nOrganization ||--o{ AuditLog : \"1:N\"\nUser ||--o{ AuditLog : \"1:N\"\nOrganization ||--o{ PlantUnit : \"1:N\"\nPlantUnit ||--o{ Asset : \"1:N\"\nOrganization ||--o{ FailureMode : \"1:N\"\nFailureMode ||--o{ DiagnosticIncident : \"1:N\"\nOrganization ||--o{ HistorianConnector : \"1:N\"\nHistorianConnector ||--o{ HistorianTag : \"1:N\"\nOrganization ||--o{ Asset : \"1:N\"\nAsset ||--o{ AssetComponent : \"1:N\"\nAsset ||--o{ HistorianTag : \"1:N\"\nAsset ||--o{ AssetHealthIndex : \"1:N\"\nAsset ||--o{ DiagnosticIncident : \"1:N\"\nAsset ||--o{ ModelBaseline : \"1:N\"\nOrganization ||--o{ AssetComponent : \"1:N\"\nAssetComponent ||--o{ HistorianTag : \"1:N\"\nOrganization ||--o{ ModelBaseline : \"1:N\"\nOrganization ||--o{ DiagnosticIncident : \"1:N\"\nDiagnosticIncident ||--o{ PrescriptiveAdvisory : \"1:N\"\nOrganization ||--o{ AssetHealthIndex : \"1:N\"\nOrganization ||--o{ HistorianTag : \"1:N\"\nHistorianTag ||--o{ TelemetryRecord : \"1:N\"\nOrganization ||--o{ PrescriptiveAdvisory : \"1:N\"\nPrescriptiveAdvisory ||--o{ CmmsWorkOrder : \"1:N\"\nOrganization ||--o{ TelemetryRecord : \"1:N\"\nOrganization ||--o{ CmmsWorkOrder : \"1:N\"\nUser ||--o{ CmmsWorkOrder : \"1:N\"",
+  "schema": [
+    {
+      "model": "User",
+      "table": "users",
+      "provided_by": "rhino_project_core",
+      "rhino_owner": "organization"
+    },
+    {
+      "model": "Organization",
+      "table": "organizations",
+      "provided_by": "rhino_project_organizations",
+      "rhino_owner": "organization",
+      "associations": [
+        {
+          "name": "users",
+          "type": "has_and_belongs_to_many"
+        }
+      ]
+    },
+    {
+      "model": "Role",
+      "table": "roles",
+      "provided_by": "rhino_project_organizations",
+      "rhino_owner": "organization"
+    },
+    {
+      "model": "UsersRole",
+      "table": "users_roles",
+      "provided_by": "rhino_project_organizations",
+      "rhino_owner": "organization",
+      "associations": [
+        {
+          "name": "user",
+          "type": "belongs_to"
+        },
+        {
+          "name": "organization",
+          "type": "belongs_to"
+        },
+        {
+          "name": "role",
+          "type": "belongs_to"
+        }
+      ]
+    },
+    {
+      "model": "AuditLog",
+      "table": "audit_logs",
+      "columns": [
+        {
+          "name": "organization_id",
+          "type": "references"
+        },
+        {
+          "name": "user_id",
+          "type": "references"
+        },
+        {
+          "name": "action_type",
+          "type": "string"
+        },
+        {
+          "name": "entity_affected",
+          "type": "string"
+        },
+        {
+          "name": "recorded_at",
+          "type": "datetime"
+        },
+        {
+          "name": "tamper_proof_hash",
+          "type": "string"
+        },
+        {
+          "name": "details_json",
+          "type": "jsonb"
+        }
+      ],
+      "rhino_owner": "organization",
+      "validations": [
+        "validates :action_type, presence: true",
+        "validates :recorded_at, presence: true",
+        "validates :tamper_proof_hash, presence: true"
+      ],
+      "associations": [
+        {
+          "name": "organization",
+          "type": "belongs_to"
+        },
+        {
+          "name": "user",
+          "type": "belongs_to"
+        }
+      ],
+      "rails_model_generation_command_line": "rails generate model AuditLog organization:references user:references action_type:string entity_affected:string recorded_at:datetime tamper_proof_hash:string details_json:jsonb"
+    },
+    {
+      "model": "PlantUnit",
+      "table": "plant_units",
+      "columns": [
+        {
+          "name": "organization_id",
+          "type": "references"
+        },
+        {
+          "name": "unit_code",
+          "type": "string"
+        },
+        {
+          "name": "unit_name",
+          "type": "string"
+        },
+        {
+          "name": "refinery_area",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "type": "text"
+        }
+      ],
+      "rhino_owner": "organization",
+      "validations": [],
+      "associations": [
+        {
+          "name": "organization",
+          "type": "belongs_to"
+        },
+        {
+          "name": "assets",
+          "type": "has_many"
+        }
+      ]
+    },
+    {
+      "model": "FailureMode",
+      "table": "failure_modes",
+      "columns": [
+        {
+          "name": "organization_id",
+          "type": "references"
+        },
+        {
+          "name": "iso_code",
+          "type": "string"
+        },
+        {
+          "name": "failure_name",
+          "type": "string"
+        },
+        {
+          "name": "equipment_category",
+          "type": "string"
+        },
+        {
+          "name": "severity_weight",
+          "type": "float"
+        },
+        {
+          "name": "description",
+          "type": "text"
+        }
+      ],
+      "rhino_owner": "organization",
+      "validations": [],
+      "associations": [
+        {
+          "name": "organization",
+          "type": "belongs_to"
+        },
+        {
+          "name": "diagnostic_incidents",
+          "type": "has_many"
+        }
+      ]
+    },
+    {
+      "model": "HistorianConnector",
+      "table": "historian_connectors",
+      "columns": [
+        {
+          "name": "organization_id",
+          "type": "references"
+        },
+        {
+          "name": "connector_name",
+          "type": "string"
+        },
+        {
+          "name": "protocol_type",
+          "type": "string"
+        },
+        {
+          "name": "server_address",
+          "type": "string"
+        },
+        {
+          "name": "port",
+          "type": "integer"
+        },
+        {
+          "name": "status",
+          "type": "string"
+        },
+        {
+          "name": "last_heartbeat",
+          "type": "datetime"
+        }
+      ],
+      "rhino_owner": "organization",
+      "validations": [],
+      "associations": [
+        {
+          "name": "organization",
+          "type": "belongs_to"
+        },
+        {
+          "name": "historian_tags",
+          "type": "has_many"
+        }
+      ]
+    },
+    {
+      "model": "Asset",
+      "table": "assets",
+      "columns": [
+        {
+          "name": "organization_id",
+          "type": "references"
+        },
+        {
+          "name": "plant_unit_id",
+          "type": "references"
+        },
+        {
+          "name": "asset_tag",
+          "type": "string"
+        },
+        {
+          "name": "asset_name",
+          "type": "string"
+        },
+        {
+          "name": "equipment_type",
+          "type": "string"
+        },
+        {
+          "name": "criticality_class",
+          "type": "string"
+        },
+        {
+          "name": "design_speed_rpm",
+          "type": "float"
+        },
+        {
+          "name": "bearing_type",
+          "type": "string"
+        },
+        {
+          "name": "seal_plan",
+          "type": "string"
+        },
+        {
+          "name": "operating_status",
+          "type": "string"
+        }
+      ],
+      "rhino_owner": "organization",
+      "validations": [],
+      "associations": [
+        {
+          "name": "organization",
+          "type": "belongs_to"
+        },
+        {
+          "name": "plant_unit",
+          "type": "belongs_to"
+        },
+        {
+          "name": "asset_components",
+          "type": "has_many"
+        },
+        {
+          "name": "historian_tags",
+          "type": "has_many"
+        },
+        {
+          "name": "asset_health_indices",
+          "type": "has_many"
+        },
+        {
+          "name": "diagnostic_incidents",
+          "type": "has_many"
+        },
+        {
+          "name": "model_baselines",
+          "type": "has_many"
+        }
+      ]
+    },
+    {
+      "model": "AssetComponent",
+      "table": "asset_components",
+      "columns": [
+        {
+          "name": "organization_id",
+          "type": "references"
+        },
+        {
+          "name": "asset_id",
+          "type": "references"
+        },
+        {
+          "name": "component_name",
+          "type": "string"
+        },
+        {
+          "name": "component_type",
+          "type": "string"
+        },
+        {
+          "name": "position",
+          "type": "string"
+        }
+      ],
+      "rhino_owner": "organization",
+      "validations": [],
+      "associations": [
+        {
+          "name": "organization",
+          "type": "belongs_to"
+        },
+        {
+          "name": "asset",
+          "type": "belongs_to"
+        },
+        {
+          "name": "historian_tags",
+          "type": "has_many"
+        }
+      ]
+    },
+    {
+      "model": "ModelBaseline",
+      "table": "model_baselines",
+      "columns": [
+        {
+          "name": "organization_id",
+          "type": "references"
+        },
+        {
+          "name": "asset_id",
+          "type": "references"
+        },
+        {
+          "name": "model_version",
+          "type": "string"
+        },
+        {
+          "name": "algorithm_type",
+          "type": "string"
+        },
+        {
+          "name": "training_window_start",
+          "type": "datetime"
+        },
+        {
+          "name": "training_window_end",
+          "type": "datetime"
+        },
+        {
+          "name": "hyperparameters_json",
+          "type": "jsonb"
+        },
+        {
+          "name": "is_active",
+          "type": "boolean"
+        }
+      ],
+      "rhino_owner": "organization",
+      "validations": [
+        "validates :model_version, presence: true",
+        "validates :algorithm_type, presence: true"
+      ],
+      "associations": [
+        {
+          "name": "organization",
+          "type": "belongs_to"
+        },
+        {
+          "name": "asset",
+          "type": "belongs_to"
+        }
+      ],
+      "rails_model_generation_command_line": "rails generate model ModelBaseline organization:references asset:references model_version:string algorithm_type:string training_window_start:datetime training_window_end:datetime hyperparameters_json:jsonb is_active:boolean"
+    },
+    {
+      "model": "DiagnosticIncident",
+      "table": "diagnostic_incidents",
+      "columns": [
+        {
+          "name": "organization_id",
+          "type": "references"
+        },
+        {
+          "name": "asset_id",
+          "type": "references"
+        },
+        {
+          "name": "failure_mode_id",
+          "type": "references"
+        },
+        {
+          "name": "status",
+          "type": "string"
+        },
+        {
+          "name": "severity_level",
+          "type": "string"
+        },
+        {
+          "name": "rul_days_estimate",
+          "type": "float"
+        },
+        {
+          "name": "detected_at",
+          "type": "datetime"
+        },
+        {
+          "name": "resolved_at",
+          "type": "datetime"
+        }
+      ],
+      "rhino_owner": "organization",
+      "validations": [],
+      "associations": [
+        {
+          "name": "organization",
+          "type": "belongs_to"
+        },
+        {
+          "name": "asset",
+          "type": "belongs_to"
+        },
+        {
+          "name": "failure_mode",
+          "type": "belongs_to"
+        },
+        {
+          "name": "prescriptive_advisories",
+          "type": "has_many"
+        }
+      ]
+    },
+    {
+      "model": "AssetHealthIndex",
+      "table": "asset_health_indices",
+      "columns": [
+        {
+          "name": "organization_id",
+          "type": "references"
+        },
+        {
+          "name": "asset_id",
+          "type": "references"
+        },
+        {
+          "name": "calculated_at",
+          "type": "datetime"
+        },
+        {
+          "name": "health_score",
+          "type": "float"
+        },
+        {
+          "name": "anomaly_confidence",
+          "type": "float"
+        },
+        {
+          "name": "contributing_factors_json",
+          "type": "jsonb"
+        }
+      ],
+      "rhino_owner": "organization",
+      "validations": [
+        "validates :health_score, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }",
+        "validates :calculated_at, presence: true"
+      ],
+      "associations": [
+        {
+          "name": "organization",
+          "type": "belongs_to"
+        },
+        {
+          "name": "asset",
+          "type": "belongs_to"
+        }
+      ],
+      "rails_model_generation_command_line": "rails generate model AssetHealthIndex organization:references asset:references calculated_at:datetime health_score:float anomaly_confidence:float contributing_factors_json:jsonb"
+    },
+    {
+      "model": "HistorianTag",
+      "table": "historian_tags",
+      "columns": [
+        {
+          "name": "organization_id",
+          "type": "references"
+        },
+        {
+          "name": "asset_id",
+          "type": "references"
+        },
+        {
+          "name": "asset_component_id",
+          "type": "references"
+        },
+        {
+          "name": "historian_connector_id",
+          "type": "references"
+        },
+        {
+          "name": "tag_path",
+          "type": "string"
+        },
+        {
+          "name": "measurement_type",
+          "type": "string"
+        },
+        {
+          "name": "engineering_unit",
+          "type": "string"
+        },
+        {
+          "name": "scan_frequency_hz",
+          "type": "float"
+        }
+      ],
+      "rhino_owner": "organization",
+      "validations": [],
+      "associations": [
+        {
+          "name": "organization",
+          "type": "belongs_to"
+        },
+        {
+          "name": "asset",
+          "type": "belongs_to"
+        },
+        {
+          "name": "asset_component",
+          "type": "belongs_to"
+        },
+        {
+          "name": "historian_connector",
+          "type": "belongs_to"
+        },
+        {
+          "name": "telemetry_records",
+          "type": "has_many"
+        }
+      ]
+    },
+    {
+      "model": "PrescriptiveAdvisory",
+      "table": "prescriptive_advisories",
+      "columns": [
+        {
+          "name": "organization_id",
+          "type": "references"
+        },
+        {
+          "name": "diagnostic_incident_id",
+          "type": "references"
+        },
+        {
+          "name": "recommended_action",
+          "type": "text"
+        },
+        {
+          "name": "throttle_percentage",
+          "type": "float"
+        },
+        {
+          "name": "parts_required_json",
+          "type": "jsonb"
+        },
+        {
+          "name": "urgency",
+          "type": "string"
+        }
+      ],
+      "rhino_owner": "organization",
+      "validations": [],
+      "associations": [
+        {
+          "name": "organization",
+          "type": "belongs_to"
+        },
+        {
+          "name": "diagnostic_incident",
+          "type": "belongs_to"
+        },
+        {
+          "name": "cmms_work_orders",
+          "type": "has_many"
+        }
+      ]
+    },
+    {
+      "model": "TelemetryRecord",
+      "table": "telemetry_records",
+      "columns": [
+        {
+          "name": "organization_id",
+          "type": "references"
+        },
+        {
+          "name": "historian_tag_id",
+          "type": "references"
+        },
+        {
+          "name": "recorded_at",
+          "type": "datetime"
+        },
+        {
+          "name": "recorded_value",
+          "type": "float"
+        },
+        {
+          "name": "data_quality_flag",
+          "type": "string"
+        }
+      ],
+      "rhino_owner": "organization",
+      "validations": [
+        "validates :recorded_at, presence: true",
+        "validates :recorded_value, presence: true"
+      ],
+      "associations": [
+        {
+          "name": "organization",
+          "type": "belongs_to"
+        },
+        {
+          "name": "historian_tag",
+          "type": "belongs_to"
+        }
+      ],
+      "rails_model_generation_command_line": "rails generate model TelemetryRecord organization:references historian_tag:references recorded_at:datetime recorded_value:float data_quality_flag:string"
+    },
+    {
+      "model": "CmmsWorkOrder",
+      "table": "cmms_work_orders",
+      "columns": [
+        {
+          "name": "organization_id",
+          "type": "references"
+        },
+        {
+          "name": "prescriptive_advisory_id",
+          "type": "references"
+        },
+        {
+          "name": "user_id",
+          "type": "references"
+        },
+        {
+          "name": "cmms_type",
+          "type": "string"
+        },
+        {
+          "name": "external_order_number",
+          "type": "string"
+        },
+        {
+          "name": "sync_status",
+          "type": "string"
+        },
+        {
+          "name": "dispatched_at",
+          "type": "datetime"
+        },
+        {
+          "name": "work_order_payload",
+          "type": "jsonb"
+        }
+      ],
+      "rhino_owner": "organization",
+      "validations": [
+        "validates :cmms_type, presence: true",
+        "validates :sync_status, presence: true"
+      ],
+      "associations": [
+        {
+          "name": "organization",
+          "type": "belongs_to"
+        },
+        {
+          "name": "prescriptive_advisory",
+          "type": "belongs_to"
+        },
+        {
+          "name": "user",
+          "type": "belongs_to"
+        }
+      ],
+      "rails_model_generation_command_line": "rails generate model CmmsWorkOrder organization:references prescriptive_advisory:references user:references cmms_type:string external_order_number:string sync_status:string dispatched_at:datetime work_order_payload:jsonb"
+    }
+  ],
+  "sample_data": [
+    {
+      "rows": [
+        {
+          "id": 1,
+          "user_id": 1,
+          "action_type": "DISPATCH_WORK_ORDER",
+          "recorded_at": "2025-05-18T10:00:00Z",
+          "details_json": {
+            "status": "SUCCESS",
+            "subsystem": "CMMS_OUTBOUND_DISPATCH",
+            "ip_address": "10.120.12.44",
+            "target_system": "SAP PM RFC_GATEWAY"
+          },
+          "entity_affected": "CmmsWorkOrder:1",
+          "organization_id": 1,
+          "tamper_proof_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "id": 2,
+          "user_id": 1,
+          "action_type": "OVERRIDE_HEALTH_BASELINE",
+          "recorded_at": "2025-05-17T16:15:00Z",
+          "details_json": {
+            "reason": "Post-lube-oil change recalibration approved by Reliability Superintendent",
+            "operator_role": "Lead Reliability Engineer"
+          },
+          "entity_affected": "ModelBaseline:1",
+          "organization_id": 1,
+          "tamper_proof_hash": "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"
+        },
+        {
+          "id": 3,
+          "user_id": 1,
+          "action_type": "AIR_GAP_MODEL_IMPORT",
+          "recorded_at": "2025-05-16T08:30:00Z",
+          "details_json": {
+            "media_source": "Read-Only Optical Data Diode (DVD-R)",
+            "signature_verified": true,
+            "pkg_checksum_sha256": "4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a"
+          },
+          "entity_affected": "ModelBaseline:3",
+          "organization_id": 1,
+          "tamper_proof_hash": "a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e"
+        }
+      ],
+      "table_name": "audit_logs"
+    },
+    {
+      "rows": [
+        {
+          "id": "1",
+          "uid": "user1@example.com",
+          "name": "User 1",
+          "email": "user1@example.com",
+          "approved": "true",
+          "provider": "email",
+          "last_name": "Last1",
+          "created_at": "2026-10-06T15:03:14.657784+00:00",
+          "first_name": "First1",
+          "updated_at": "2026-10-06T15:03:14.657784+00:00",
+          "sign_in_count": "5",
+          "profile_completed": "true",
+          "encrypted_password": "hashed_password_1",
+          "allow_password_change": "false"
+        },
+        {
+          "id": "2",
+          "uid": "user2@example.com",
+          "name": "User 2",
+          "email": "user2@example.com",
+          "approved": "false",
+          "provider": "email",
+          "last_name": "Last2",
+          "created_at": "2026-10-06T15:03:14.657810+00:00",
+          "first_name": "First2",
+          "updated_at": "2026-10-06T15:03:14.657810+00:00",
+          "sign_in_count": "10",
+          "profile_completed": "false",
+          "encrypted_password": "hashed_password_2",
+          "allow_password_change": "false"
+        }
+      ],
+      "table_name": "users"
+    },
+    {
+      "rows": [
+        {
+          "id": "1",
+          "name": "Organization 1",
+          "created_at": "2026-10-06T15:03:14.657875+00:00",
+          "updated_at": "2026-10-06T15:03:14.657875+00:00"
+        },
+        {
+          "id": "2",
+          "name": "Organization 2",
+          "created_at": "2026-10-06T15:03:14.657885+00:00",
+          "updated_at": "2026-10-06T15:03:14.657885+00:00"
+        }
+      ],
+      "table_name": "organizations"
+    },
+    {
+      "rows": [
+        {
+          "id": "1",
+          "name": "Role 1",
+          "created_at": "2026-10-06T15:03:14.657917+00:00",
+          "updated_at": "2026-10-06T15:03:14.657917+00:00"
+        },
+        {
+          "id": "2",
+          "name": "Admin Role 2",
+          "created_at": "2026-10-06T15:03:14.657927+00:00",
+          "updated_at": "2026-10-06T15:03:14.657927+00:00"
+        }
+      ],
+      "table_name": "roles"
+    },
+    {
+      "rows": [
+        {
+          "id": "1",
+          "role_id": "1",
+          "user_id": "1",
+          "created_at": "2026-10-06T15:03:14.657980+00:00",
+          "updated_at": "2026-10-06T15:03:14.657980+00:00",
+          "organization_id": "1"
+        },
+        {
+          "id": "2",
+          "role_id": "2",
+          "user_id": "2",
+          "created_at": "2026-10-06T15:03:14.657988+00:00",
+          "updated_at": "2026-10-06T15:03:14.657988+00:00",
+          "organization_id": "1"
+        }
+      ],
+      "table_name": "users_roles"
+    },
+    {
+      "rows": [
+        {
+          "id": 1,
+          "unit_code": "CDU-01",
+          "unit_name": "Atmospheric Crude Distillation Unit 1",
+          "description": "Primary distillation unit processing 180,000 BPD heavy sour crude",
+          "refinery_area": "Area A - Crude Fractionation",
+          "organization_id": 1
+        },
+        {
+          "id": 2,
+          "unit_code": "HT-02",
+          "unit_name": "Hydrotreater Diesel Unit 2",
+          "description": "High-pressure desulfurization hydrotreating unit operating at 85 barg",
+          "refinery_area": "Area B - Distillate Hydroprocessing",
+          "organization_id": 1
+        },
+        {
+          "id": 3,
+          "unit_code": "FCCU-03",
+          "unit_name": "Fluid Catalytic Cracking Unit",
+          "description": "Catalytic gas oil conversion unit with wet gas compression system",
+          "refinery_area": "Area C - Conversion Complex",
+          "organization_id": 1
+        },
+        {
+          "id": 4,
+          "unit_code": "UTIL-04",
+          "unit_name": "High Pressure Utilities & Steam",
+          "description": "High-pressure steam boiler battery and 120 barg BFW distribution",
+          "refinery_area": "Area D - Utilities & Offsites",
+          "organization_id": 1
+        }
+      ],
+      "table_name": "plant_units"
+    },
+    {
+      "rows": [
+        {
+          "id": 1,
+          "iso_code": "ISO14224-MECH-BRG-BPFO",
+          "description": "Fatigue spalling and micro-pitting on stationary outer ring raceway emitting periodic impact peaks at calculated BPFO harmonics",
+          "failure_name": "Rolling Element Bearing Outer Race Defect (BPFO)",
+          "organization_id": 1,
+          "severity_weight": 0.85,
+          "equipment_category": "Centrifugal Pump"
+        },
+        {
+          "id": 2,
+          "iso_code": "ISO14224-MECH-ALIGN-ANG",
+          "description": "Coupling angular offset resulting in prominent 2X running speed radial and axial vibration components",
+          "failure_name": "Angular & Parallel Shaft Misalignment",
+          "organization_id": 1,
+          "severity_weight": 0.7,
+          "equipment_category": "General Rotating Machinery"
+        },
+        {
+          "id": 3,
+          "iso_code": "ISO14224-HYDR-CAVIT-SUCT",
+          "description": "NPSH margin deficiency producing vapor bubble collapse and high-frequency broadband noise in the 2 kHz to 8 kHz band",
+          "failure_name": "Hydraulic Cavitation & Recirculation",
+          "organization_id": 1,
+          "severity_weight": 0.8,
+          "equipment_category": "Centrifugal Pump"
+        },
+        {
+          "id": 4,
+          "iso_code": "ISO14224-SEAL-DGS-CONTAM",
+          "description": "Liquid aerosol or particulate ingress into spiral-grooved dynamic gas seal faces causing excessive primary vent leakage",
+          "failure_name": "Dry Gas Seal Face Contamination / Grooving",
+          "organization_id": 1,
+          "severity_weight": 0.95,
+          "equipment_category": "Centrifugal Compressor"
+        }
+      ],
+      "table_name": "failure_modes"
+    },
+    {
+      "rows": [
+        {
+          "id": 1,
+          "port": 5450,
+          "status": "Connected",
+          "protocol_type": "OSIsoft PI AF / Web API",
+          "connector_name": "OSIsoft PI Server Primary CDU",
+          "last_heartbeat": "2025-05-18T14:30:00Z",
+          "server_address": "10.120.44.15",
+          "organization_id": 1
+        },
+        {
+          "id": 2,
+          "port": 3150,
+          "status": "Connected",
+          "protocol_type": "Honeywell PHD RDI OPC HDA",
+          "connector_name": "Honeywell PHD Hydroprocessing Node",
+          "last_heartbeat": "2025-05-18T14:30:00Z",
+          "server_address": "10.120.45.20",
+          "organization_id": 1
+        },
+        {
+          "id": 3,
+          "port": 4840,
+          "status": "Connected",
+          "protocol_type": "OPC UA Secure Binary",
+          "connector_name": "Yokogawa Exaquantum Utilities",
+          "last_heartbeat": "2025-05-18T14:29:55Z",
+          "server_address": "10.120.46.10",
+          "organization_id": 1
+        }
+      ],
+      "table_name": "historian_connectors"
+    },
+    {
+      "rows": [
+        {
+          "id": 1,
+          "asset_tag": "P-101A",
+          "seal_plan": "API Plan 53B (Pressurized Barrier System)",
+          "asset_name": "Crude Distillation Charge Pump A",
+          "bearing_type": "SKF 7314 BECBM Angular Contact & 6314 Deep Groove",
+          "plant_unit_id": 1,
+          "equipment_type": "Centrifugal Pump (Overhung OH2)",
+          "organization_id": 1,
+          "design_speed_rpm": 2980,
+          "operating_status": "Degraded",
+          "criticality_class": "A - Severe/Critical"
+        },
+        {
+          "id": 2,
+          "asset_tag": "K-301",
+          "seal_plan": "API Plan 32/54 Dry Gas Seal (Tandem)",
+          "asset_name": "Hydrogen Recycle Compressor",
+          "bearing_type": "Tilting Pad Journal & Active Magnetic Thrust",
+          "plant_unit_id": 2,
+          "equipment_type": "Multistage Centrifugal Compressor",
+          "organization_id": 1,
+          "design_speed_rpm": 10450,
+          "operating_status": "Running",
+          "criticality_class": "A - Severe/Critical"
+        },
+        {
+          "id": 3,
+          "asset_tag": "P-402",
+          "seal_plan": "API Plan 23 (Mechanical Seal with Pumping Ring)",
+          "asset_name": "Boiler Feed Water Pump B",
+          "bearing_type": "Sleeve Radial & Kingsbury Double Tilting Pad",
+          "plant_unit_id": 4,
+          "equipment_type": "Multistage Centrifugal Pump (BB3)",
+          "organization_id": 1,
+          "design_speed_rpm": 3550,
+          "operating_status": "Running",
+          "criticality_class": "A - Severe/Critical"
+        },
+        {
+          "id": 4,
+          "asset_tag": "KT-201",
+          "seal_plan": "Steam Labyrinth with Gland Condenser",
+          "asset_name": "Wet Gas Compressor Steam Turbine Driver",
+          "bearing_type": "Tilting Pad Radial with Spherical Pivot",
+          "plant_unit_id": 3,
+          "equipment_type": "Multistage Reaction Steam Turbine",
+          "organization_id": 1,
+          "design_speed_rpm": 6800,
+          "operating_status": "Warning",
+          "criticality_class": "A - Severe/Critical"
+        }
+      ],
+      "table_name": "assets"
+    },
+    {
+      "rows": [
+        {
+          "id": 1,
+          "asset_id": 1,
+          "position": "Pump DE",
+          "component_name": "Drive End Radial Bearing",
+          "component_type": "Rolling Element Bearing",
+          "organization_id": 1
+        },
+        {
+          "id": 2,
+          "asset_id": 1,
+          "position": "Pump NDE",
+          "component_name": "Non-Drive End Thrust Bearing",
+          "component_type": "Angular Contact Ball Bearing Pair",
+          "organization_id": 1
+        },
+        {
+          "id": 3,
+          "asset_id": 1,
+          "position": "Stuffing Box DE",
+          "component_name": "Primary Cartridge Seal",
+          "component_type": "Mechanical Seal API 682",
+          "organization_id": 1
+        },
+        {
+          "id": 4,
+          "asset_id": 2,
+          "position": "Compressor IB",
+          "component_name": "Compressor Inboard Journal Bearing",
+          "component_type": "Hydrodynamic Tilting Pad Bearing",
+          "organization_id": 1
+        },
+        {
+          "id": 5,
+          "asset_id": 2,
+          "position": "Discharge End Seal Cavity",
+          "component_name": "High Pressure Tandem Dry Gas Seal",
+          "component_type": "Dry Gas Seal Cartridge",
+          "organization_id": 1
+        },
+        {
+          "id": 6,
+          "asset_id": 4,
+          "position": "Steam Chest Inflow",
+          "component_name": "Turbine Governor Valve Actuator",
+          "component_type": "Hydraulic Trip/Throttle Assembly",
+          "organization_id": 1
+        }
+      ],
+      "table_name": "asset_components"
+    },
+    {
+      "rows": [
+        {
+          "id": 1,
+          "asset_id": 1,
+          "is_active": true,
+          "model_version": "v2.4.1-PCA-AE",
+          "algorithm_type": "Deep Autoencoder & Principal Component Residual Tracking",
+          "organization_id": 1,
+          "training_window_end": "2025-04-01T00:00:00Z",
+          "hyperparameters_json": {
+            "fft_bins": 512,
+            "batch_size": 64,
+            "latent_dim": 8,
+            "learning_rate": 0.001,
+            "anomaly_threshold_std": 3
+          },
+          "training_window_start": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": 2,
+          "asset_id": 2,
+          "is_active": true,
+          "model_version": "v1.9.0-VAR-LSTM",
+          "algorithm_type": "Vector Autoregression with Long Short-Term Memory",
+          "organization_id": 1,
+          "training_window_end": "2025-03-01T00:00:00Z",
+          "hyperparameters_json": {
+            "dropout": 0.2,
+            "lstm_units": [
+              64,
+              32
+            ],
+            "loss_metric": "MSE",
+            "sequence_length": 120
+          },
+          "training_window_start": "2024-11-01T00:00:00Z"
+        },
+        {
+          "id": 3,
+          "asset_id": 4,
+          "is_active": true,
+          "model_version": "v1.2.0-DTW-OCSVM",
+          "algorithm_type": "Dynamic Time Warping One-Class SVM",
+          "organization_id": 1,
+          "training_window_end": "2025-04-15T00:00:00Z",
+          "hyperparameters_json": {
+            "nu": 0.05,
+            "gamma": "scale",
+            "kernel": "rbf"
+          },
+          "training_window_start": "2025-02-01T00:00:00Z"
+        }
+      ],
+      "table_name": "model_baselines"
+    },
+    {
+      "rows": [
+        {
+          "id": 1,
+          "status": "Active",
+          "asset_id": 1,
+          "detected_at": "2025-05-15T09:15:00Z",
+          "resolved_at": null,
+          "severity_level": "High",
+          "failure_mode_id": 1,
+          "organization_id": 1,
+          "rul_days_estimate": 18.5
+        },
+        {
+          "id": 2,
+          "status": "Investigating",
+          "asset_id": 4,
+          "detected_at": "2025-05-16T11:45:00Z",
+          "resolved_at": null,
+          "severity_level": "Medium",
+          "failure_mode_id": 2,
+          "organization_id": 1,
+          "rul_days_estimate": 42
+        },
+        {
+          "id": 3,
+          "status": "Resolved",
+          "asset_id": 3,
+          "detected_at": "2025-04-10T08:00:00Z",
+          "resolved_at": "2025-04-12T16:30:00Z",
+          "severity_level": "Low",
+          "failure_mode_id": 3,
+          "organization_id": 1,
+          "rul_days_estimate": 120
+        }
+      ],
+      "table_name": "diagnostic_incidents"
+    },
+    {
+      "rows": [
+        {
+          "id": 1,
+          "asset_id": 1,
+          "health_score": 41.2,
+          "calculated_at": "2025-05-18T14:30:00Z",
+          "organization_id": 1,
+          "anomaly_confidence": 0.94,
+          "contributing_factors_json": {
+            "vib_de_env": {
+              "status": "severe_anomaly",
+              "weight": 0.45,
+              "z_score": 3.82
+            },
+            "brg_nde_temp": {
+              "status": "warning",
+              "weight": 0.3,
+              "z_score": 2.45
+            },
+            "discharge_diff_press": {
+              "status": "normal",
+              "weight": 0.25,
+              "z_score": 1.1
+            }
+          }
+        },
+        {
+          "id": 2,
+          "asset_id": 2,
+          "health_score": 88.5,
+          "calculated_at": "2025-05-18T14:30:00Z",
+          "organization_id": 1,
+          "anomaly_confidence": 0.12,
+          "contributing_factors_json": {
+            "seal_vent_flow": {
+              "status": "normal",
+              "weight": 0.35,
+              "z_score": 0.8
+            },
+            "shaft_displacement": {
+              "status": "normal",
+              "weight": 0.4,
+              "z_score": 0.45
+            },
+            "lube_oil_header_press": {
+              "status": "normal",
+              "weight": 0.25,
+              "z_score": 0.2
+            }
+          }
+        },
+        {
+          "id": 3,
+          "asset_id": 3,
+          "health_score": 95,
+          "calculated_at": "2025-05-18T14:30:00Z",
+          "organization_id": 1,
+          "anomaly_confidence": 0.05,
+          "contributing_factors_json": {
+            "axial_thrust_pos": {
+              "status": "nominal",
+              "weight": 0.5,
+              "z_score": 0.15
+            },
+            "motor_winding_temp": {
+              "status": "nominal",
+              "weight": 0.5,
+              "z_score": 0.22
+            }
+          }
+        },
+        {
+          "id": 4,
+          "asset_id": 4,
+          "health_score": 64.7,
+          "calculated_at": "2025-05-18T14:30:00Z",
+          "organization_id": 1,
+          "anomaly_confidence": 0.78,
+          "contributing_factors_json": {
+            "exhaust_casing_temp": {
+              "status": "moderate",
+              "weight": 0.4,
+              "z_score": 1.4
+            },
+            "governor_response_lag": {
+              "status": "warning",
+              "weight": 0.6,
+              "z_score": 2.15
+            }
+          }
+        }
+      ],
+      "table_name": "asset_health_indices"
+    },
+    {
+      "rows": [
+        {
+          "id": 1,
+          "asset_id": 1,
+          "tag_path": "CDU_01.P101A.VIB_DE_VEL_X",
+          "organization_id": 1,
+          "engineering_unit": "mm/s RMS",
+          "measurement_type": "Overall Vibration Velocity Horizontal",
+          "scan_frequency_hz": 1,
+          "asset_component_id": 1,
+          "historian_connector_id": 1
+        },
+        {
+          "id": 2,
+          "asset_id": 1,
+          "tag_path": "CDU_01.P101A.BRG_NDE_TEMP",
+          "organization_id": 1,
+          "engineering_unit": "degC",
+          "measurement_type": "Bearing Metal Temperature",
+          "scan_frequency_hz": 0.1,
+          "asset_component_id": 2,
+          "historian_connector_id": 1
+        },
+        {
+          "id": 3,
+          "asset_id": 1,
+          "tag_path": "CDU_01.P101A.VIB_DE_PKPK_ENV",
+          "organization_id": 1,
+          "engineering_unit": "g pk-pk",
+          "measurement_type": "High Frequency Demodulated Acceleration / Enveloping",
+          "scan_frequency_hz": 10,
+          "asset_component_id": 1,
+          "historian_connector_id": 1
+        },
+        {
+          "id": 4,
+          "asset_id": 2,
+          "tag_path": "HT_02.K301.VIB_IB_PROX_DISP_Y",
+          "organization_id": 1,
+          "engineering_unit": "um pk-pk",
+          "measurement_type": "Radial Shaft Relative Displacement",
+          "scan_frequency_hz": 1,
+          "asset_component_id": 4,
+          "historian_connector_id": 2
+        },
+        {
+          "id": 5,
+          "asset_id": 2,
+          "tag_path": "HT_02.K301.DGS_PRIMARY_VENT_FLOW",
+          "organization_id": 1,
+          "engineering_unit": "Nm3/h",
+          "measurement_type": "Dry Gas Seal Primary Leakage Vent Flow",
+          "scan_frequency_hz": 0.2,
+          "asset_component_id": 5,
+          "historian_connector_id": 2
+        },
+        {
+          "id": 6,
+          "asset_id": 4,
+          "tag_path": "FCCU_03.KT201.STEAM_CHEST_PRESS",
+          "organization_id": 1,
+          "engineering_unit": "barg",
+          "measurement_type": "Steam Chest Inlet Pressure",
+          "scan_frequency_hz": 1,
+          "asset_component_id": 6,
+          "historian_connector_id": 1
+        }
+      ],
+      "table_name": "historian_tags"
+    },
+    {
+      "rows": [
+        {
+          "id": 1,
+          "urgency": "Urgent - Execute within 72h",
+          "organization_id": 1,
+          "recommended_action": "Reduce P-101A throughput by 15% and switch load to hot-standby pump P-101B. Mobilize mechanical maintenance for drive-end bearing replacement during upcoming unit de-rate window.",
+          "parts_required_json": {
+            "seals": [
+              "John Crane API 682 Type A Elastomer O-ring Kit"
+            ],
+            "bearings": [
+              "SKF 7314 BECBM Pair",
+              "SKF 6314 C3 Radial"
+            ],
+            "lubricant": [
+              "Mobil DTE 25 Hydraulic Oil (20 Liters)"
+            ]
+          },
+          "throttle_percentage": 15,
+          "diagnostic_incident_id": 1
+        },
+        {
+          "id": 2,
+          "urgency": "Routine - Within 14 Days",
+          "organization_id": 1,
+          "recommended_action": "Schedule laser shaft alignment check on turbine-compressor spool during next planned nitrogen blowdown cycle. Inspect diaphragm coupling disc packs for fretting fatigue.",
+          "parts_required_json": {
+            "shims": [
+              "316SS Precision Pre-Cut Shims 0.05mm - 2.0mm Kit"
+            ],
+            "coupling_bolts": [
+              "Rexnord Thomas Series 71 Bolt Kit M16x80 Grade 10.9"
+            ]
+          },
+          "throttle_percentage": 0,
+          "diagnostic_incident_id": 2
+        }
+      ],
+      "table_name": "prescriptive_advisories"
+    },
+    {
+      "rows": [
+        {
+          "id": 1,
+          "recorded_at": "2025-05-18T14:30:00Z",
+          "recorded_value": 7.82,
+          "organization_id": 1,
+          "historian_tag_id": 1,
+          "data_quality_flag": "Good - 192 (OPC Quality)"
+        },
+        {
+          "id": 2,
+          "recorded_at": "2025-05-18T14:30:00Z",
+          "recorded_value": 93.4,
+          "organization_id": 1,
+          "historian_tag_id": 2,
+          "data_quality_flag": "Good - 192 (OPC Quality)"
+        },
+        {
+          "id": 3,
+          "recorded_at": "2025-05-18T14:30:00Z",
+          "recorded_value": 4.65,
+          "organization_id": 1,
+          "historian_tag_id": 3,
+          "data_quality_flag": "Good - 192 (OPC Quality)"
+        },
+        {
+          "id": 4,
+          "recorded_at": "2025-05-18T14:30:00Z",
+          "recorded_value": 32.1,
+          "organization_id": 1,
+          "historian_tag_id": 4,
+          "data_quality_flag": "Good - 192 (OPC Quality)"
+        },
+        {
+          "id": 5,
+          "recorded_at": "2025-05-18T14:30:00Z",
+          "recorded_value": 1.85,
+          "organization_id": 1,
+          "historian_tag_id": 5,
+          "data_quality_flag": "Good - 192 (OPC Quality)"
+        }
+      ],
+      "table_name": "telemetry_records"
+    },
+    {
+      "rows": [
+        {
+          "id": 1,
+          "user_id": 1,
+          "cmms_type": "SAP PM",
+          "sync_status": "Dispatched",
+          "dispatched_at": "2025-05-18T10:00:00Z",
+          "organization_id": 1,
+          "work_order_payload": {
+            "priority": "1 - Emergency",
+            "order_type": "PM02",
+            "short_text": "RefineGuard APM: DE Bearing BPFO Spall Detected - Replace Bearing",
+            "work_center": "MECH-01",
+            "planner_group": "REL-ROT",
+            "equipment_number": "EQ-CDU-P101A",
+            "iso_failure_code": "ISO14224-MECH-BRG-BPFO",
+            "functional_location": "FL-REFINERY-CDU-PUMPS"
+          },
+          "external_order_number": "SAP-WO-88029144",
+          "prescriptive_advisory_id": 1
+        },
+        {
+          "id": 2,
+          "user_id": 1,
+          "cmms_type": "IBM Maximo",
+          "sync_status": "Pending Sync",
+          "dispatched_at": "2025-05-18T11:20:00Z",
+          "organization_id": 1,
+          "work_order_payload": {
+            "siteid": "REFINERY_AREA_C",
+            "assetnum": "KT201",
+            "work_type": "CM",
+            "wopriority": 2,
+            "description": "Laser Alignment Verification - Elevated 2X Vibration Harmonic"
+          },
+          "external_order_number": "MAX-WO-109432",
+          "prescriptive_advisory_id": 2
+        }
+      ],
+      "table_name": "cmms_work_orders"
+    }
+  ]
+}

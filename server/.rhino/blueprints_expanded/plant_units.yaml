@@ -1,0 +1,93 @@
+model: PlantUnit
+slug: plant_units
+table: plant_units
+options:
+  belongs_to_organization: true
+  soft_deletes: true
+  pagination: true
+  per_page: 50
+columns:
+  unit_code:
+    type: string
+    nullable: false
+    filterable: true
+    sortable: true
+    searchable: true
+  unit_name:
+    type: string
+    nullable: false
+    sortable: true
+    searchable: true
+  unit_type:
+    type: string
+    nullable: true
+    filterable: true
+  refinery_area:
+    type: string
+    nullable: true
+    filterable: true
+  description:
+    type: text
+    nullable: true
+    searchable: true
+  throughput_target_bpd:
+    type: float
+    nullable: true
+  rate_percent:
+    type: float
+    nullable: true
+  exposure_usd_per_day:
+    type: float
+    nullable: true
+  derate_recommendation:
+    type: text
+    nullable: true
+relationships:
+- type: belongsTo
+  model: Organization
+- type: hasMany
+  model: Asset
+- type: hasMany
+  model: ShiftLogEntry
+permissions:
+  admin:
+    actions:
+    - index
+    - show
+    - store
+    - update
+    - destroy
+    - trashed
+    - restore
+    - forceDelete
+    show_fields: '*'
+    create_fields: '*'
+    update_fields: '*'
+  reliability_engineer:
+    actions:
+    - index
+    - show
+    show_fields: '*'
+    create_fields: []
+    update_fields: []
+  machinery_specialist:
+    actions:
+    - index
+    - show
+    show_fields: '*'
+    create_fields: []
+    update_fields: []
+  maintenance_planner:
+    actions:
+    - index
+    - show
+    show_fields: '*'
+    create_fields: []
+    update_fields: []
+  operations_superintendent:
+    actions:
+    - index
+    - show
+    show_fields: '*'
+    create_fields: []
+    update_fields: []

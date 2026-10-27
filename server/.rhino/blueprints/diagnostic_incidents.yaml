@@ -1,0 +1,192 @@
+# RefineGuard APM — DiagnosticIncident
+# PRD: schema.diagnostic_incidents + US-05 AC2 (acknowledge -> 'Under Investigation' with user id +
+#      timestamp in the audit record) + US-08 AC3 (specialist confirms/edits a finding with technical
+#      notes; it propagates to prescriptive planning) + US-11 AC1/AC3 (RUL window + 90% CI,
+#      escalation to 'Urgent Action Required' at <=14 days) + US-14 AC1/AC2 (operating regime,
+#      regime-specific degradation rates, 5-minute P-F slope recalculation on feed slate switch)
+#      + US-16 AC4 (deployment logged with model version, author and timestamp).
+# Backs: /assets/:assetId/diagnostics, /fleet-overview anomaly queue, /prescriptive-advisories.
+# Gaps compensated: G7 (missing fields), G20 (acknowledge must persist), G13 (severity vocabulary).
+model: DiagnosticIncident
+slug: diagnostic_incidents
+table: diagnostic_incidents
+
+options:
+  belongs_to_organization: true
+  soft_deletes: true
+  audit_trail: true
+  pagination: true
+  per_page: 100
+
+columns:
+  asset_id:
+    type: foreignId
+    foreign_model: Asset
+    nullable: false
+    index: true
+    filterable: true
+  failure_mode_id:
+    type: foreignId
+    foreign_model: FailureMode
+    nullable: true
+    index: true
+    filterable: true
+  incident_code:
+    type: string
+    nullable: true
+    filterable: true
+    sortable: true
+    searchable: true
+  status:
+    type: string
+    nullable: false
+    default: "Active"
+    filterable: true
+    sortable: true
+  severity_level:
+    type: string
+    nullable: true
+    default: "Low"
+    filterable: true
+    sortable: true
+  health_state:
+    type: string
+    nullable: true
+    default: "Normal"
+    filterable: true
+  rul_days_estimate:
+    type: float
+    nullable: true
+    filterable: true
+    sortable: true
+  rul_window_low_days:
+    type: float
+    nullable: true
+  rul_window_high_days:
+    type: float
+    nullable: true
+  rul_confidence_pct:
+    type: float
+    nullable: true
+  pf_interval_days:
+    type: float
+    nullable: true
+    sortable: true
+  regime:
+    type: string
+    nullable: true
+    filterable: true
+  regime_confidence_pct:
+    type: float
+    nullable: true
+  root_cause:
+    type: text
+    nullable: true
+    searchable: true
+  evidence_summary:
+    type: text
+    nullable: true
+    searchable: true
+  failure_mechanism:
+    type: string
+    nullable: true
+    filterable: true
+  finding_confidence:
+    type: float
+    nullable: true
+  finding_status:
+    type: string
+    nullable: true
+    default: "Draft"
+    filterable: true
+  signed_off_by_id:
+    type: foreignId
+    foreign_model: User
+    nullable: true
+    index: true
+  signed_off_at:
+    type: datetime
+    nullable: true
+  acknowledged_by_id:
+    type: foreignId
+    foreign_model: User
+    nullable: true
+    index: true
+  acknowledged_at:
+    type: datetime
+    nullable: true
+  detected_at:
+    type: datetime
+    nullable: false
+    filterable: true
+    sortable: true
+  resolved_at:
+    type: datetime
+    nullable: true
+
+relationships:
+  - type: belongsTo
+    model: Organization
+  - type: belongsTo
+    model: Asset
+  - type: belongsTo
+    model: FailureMode
+  - type: belongsTo
+    model: User
+  - type: hasMany
+    model: PrescriptiveAdvisory
+  - type: hasMany
+    model: FailureModeAssessment
+
+permissions:
+  admin:
+    actions: [index, show, store, update, destroy, trashed, restore, forceDelete]
+    show_fields: "*"
+    create_fields: "*"
+    update_fields: "*"
+  reliability_engineer:
+    actions: [index, show, store, update]
+    show_fields: "*"
+    create_fields: &incident_writable
+      - asset_id
+      - failure_mode_id
+      - incident_code
+      - status
+      - severity_level
+      - health_state
+      - rul_days_estimate
+      - rul_window_low_days
+      - rul_window_high_days
+      - rul_confidence_pct
+      - pf_interval_days
+      - regime
+      - regime_confidence_pct
+      - acknowledged_at
+      - detected_at
+      - resolved_at
+    update_fields: *incident_writable
+  machinery_specialist:
+    actions: [index, show, store, update]
+    show_fields: "*"
+    create_fields: &incident_specialist_writable
+      - root_cause
+      - evidence_summary
+      - failure_mechanism
+      - finding_confidence
+      - finding_status
+      - signed_off_at
+      - status
+      - severity_level
+      - acknowledged_at
+      - resolved_at
+    update_fields: *incident_specialist_writable
+  maintenance_planner:
+    actions: [index, show, update]
+    show_fields: "*"
+    create_fields: []
+    update_fields: [status, severity_level]
+  operations_superintendent:
+    actions: [index, show]
+    show_fields: [id, asset_id, incident_code, status, severity_level, health_state, rul_days_estimate, rul_window_low_days, rul_window_high_days, pf_interval_days, regime, detected_at]
+    create_fields: []
+    update_fields: []

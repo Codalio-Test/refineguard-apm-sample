@@ -1,0 +1,357 @@
+{
+  "prd_name": "RefineGuard APM",
+  "audited_at": "2026-10-06T21:05:39Z",
+  "updated_at": "2026-10-06T21:05:39Z",
+  "inputs": {
+    "prd": true,
+    "ui_prototype": true,
+    "source_repo": false,
+    "prototype_pages": 18
+  },
+  "summary": {
+    "gap_count": 27,
+    "high": 14,
+    "medium": 12,
+    "low": 1,
+    "key_features": 8,
+    "user_stories": 16,
+    "acceptance_criteria_in_prd": 108,
+    "acceptance_criteria_by_story": {
+      "US-01": 12,
+      "US-02": 12,
+      "US-03": 11,
+      "US-04": 7,
+      "US-05": 6,
+      "US-06": 6,
+      "US-07": 5,
+      "US-08": 5,
+      "US-09": 5,
+      "US-10": 5,
+      "US-11": 6,
+      "US-12": 6,
+      "US-13": 5,
+      "US-14": 5,
+      "US-15": 5,
+      "US-16": 7
+    },
+    "sitemap_routes": 17,
+    "prototype_routes": 18,
+    "roles_in_registry": 5,
+    "blockers": false,
+    "note": "No unresolved blockers. Every key_feature has at least one covering user story and at least one sitemap route; every sitemap route has a prototype page. All gaps are compensating-design gaps (missing columns/entities/endpoints and vocabulary drift between the PRD text and the locked prototype), never missing features."
+  },
+  "role_registry": [
+    {
+      "id": "admin",
+      "label": "System Administrator",
+      "source": "user_stories[].user_story.as_a ('admin'); user_flows[].primary_role; navigation_design admin nav path",
+      "notes": "Privileged role. Must be seeded with the literal slug 'admin' (organizations engine hardcodes it for membership/settings checks)."
+    },
+    {
+      "id": "reliability_engineer",
+      "label": "Reliability Engineer",
+      "source": "persona Marcus Vance age_role; user_stories US-04/US-05/US-06/US-11/US-14 as_a; user_flows primary_role",
+      "notes": "Default entry /fleet-overview."
+    },
+    {
+      "id": "machinery_specialist",
+      "label": "Rotating Equipment & Vibration Specialist",
+      "source": "persona Dr. Elena Rostova age_role; user_stories US-02/US-08/US-09/US-10/US-16 as_a; user_flows primary_role",
+      "notes": "Default entry /assets/:assetId/spectral-analytics."
+    },
+    {
+      "id": "maintenance_planner",
+      "label": "Maintenance & Turnaround Planning Coordinator",
+      "source": "persona Dave Kalu age_role; user_stories US-12 as_a; user_flows primary_role",
+      "notes": "Default entry /prescriptive-advisories."
+    },
+    {
+      "id": "operations_superintendent",
+      "label": "Plant Operations Superintendent",
+      "source": "target_audience entry; user_stories US-13/US-15 as_a; user_flows primary_role; navigation_design role section",
+      "notes": "Default entry /operations/unit-risk-matrix."
+    }
+  ],
+  "roles_explicitly_not_registered": [
+    {
+      "prose_label": "console operator",
+      "seen_in": ["US-15 acceptance criterion 3", "US-13 acceptance criterion 3"],
+      "decision": "Not registered as an application role. US-15 AC4 restricts /operations/shift-log to operations_superintendent, reliability_engineer and admin; registering a role that the route ACL forbids would create a dead-end role with no reachable route group. The console-operator step check-off is captured as an action available to operations_superintendent/reliability_engineer on /operations/shift-log. See gap FLOW_JOURNEY_MISMATCH (console operator).",
+      "gap_index": "G21"
+    },
+    {
+      "prose_label": "Guest / anonymous",
+      "seen_in": ["US-06 acceptance criterion 3", "US-01/02/03/04/05/07..16 'Unauthenticated users are redirected to /login'"],
+      "decision": "'public' is an access tier, not a role. Public tier = '/' landing + '/login' + '/api/auth/*'. No Role row, no pages[].roles entry."
+    }
+  ],
+  "gaps": [
+    {
+      "code": "DATA_MODEL_UX_MISMATCH",
+      "severity": "high",
+      "message": "sample_data.users is DeviseTokenAuth-shaped (uid, provider, encrypted_password, allow_password_change, sign_in_count, approved, profile_completed) while this project's stack is rhino-rails v4, whose User is Rhino::User with has_secure_password + has_secure_token(:api_token) and no Devise/omniauth. US-01 additionally injects auto-generated 'The data model stores email / approved / first name / last name / profile completed' criteria that attribute Devise columns to the historian-connector story.",
+      "compensation_hint": "Do not blueprint a User model. Treat User/Organization/Role/UsersRole as engine-provided (rhino_project_core / rhino_project_organizations). Add a small User addendum migration for first_name/last_name only if the app shell renders them; map 'approved' to invitation-acceptance state and 'profile_completed' to a computed attribute. Hide api_token via rhino_additional_hidden and rhino_audit_exclude. Compensated AC rows must describe Bearer-token auth (POST /api/auth/login) rather than Devise."
+    },
+    {
+      "code": "DATA_MODEL_UX_MISMATCH",
+      "severity": "high",
+      "message": "mermaid_erd_diagram / schema declare an AuditLog model on table `audit_logs`, but Rhino v4 already owns `audit_logs` as the polymorphic table written by Rhino::HasAuditTrail. Creating a second model on that table name collides with the engine and breaks the generated audit routes.",
+      "compensation_hint": "Drop the custom AuditLog model. Use Rhino::HasAuditTrail on the write-bearing models for change history, and blueprint a distinct `security_audit_events` model (organization-scoped) to back /admin/security-audit with action_type, actor_name, actor_role, entity_affected, source_host, severity, result, recorded_at, tamper_proof_hash, previous_hash, details_json."
+    },
+    {
+      "code": "DATA_MODEL_UX_MISMATCH",
+      "severity": "high",
+      "message": "Model `Asset` as specified cannot satisfy US-03 (which requires asset_tag, unit_id, equipment_class, driver_type, bearing_de_model, bearing_nde_model, rated_rpm) nor the locked prototype: /assets reads Equipment class, Process unit, Criticality, Manufacturer, Commissioned, Data completeness, Rated flow, Speed, Max bearing temperature; /fleet-overview reads health, rms, temp, rul, sample, severity per asset; the hierarchy tree needs a parent/child chain.",
+      "compensation_hint": "Extend the Asset blueprint with: driver_type, manufacturer, commissioned_on, rated_rpm, rated_flow_m3h, max_bearing_temp_c, bearing_de_model, bearing_nde_model, parent_asset_id (self FK), hierarchy_path, health_state, health_index, health_index_delta, rms_velocity_mms, rms_velocity_delta_pct, bearing_temp_c, bearing_temp_delta_c, motor_current_a, estimated_rul_days, estimated_rul_window, last_sample_at, data_completeness_pct, monitored, last_tag_validation_at. Add computed attributes `severity` and `unit` (plant_unit.unit_code)."
+    },
+    {
+      "code": "DATA_MODEL_UX_MISMATCH",
+      "severity": "high",
+      "message": "Model `HistorianTag` lacks the columns US-01 AC2 requires the import parser to validate (historian_type, source_tag_name, engineering_unit, scan_rate_ms, deadband_val) and the per-row telemetry state /admin/tag-mapping renders (quality, last value, mapping state, last validation).",
+      "compensation_hint": "Extend HistorianTag with historian_type, source_tag_name, scan_rate_ms, deadband_val, quality_status, last_value, last_validated_at, stale_seconds, mapped, mapping_state. Whitelist asset_tag/historian_type/quality_status/mapping_state as filters and tag_path/source_tag_name as searchable."
+    },
+    {
+      "code": "DATA_MODEL_UX_MISMATCH",
+      "severity": "high",
+      "message": "Model `HistorianConnector` lacks endpoint_url, historian_type, polling_interval_seconds, poll_latency_ms, buffer_depth and the backfill counters that /admin/historian-connections renders (State, Connector, Protocol, Endpoint, Latency, Buffer, Last poll + '12,402 / 18,240 samples committed') and that US-01 AC3 ring-buffering requires.",
+      "compensation_hint": "Extend HistorianConnector with historian_type, endpoint_url, polling_interval_seconds, poll_latency_ms, buffer_depth, backfill_queue, backfill_committed, backfill_total, ring_buffer_enabled, credentials_ref (a local secret-store reference, never a plaintext credential)."
+    },
+    {
+      "code": "DATA_MODEL_UX_MISMATCH",
+      "severity": "high",
+      "message": "No entity backs /assets/:assetId/diagnostics. US-08 AC1 requires per-fault probabilities ('Bearing Outer Race Defect BPFO: 89%') and the locked prototype's PhysicalFingerprintEvidence table needs per-marker rows (Marker 1X/2X/BPFO/BPFI/BSF/FTF, Expected Hz, Observed Hz, Amplitude, Match) computed from bearing geometry and live shaft RPM.",
+      "compensation_hint": "Add a `failure_mode_assessments` blueprint model: asset_id, diagnostic_incident_id, failure_mode_id, probability, confidence_low, confidence_high, marker_label, expected_hz, observed_hz, amplitude, match_score, assessed_at, assessed_by_id. This single model backs both the FailureModeClassifier card and the physical fingerprint table."
+    },
+    {
+      "code": "DATA_MODEL_UX_MISMATCH",
+      "severity": "high",
+      "message": "Model `DiagnosticIncident` has no engineering-finding surface (root cause, evidence summary, failure mechanism, confidence, sign-off) required by US-08 AC3 and the prototype's DiagnosticFindingEditor, and no acknowledgment capture (user + timestamp) required by US-05 AC2; it also lacks the RUL window band (US-11 AC1 '90% confidence interval') and the operating-regime fields US-14 AC1/AC2 require.",
+      "compensation_hint": "Extend DiagnosticIncident with incident_code, health_state, rul_window_low_days, rul_window_high_days, rul_confidence_pct, pf_interval_days, regime, regime_confidence_pct, root_cause, evidence_summary, failure_mechanism, finding_confidence, finding_status, signed_off_by_id, signed_off_at, acknowledged_at, acknowledged_by_id."
+    },
+    {
+      "code": "DATA_MODEL_UX_MISMATCH",
+      "severity": "high",
+      "message": "No entity backs /assets/:assetId/spectral-analytics. US-09 requires FFT spectra up to 64k lines plus 1X-10X harmonic cursors with delta/amplitude readouts; US-10 requires a 3D waterfall over 7/30/90-day horizons and an orbit view; the prototype additionally reads Running speed Hz, Cursor Hz, Amplitude, Order and Δ baseline.",
+      "compensation_hint": "Add a `spectrum_snapshots` blueprint model: asset_id, historian_tag_id, captured_at, channel, line_resolution, sample_rate_hz, rms_velocity, running_speed_hz, cursor_hz, cursor_amplitude, cursor_order, delta_baseline, spectrum_json, harmonics_json, bearing_markers_json, waterfall_json, orbit_json."
+    },
+    {
+      "code": "DATA_MODEL_UX_MISMATCH",
+      "severity": "high",
+      "message": "No entity backs /operations/shift-log. US-13 AC3 requires approved derating advisories to be logged to the shift handover log with a timestamped superintendent sign-off, and US-15 AC2/AC3 require the timeline plus a checkable standby start procedure synced back to /fleet-overview.",
+      "compensation_hint": "Add a `shift_log_entries` blueprint model: plant_unit_id, asset_id, author_id, occurred_at, shift_label, event_type, severity, message, unit_status, open_risks, outstanding_actions, incoming_ack, acknowledged_by_id, handover_completed_at."
+    },
+    {
+      "code": "DATA_MODEL_UX_MISMATCH",
+      "severity": "high",
+      "message": "Model `ModelBaseline` stores only version/algorithm/window/hyperparameters/is_active. It cannot serve /model-management/evaluation (Precision, Recall, False alarms, Lead time, Drift, Coverage, gates, version history) nor US-16 AC3/AC4 (one-click deploy with model version + author + timestamp audit), and there is no entity for the selectable golden candidate windows the retraining screen lists.",
+      "compensation_hint": "Extend ModelBaseline with accuracy_metrics_json, gates_json, status, training_status, training_progress, approved_by_id, approved_at, parent_model_baseline_id, promoted_at. Add a `baseline_windows` model (asset_id, model_baseline_id, label, window_start, window_end, load_percent, completeness_percent, selected, eligible) for the golden-run selector."
+    },
+    {
+      "code": "DATA_MODEL_UX_MISMATCH",
+      "severity": "high",
+      "message": "Model `PrescriptiveAdvisory` cannot serve /prescriptive-advisories or US-12 AC1: no action step list, no warehouse bin / inventory status, no parts lead time, no dispatch status, no urgency escalation for RUL <= 14 days (US-11 AC3) and no derate sign-off capture (US-13 AC3).",
+      "compensation_hint": "Extend PrescriptiveAdvisory with advisory_code, action_steps_json, warehouse_status, warehouse_bin, parts_lead_time_days, status, due_within_days, derate_approved_at, derate_approved_by_id, regime_confidence_pct."
+    },
+    {
+      "code": "DATA_MODEL_UX_MISMATCH",
+      "severity": "high",
+      "message": "Model `CmmsWorkOrder` lacks priority, required_by, material reservations, error_message and confirmed_at, so US-12 AC2 (validate priority before transmit) and AC4 (timeout/reject handling with an error toast and zero data loss) cannot be implemented, and /work-orders/confirmation cannot render the remote order number + reservation numbers.",
+      "compensation_hint": "Extend CmmsWorkOrder with priority, required_by, material_reservations_json, error_message, confirmed_at."
+    },
+    {
+      "code": "DATA_MODEL_UX_MISMATCH",
+      "severity": "high",
+      "message": "State vocabulary drift. The PRD specifies ISO 10816 categories (Good / Satisfactory / Unsatisfactory / Unacceptable) and ISO Zone states (Normal / Alert / Alarm / Trip); the locked prototype's SeverityBadge only renders severity keys critical | warning | healthy | info. ui-integration ships the prototype JSX byte-for-byte, so the API must emit the prototype's vocabulary or every badge falls through to the default info style.",
+      "compensation_hint": "Add a computed `severity` attribute (via rhino_computed_attributes) to Asset, DiagnosticIncident, PrescriptiveAdvisory and ShiftLogEntry mapping Trip/Alarm -> 'critical', Alert -> 'warning', Normal -> 'healthy'. Keep the ISO state in health_state for filtering, and expose both keys from the serializer. Document the mapping in .rhino-plan.md Extras and cover with a compensated AC."
+    },
+    {
+      "code": "DATA_MODEL_UX_MISMATCH",
+      "severity": "high",
+      "message": "Fleet KPI vocabulary drift. PRD US-04 AC1 requires tallies 'Total Monitored, Normal, Alert, Alarm, Trip' with unit-level distributions; the locked /fleet-overview renders exactly four cards labelled 'Monitored assets', 'Requires attention', 'Critical', 'Fleet health index' (value + note + direction) plus a 'Risk by process unit' percentage list. There is no backend aggregate for either shape.",
+      "compensation_hint": "Add a custom dashboard endpoint GET /api/{org}/dashboard/fleet_overview returning exactly the prototype's four KPI objects ({label, value, note, direction}) plus {unit_risk:[{name, exposure_percent}]}, and include the ISO tallies under an additional key for PRD traceability. Implement in a custom controller using Rhino.query for tenant safety."
+    },
+    {
+      "code": "DATA_MODEL_UX_MISMATCH",
+      "severity": "medium",
+      "message": "Demo-data identity drift. PRD sample_data seeds assets P-101A, K-301, P-402, KT-201 and journeys narrate P-101A / P-101B / K-201 / K-301A/B / C-201 / T-201, while the locked prototype fixtures and its drill-down links use P-204A, C-101B, P-108C and M-44. If only one set is seeded the shipped UI renders an empty or incoherent fleet.",
+      "compensation_hint": "Seed the PRD sample_data rows verbatim AND add the prototype-narrative assets (P-204A, C-101B, P-108C) in the same organization with matching health/severity values, so every prototype fixture key resolves against real rows. Document the canonical tag set in the plan seeds section."
+    },
+    {
+      "code": "DATA_MODEL_UX_MISMATCH",
+      "severity": "medium",
+      "message": "Asset-context routes are keyed by asset TAG, not primary key: the prototype navigates to /assets/P-204A/health-summary and /assets/${item.id}/diagnostics, and AssetContextNavigation rebuilds links from useParams().assetId. Rhino's generated show route resolves a numeric id only, so a tag-keyed deep link would 404.",
+      "compensation_hint": "Whitelist asset_tag as a filterable column on Asset and plan a small client helper useAssetByTag(tag) implemented with useModelIndex('assets', { filters: { asset_tag: tag }, perPage: 1 }); all asset-context pages then use the resolved numeric id for related-resource queries. Record this in ui-handoff data_contract notes and in the plan's Extras so develop does not invent a /assets/by_tag route the engine will not draw."
+    },
+    {
+      "code": "SITEMAP_PAGE_NO_AC",
+      "severity": "medium",
+      "message": "/assets (Asset Hierarchy Explorer) has no user story acceptance criterion describing its behaviour. US-03 ACs cover /admin/asset-hierarchy-builder only, and US-06 AC5 mentions /assets solely as an example of an anonymously-redirected route. No AC specifies the tree browse, node selection, detail tabs or the 'Open health workspace' drill-down the locked prototype implements.",
+      "compensation_hint": "Plan /assets as a custom screen, add it to ui-handoff, and add compensated AC rows covering: ISA-95 tree render from the asset hierarchy, node selection populating the Identity/Components/Envelope/Tags inspector, and drilling into /assets/:assetId/health-summary with the asset context pre-loaded."
+    },
+    {
+      "code": "PROTECTED_ROUTE_NO_AUTH_AC",
+      "severity": "medium",
+      "message": "/assets is the only protected sitemap route with no role-restriction acceptance criterion. Every other protected route names its allowed roles (e.g. US-04 AC5, US-05 AC4, US-09 AC4, US-07 AC4), but nothing states who may browse the asset registry.",
+      "compensation_hint": "Assign /assets to all five authenticated roles (admin, reliability_engineer, machinery_specialist, maintenance_planner, operations_superintendent) in ui-handoff pages[].roles, add a compensated ACL acceptance criterion, and seed role permissions accordingly. Also add the anonymous-redirect expectation (already in US-06 AC5) to the compensated row."
+    },
+    {
+      "code": "PRD_PROTOTYPE_ROUTE_GAP",
+      "severity": "low",
+      "message": "The prototype defines a public marketing page at '/' (Landing, with capability cards and two CTAs into /fleet-overview and /login) that appears in no PRD sitemap entry, no user flow and no user journey. Conversely every one of the 17 PRD sitemap routes does have a prototype page, so there is no prototype-missing route.",
+      "compensation_hint": "Ship '/' as the single public is_landing page, registered OUTSIDE the authenticated route tree (wrap Layout inside AppOwnerProvider only for authenticated routes) so anonymous visitors are not bounced to /login. Add a compensated AC for the landing (public reachability + CTA navigation) and keep is_landing=true on exactly one handoff entry."
+    },
+    {
+      "code": "FLOW_JOURNEY_MISMATCH",
+      "severity": "medium",
+      "message": "User flow 'Daily Fleet Health Triage & Anomaly Investigation' step 4 and US-05 AC2 require acknowledging an anomaly to transition the record to 'Under Investigation' and capture the acting user's id and timestamp in the audit record. The locked prototype's Acknowledge button only flips local component state and relabels the badge, with no persisted status transition and no audit write.",
+      "compensation_hint": "Wire the Acknowledge control through the action_contract to useModelUpdate('diagnostic_incidents', { id, data: { status: 'Under Investigation', acknowledged_at, acknowledged_by_id } }) plus a security_audit_events row. Add an acceptance criterion asserting the persisted status and the audit capture."
+    },
+    {
+      "code": "FLOW_JOURNEY_MISMATCH",
+      "severity": "medium",
+      "message": "US-15 AC3 grants 'console operators' the ability to check off standby warm-up/start steps and sync completion back to /fleet-overview, but US-15 AC4 restricts /operations/shift-log to operations_superintendent, reliability_engineer and admin, and 'console operator' does not appear in application_roles, personas or user_journeys. The two criteria inside one story contradict each other and the role registry.",
+      "compensation_hint": "Do not create a console_operator role (a role whose only route is ACL-forbidden is the dead-end-role defect). Resolve to US-15 AC4's narrower ACL: the step check-off is an operations_superintendent / reliability_engineer action recorded on shift_log_entries with incoming_ack/acknowledged_by_id, and the fleet sync is a callback that refreshes /fleet-overview. Document the resolution in the plan's PRD gaps compensated section."
+    },
+    {
+      "code": "PERSONA_NO_JOURNEY",
+      "severity": "medium",
+      "message": "target_audience lists five audiences but user_personas and user_journeys cover only three. Plant Operations Superintendent and System Administrator have no journey, so their post-login landing route and their daily navigation path are never exercised end-to-end and no AC pins them.",
+      "compensation_hint": "Use navigation_design section 5 to pin entry routes: operations_superintendent -> /operations/unit-risk-matrix (governance path /operations/shift-log -> /fleet-overview); admin -> /admin/historian-connections (/admin/tag-mapping -> /admin/asset-hierarchy-builder -> /admin/security-audit -> /admin/system-health). Encode these in ui-handoff pages[].roles, in the role landings section of the plan, and in compensated AC rows."
+    },
+    {
+      "code": "DATA_MODEL_UX_MISMATCH",
+      "severity": "medium",
+      "message": "Several US-01/US-02/US-03 acceptance criteria attribute columns to the wrong story subject model, because they are auto-derived across the whole ERD: US-02 asserts the data model stores 'component name', 'component type', 'algorithm type' and 'urgency' (which live on AssetComponent, ModelBaseline and PrescriptiveAdvisory), and US-03 asserts 'protocol type', 'hyperparameters json' and 'measurement type' (HistorianConnector, ModelBaseline, HistorianTag).",
+      "compensation_hint": "Keep the criteria verbatim in acceptance-criteria.json, but point each subtask at the real owning model (AssetComponent, ModelBaseline, PrescriptiveAdvisory, HistorianConnector, HistorianTag) and make sure those blueprints declare the columns. Note the attribution drift in the plan so review does not read it as a missing column."
+    },
+    {
+      "code": "DATA_MODEL_UX_MISMATCH",
+      "severity": "medium",
+      "message": "US-01 AC1/AC2 require an upload UI accepting CSV and JSON that validates required columns and reports per-row conflicts, US-03 AC1-AC3 require the same for CSV/JSON/XML with duplicate-tag and invalid-parent rejection, and US-02 AC5 requires a batch harness validating up to 50 tags in under 2000ms. None of these bulk surfaces exist in the ERD or in any generated Rhino route.",
+      "compensation_hint": "Plan custom endpoints as Extras: POST /api/{org}/historian_tags/import (multipart, CSV+JSON, returns per-row validation errors), POST /api/{org}/historian_tags/validate_batch (<=50 rows, returns per-tag quality + sample value + latency), POST /api/{org}/assets/import (CSV/JSON/XML with duplicate-tag and invalid-parent detection), POST /api/{org}/assets/validate_hierarchy. Each must resolve the organization from Rhino context, never from the payload."
+    },
+    {
+      "code": "DATA_MODEL_UX_MISMATCH",
+      "severity": "medium",
+      "message": "US-06 requires hardware-token multi-factor validation and automatic session termination after 30 minutes of inactivity, plus account lockout after 5 consecutive failed attempts. The rhino-rails auth surface ships Bearer api_token login/logout/password-reset only: no MFA factor, no server-side idle expiry, no lockout counter. The locked /login page also has no MFA field, so the second factor has no UI affordance.",
+      "compensation_hint": "Implement as Extras on top of the built-in auth: (a) a local LDAP/AD credential broker bound into POST /api/auth/login, (b) a hardware-token second factor verified server-side with the login form's existing Alert slot used for the failure banner (the prototype is locked, so no new input is added), (c) a failed-attempt counter with lockout after 5, (d) an idle-expiry guard that rejects requests whose api_token has been idle >30 minutes and returns 401 so the client redirects to /login. Cover each with an acceptance criterion and note the prototype-UI limitation explicitly."
+    },
+    {
+      "code": "FLOW_JOURNEY_MISMATCH",
+      "severity": "medium",
+      "message": "navigation_design sections 1 and 2 specify a 52px top header carrying air-gap ingestion telemetry badges (PI latency, PHD sync state, air-gap governance shield), a persistent 280px collapsible ISA-95 hierarchy tree sidebar driven by the plant topology, and a global status footer (historian sync latency, local DB, buffer, revision). The locked prototype's Layout ships an 80px header with alert drawer + theme toggle + profile menu, a shadcn Sidebar with three flat module groups and no plant tree, and no footer.",
+      "compensation_hint": "The prototype is the approved, locked design: keep its shell. Fold the air-gap telemetry badges into the existing header/footer-lite area using historian_connectors data (poll_latency_ms, status, buffer_depth) and note in the plan that the ISA-95 tree lives on /assets (AssetHierarchyBrowser) rather than in the global sidebar. Do not rebuild the shell."
+    },
+    {
+      "code": "DATA_MODEL_UX_MISMATCH",
+      "severity": "medium",
+      "message": "Design principle 5 and navigation_design section 6 prescribe a keyboard-ergonomics layer (Cmd/Ctrl+K asset+tag quick switcher, '[' sidebar collapse, 1-4 unit filters, A/Space acknowledge, J/K row navigation, Enter open, H harmonics, B bearing markers, W waterfall toggle, Left/Right waterfall scrub, Cmd/Ctrl+Enter dispatch, Esc close). The prototype implements none of these and no user story carries an acceptance criterion for them.",
+      "compensation_hint": "Plan a single client-side keyboard layer under client/src/hooks/useGlobalShortcuts.ts plus a QuickSwitcher component, mounted once in Layout, and cover the highest-value subset with compensated AC rows (Cmd/Ctrl+K opens the asset/tag quick switcher; 1-4 filter the fleet by unit; J/K+Enter navigate the fleet table; H/B/W toggle spectral overlays; Cmd/Ctrl+Enter confirms dispatch). Note that the shortcuts layer is client-only and adds no backend surface."
+    }
+  ],
+  "coverage_matrix": [
+    {
+      "key_feature": "Historian & SCADA Connectors",
+      "user_stories": ["US-01", "US-02"],
+      "flows": ["Historian Tag Ingestion & Asset Twin Configuration"],
+      "journeys": [],
+      "sitemap_paths": ["/admin/historian-connections", "/admin/tag-mapping"],
+      "models": ["HistorianConnector", "HistorianTag", "TelemetryRecord"],
+      "highest_severity_gap": "high",
+      "status": "covered",
+      "notes": "Feature has both a story and routes. Gap G5/G4 extend connector + tag columns; G24 adds the import/batch endpoints the ACs require."
+    },
+    {
+      "key_feature": "Asset Hierarchy & Digital Twin Builder",
+      "user_stories": ["US-03"],
+      "flows": ["Historian Tag Ingestion & Asset Twin Configuration"],
+      "journeys": [],
+      "sitemap_paths": ["/admin/asset-hierarchy-builder", "/assets"],
+      "models": ["Asset", "AssetComponent", "PlantUnit"],
+      "highest_severity_gap": "high",
+      "status": "partially covered",
+      "notes": "/assets has no functional AC (G17) and no ACL AC (G18); the builder route is fully AC'd. Gap G3 extends Asset columns."
+    },
+    {
+      "key_feature": "Multivariate Anomaly Detection & Health Index Engine",
+      "user_stories": ["US-04", "US-05", "US-16"],
+      "flows": ["Daily Fleet Health Triage & Anomaly Investigation", "Anomaly Model Calibration & Baseline Retraining"],
+      "journeys": ["Morning fleet triage (Marcus Vance)"],
+      "sitemap_paths": ["/fleet-overview", "/assets/:assetId/health-summary", "/model-management/retraining", "/model-management/evaluation"],
+      "models": ["AssetHealthIndex", "Asset", "ModelBaseline", "BaselineWindow"],
+      "highest_severity_gap": "high",
+      "status": "covered",
+      "notes": "G14 adds the KPI aggregate the prototype renders; G10 adds evaluation/promotion + golden windows; G13 aligns the severity vocabulary."
+    },
+    {
+      "key_feature": "Diagnostic Classifier & Failure Mode Fingerprinting",
+      "user_stories": ["US-08"],
+      "flows": ["Spectral & Multi-Sensor Deep-Dive Root Cause Analysis"],
+      "journeys": ["Advanced spectral diagnostic investigation (Dr. Elena Rostova)"],
+      "sitemap_paths": ["/assets/:assetId/diagnostics"],
+      "models": ["FailureModeAssessment", "FailureMode", "DiagnosticIncident"],
+      "highest_severity_gap": "high",
+      "status": "covered",
+      "notes": "G6 adds the assessment entity that both the classifier card and the fingerprint table read; G7 adds the finding fields."
+    },
+    {
+      "key_feature": "Prognostics & Remaining Useful Life (RUL) Estimation",
+      "user_stories": ["US-11", "US-14"],
+      "flows": ["Prescriptive Action Verification & Work Order Dispatch"],
+      "journeys": ["Prescriptive advisory review & CMMS dispatch (Dave Kalu)"],
+      "sitemap_paths": ["/prescriptive-advisories", "/assets/:assetId/health-summary"],
+      "models": ["DiagnosticIncident", "PrescriptiveAdvisory"],
+      "highest_severity_gap": "high",
+      "status": "covered",
+      "notes": "G7 adds the RUL window band and regime fields; G11 adds advisory urgency escalation and derate sign-off."
+    },
+    {
+      "key_feature": "Interactive Spectral & Time-Series Analytics",
+      "user_stories": ["US-09", "US-10"],
+      "flows": ["Spectral & Multi-Sensor Deep-Dive Root Cause Analysis"],
+      "journeys": ["Advanced spectral diagnostic investigation (Dr. Elena Rostova)"],
+      "sitemap_paths": ["/assets/:assetId/spectral-analytics"],
+      "models": ["SpectrumSnapshot", "HistorianTag", "TelemetryRecord"],
+      "highest_severity_gap": "high",
+      "status": "covered",
+      "notes": "G8 adds the spectrum/waterfall/orbit entity; G27 adds the keyboard overlay toggles the PRD prescribes."
+    },
+    {
+      "key_feature": "Prescriptive Alerting & CMMS Dispatch",
+      "user_stories": ["US-12", "US-13", "US-15"],
+      "flows": ["Prescriptive Action Verification & Work Order Dispatch", "Unit Risk Assessment & Operational Derating Advisory"],
+      "journeys": ["Prescriptive advisory review & CMMS dispatch (Dave Kalu)"],
+      "sitemap_paths": ["/prescriptive-advisories", "/work-orders/confirmation", "/operations/unit-risk-matrix", "/operations/shift-log"],
+      "models": ["PrescriptiveAdvisory", "CmmsWorkOrder", "ShiftLogEntry", "PlantUnit"],
+      "highest_severity_gap": "high",
+      "status": "covered",
+      "notes": "G9 adds the shift log; G11/G12 add advisory + work-order fields; G21 resolves the console-operator ACL contradiction; G22 pins the superintendent's entry route."
+    },
+    {
+      "key_feature": "Air-Gapped Security & Local Governance Engine",
+      "user_stories": ["US-06", "US-07"],
+      "flows": ["Operator & Engineer Authentication", "Air-Gapped Audit Log & Security Governance Review"],
+      "journeys": [],
+      "sitemap_paths": ["/login", "/admin/security-audit", "/admin/system-health"],
+      "models": ["SecurityAuditEvent", "User", "Role", "UsersRole"],
+      "highest_severity_gap": "high",
+      "status": "covered",
+      "notes": "G1 drops the Devise-shaped User; G2 replaces the colliding audit_logs model; G25 adds MFA/lockout/idle-expiry; G22 pins the admin entry route and governance path."
+    }
+  ],
+  "hints_for_planner": [
+    "Keep the locked prototype as the visual + JSON contract. Every key it reads must be produced by a real column, computed attribute or custom endpoint — do not fall back to mocks for any key the prototype renders.",
+    "Do not blueprint User, Organization, Role or UsersRole: they are engine-provided by rhino_project_core / rhino_project_organizations. Never create a table named audit_logs — Rhino::HasAuditTrail owns it.",
+    "Add these four entities to the blueprint set to back the prototype: failure_mode_assessments, spectrum_snapshots, shift_log_entries, baseline_windows. Rename the ERD's AuditLog to security_audit_events.",
+    "Extend the ERD models whose column lists cannot satisfy their screens: Asset, AssetComponent, HistorianConnector, HistorianTag, DiagnosticIncident, ModelBaseline, PrescriptiveAdvisory, CmmsWorkOrder, PlantUnit.",
+    "Emit the prototype's severity vocabulary (critical|warning|healthy|info) as a computed attribute; keep the ISO states available on health_state for filtering and PRD traceability.",
+    "Plan custom endpoints only where the shape is genuinely non-CRUD: /dashboard/fleet_overview, /dashboard/active_anomalies, /dashboard/unit_risk_matrix, /system_health, /security_audit_events/export, /historian_tags/import, /historian_tags/validate_batch, /assets/import, /assets/validate_hierarchy, /historian_connectors/:id/test_connection, /model_baselines/:id/train, /model_baselines/:id/promote, /cmms_work_orders dispatch. Every one must resolve the organization from Rhino context (Rhino.query) and gate on the owning model's policy.",
+    "Asset-context routes are tag-keyed. Whitelist asset_tag as a filter on Asset and plan a client useAssetByTag helper instead of assuming the numeric show route.",
+    "Register exactly five roles (admin, reliability_engineer, machinery_specialist, maintenance_planner, operations_superintendent). Do not add console_operator: US-15 AC3 grants it a capability that US-15 AC4's ACL forbids, and a role with no reachable route dead-ends.",
+    "Seed 'admin' with the literal slug, one UsersRole per role so useRoles() is non-empty, and both PRD sample_data assets and the prototype-narrative assets (P-204A, C-101B, P-108C) so every locked fixture key resolves.",
+    "Contract-required mutation proof: assets carries the required writable scalar asset_tag; admin gets full index/show/store/update/destroy and reliability_engineer gets read-only index/show with no store, so the host can prove a valid mutation and an invalid-payload rejection.",
+    "Auth pages use Rhino Bearer auth (POST /api/auth/login -> api_token), never a Devise/JWT client. public tier = '/' landing (is_landing=true, route OUTSIDE the authenticated tree) + '/login' + /api/auth/*.",
+    "Acceptance criteria must be counted N = M + K + G: 101 verbatim PRD AC rows + one row per Extra + one row per high-severity gap that has no verbatim PRD AC. Do not summarise sibling ACs.",
+    "Phasing: use the PRD's three phases verbatim as the `phase` field and order the plan's implementation order by them."
+  ]
+}

@@ -1,0 +1,37 @@
+[
+  {
+    "title": "Recon: inspect existing diff vs the 16 items",
+    "notes": "Read changed files; confirm each item's implementation really exists.",
+    "status": "in_progress"
+  },
+  {
+    "title": "Run server suite: bin/rails test",
+    "notes": "Must be 0 failures.",
+    "status": "todo"
+  },
+  {
+    "title": "Run rubocop + brakeman",
+    "notes": "0 offenses, 0 warnings.",
+    "status": "todo"
+  },
+  {
+    "title": "Run client: vitest --coverage, oxlint, build",
+    "notes": "0 failures/0 warnings; branch >=85%.",
+    "status": "todo"
+  },
+  {
+    "title": "Item 16: finish mutation testing and report score",
+    "notes": "mutant (CmmsDispatchService, DiagnosticsClassifier, policies) + Stryker (validation.ts, useApiQueries.ts) >=80%.",
+    "status": "todo"
+  },
+  {
+    "title": "Guardrail G: exercise endpoints live as allowed+forbidden roles",
+    "notes": "Use app_run + g_exercise.py.",
+    "status": "todo"
+  },
+  {
+    "title": "Guardrail H: self-review diff for regressions",
+    "notes": "File by file; fix before reporting.",
+    "status": "todo"
+  }
+]

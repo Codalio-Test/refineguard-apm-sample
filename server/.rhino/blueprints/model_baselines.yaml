@@ -1,0 +1,138 @@
+# RefineGuard APM — ModelBaseline
+# PRD: schema.model_baselines + US-16 AC1/AC2/AC3/AC4 (golden baseline window, local training with
+#      goodness-of-fit + reconstruction error within 60s, compare against historical validation
+#      datasets, one-click deploy with model version + author + timestamp in the audit trail)
+#      + US-16 AC "data model stores training window end" + US-03 AC "hyperparameters json".
+# Backs: /model-management/retraining, /model-management/evaluation.
+# Gap compensated: G10 (evaluation/promotion surface was missing entirely).
+model: ModelBaseline
+slug: model_baselines
+table: model_baselines
+
+options:
+  belongs_to_organization: true
+  soft_deletes: true
+  audit_trail: true
+  pagination: true
+  per_page: 50
+
+columns:
+  asset_id:
+    type: foreignId
+    foreign_model: Asset
+    nullable: false
+    index: true
+    filterable: true
+  model_version:
+    type: string
+    nullable: false
+    filterable: true
+    sortable: true
+    searchable: true
+  algorithm_type:
+    type: string
+    nullable: false
+    filterable: true
+    searchable: true
+  training_window_start:
+    type: datetime
+    nullable: true
+    sortable: true
+  training_window_end:
+    type: datetime
+    nullable: true
+    sortable: true
+  hyperparameters_json:
+    type: json
+    nullable: true
+  accuracy_metrics_json:
+    type: json
+    nullable: true
+  gates_json:
+    type: json
+    nullable: true
+  status:
+    type: string
+    nullable: false
+    default: "Candidate"
+    filterable: true
+    sortable: true
+  training_status:
+    type: string
+    nullable: true
+    default: "Idle"
+    filterable: true
+  training_progress:
+    type: integer
+    nullable: true
+    default: 0
+  training_log:
+    type: text
+    nullable: true
+  is_active:
+    type: boolean
+    nullable: true
+    default: false
+    filterable: true
+  approved_by_id:
+    type: foreignId
+    foreign_model: User
+    nullable: true
+    index: true
+  approved_at:
+    type: datetime
+    nullable: true
+  parent_model_baseline_id:
+    type: foreignId
+    foreign_model: ModelBaseline
+    nullable: true
+    index: true
+  promoted_at:
+    type: datetime
+    nullable: true
+
+relationships:
+  - type: belongsTo
+    model: Organization
+  - type: belongsTo
+    model: Asset
+  - type: belongsTo
+    model: User
+  - type: hasMany
+    model: BaselineWindow
+
+permissions:
+  admin:
+    actions: [index, show, store, update, destroy, trashed, restore, forceDelete]
+    show_fields: "*"
+    create_fields: "*"
+    update_fields: "*"
+  machinery_specialist:
+    actions: [index, show, store, update]
+    show_fields: "*"
+    create_fields: &baseline_writable
+      - asset_id
+      - model_version
+      - algorithm_type
+      - training_window_start
+      - training_window_end
+      - hyperparameters_json
+    update_fields: &baseline_updatable
+      - model_version
+      - algorithm_type
+      - training_window_start
+      - training_window_end
+      - hyperparameters_json
+      - accuracy_metrics_json
+      - gates_json
+      - status
+      - training_status
+      - training_progress
+      - is_active
+      - approved_at
+      - promoted_at
+  reliability_engineer:
+    actions: [index, show]
+    show_fields: "*"
+    create_fields: []
+    update_fields: []

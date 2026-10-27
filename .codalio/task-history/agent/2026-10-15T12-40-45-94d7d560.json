@@ -1,0 +1,102 @@
+[
+  {
+    "title": "Audit current working tree against all 16 review items",
+    "notes": "Determine what the existing uncommitted changes already do vs. what remains.",
+    "status": "in_progress"
+  },
+  {
+    "title": "Item 1: derate throttle bounds 0-100 + 422 + tests",
+    "notes": "",
+    "status": "todo"
+  },
+  {
+    "title": "Item 2: dispatch race with advisory.with_lock + test",
+    "notes": "",
+    "status": "todo"
+  },
+  {
+    "title": "Item 3: System health measured-only values + not_measured + tests",
+    "notes": "",
+    "status": "todo"
+  },
+  {
+    "title": "Item 4: sign-off + propagation in one transaction",
+    "notes": "",
+    "status": "todo"
+  },
+  {
+    "title": "Item 5: uniform {errors:[...]} shape end-to-end",
+    "notes": "",
+    "status": "todo"
+  },
+  {
+    "title": "Item 6: WorkOrderConfirmation response shape + typed hook + tests",
+    "notes": "",
+    "status": "todo"
+  },
+  {
+    "title": "Item 7: LDAP TLS + RFC4514 DN escaping + tests",
+    "notes": "",
+    "status": "todo"
+  },
+  {
+    "title": "Item 8: SecurityAuditEventPolicy create/update []",
+    "notes": "",
+    "status": "todo"
+  },
+  {
+    "title": "Item 9: SecurityAudit useMemo deps + late-data test",
+    "notes": "",
+    "status": "todo"
+  },
+  {
+    "title": "Item 10: all oxlint warnings fixed + JSX->TS conversion",
+    "notes": "",
+    "status": "todo"
+  },
+  {
+    "title": "Item 11: de-duplicate auth fields, validation refinement, hooks",
+    "notes": "",
+    "status": "todo"
+  },
+  {
+    "title": "Item 12: remove comment residue",
+    "notes": "",
+    "status": "todo"
+  },
+  {
+    "title": "Item 13: remove .codalio/review/*.log",
+    "notes": "",
+    "status": "todo"
+  },
+  {
+    "title": "Item 14: docs/architecture.md",
+    "notes": "",
+    "status": "todo"
+  },
+  {
+    "title": "Item 15: server+client branch coverage >=85% enforced",
+    "notes": "",
+    "status": "todo"
+  },
+  {
+    "title": "Item 16: mutation testing (mutant + stryker) >=80%",
+    "notes": "",
+    "status": "todo"
+  },
+  {
+    "title": "Guardrail F: run all 6 checks green",
+    "notes": "",
+    "status": "todo"
+  },
+  {
+    "title": "Guardrail G: exercise pages/endpoints as allowed+forbidden roles",
+    "notes": "",
+    "status": "todo"
+  },
+  {
+    "title": "Guardrail H: self-review diff for regressions",
+    "notes": "",
+    "status": "todo"
+  }
+]

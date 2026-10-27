@@ -1,0 +1,121 @@
+# RefineGuard APM — CmmsWorkOrder
+# PRD: schema.cmms_work_orders + US-12 AC2 (validate priority, package diagnostic findings + FFT
+#      plots, transmit to on-prem SAP PM / Maximo within 3000ms) + AC3 (confirmation screen shows
+#      the remote work order number #WO-884210 and warehouse material reservation numbers) +
+#      AC4 (timeout/reject -> error toast with the exact validation issue, advisory reverts to
+#      'Ready for Dispatch', zero data lost).
+# Backs: /work-orders/confirmation.
+# Gap compensated: G12 (priority / required_by / reservations / error / confirmed_at were missing).
+model: CmmsWorkOrder
+slug: cmms_work_orders
+table: cmms_work_orders
+
+options:
+  belongs_to_organization: true
+  soft_deletes: true
+  audit_trail: true
+  pagination: true
+  per_page: 50
+
+columns:
+  prescriptive_advisory_id:
+    type: foreignId
+    foreign_model: PrescriptiveAdvisory
+    nullable: false
+    index: true
+    filterable: true
+  user_id:
+    type: foreignId
+    foreign_model: User
+    nullable: true
+    index: true
+    filterable: true
+  cmms_type:
+    type: string
+    nullable: false
+    filterable: true
+  external_order_number:
+    type: string
+    nullable: true
+    filterable: true
+    sortable: true
+    searchable: true
+  sync_status:
+    type: string
+    nullable: false
+    default: "Pending Sync"
+    filterable: true
+    sortable: true
+  priority:
+    type: string
+    nullable: true
+    filterable: true
+  required_by:
+    type: date
+    nullable: true
+    sortable: true
+  dispatched_at:
+    type: datetime
+    nullable: true
+    sortable: true
+  confirmed_at:
+    type: datetime
+    nullable: true
+  work_order_payload:
+    type: json
+    nullable: true
+  material_reservations_json:
+    type: json
+    nullable: true
+  error_message:
+    type: text
+    nullable: true
+
+relationships:
+  - type: belongsTo
+    model: Organization
+  - type: belongsTo
+    model: PrescriptiveAdvisory
+  - type: belongsTo
+    model: User
+
+permissions:
+  admin:
+    actions: [index, show, store, update, destroy, trashed, restore, forceDelete]
+    show_fields: "*"
+    create_fields: "*"
+    update_fields: "*"
+  maintenance_planner:
+    actions: [index, show, store, update]
+    show_fields: "*"
+    create_fields: &work_order_writable
+      - prescriptive_advisory_id
+      - cmms_type
+      - priority
+      - required_by
+      - work_order_payload
+    update_fields:
+      - priority
+      - required_by
+      - external_order_number
+      - sync_status
+      - dispatched_at
+      - confirmed_at
+      - work_order_payload
+      - material_reservations_json
+      - error_message
+  reliability_engineer:
+    actions: [index, show, store]
+    show_fields: "*"
+    create_fields: *work_order_writable
+    update_fields: []
+  machinery_specialist:
+    actions: [index, show]
+    show_fields: [id, prescriptive_advisory_id, cmms_type, external_order_number, sync_status, priority, required_by, dispatched_at, confirmed_at]
+    create_fields: []
+    update_fields: []
+  operations_superintendent:
+    actions: [index, show]
+    show_fields: [id, prescriptive_advisory_id, cmms_type, external_order_number, sync_status, priority, required_by, dispatched_at]
+    create_fields: []
+    update_fields: []

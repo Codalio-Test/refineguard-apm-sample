@@ -1,0 +1,227 @@
+# RefineGuard APM — Asset (rotating machinery digital twin)
+#
+# Contract-carrying resource for the host runtime proof:
+#   * `asset_tag` is a REQUIRED writable scalar (nullable: false, no default) -> a valid POST proves
+#     mutation and an empty/duplicate payload proves 422 rejection.
+#   * admin            -> full index/show/store/update/destroy (+ trashed/restore/forceDelete)
+#   * reliability_engineer -> read-only index/show with create_fields/update_fields = [] (no store)
+#
+# Backs: /assets (hierarchy browser + inspector), /fleet-overview triage table,
+#        /assets/:assetId/* context header, /admin/asset-hierarchy-builder.
+# Gaps compensated: G3 (missing columns), G13 (severity vocabulary), G15 (demo identity),
+#                   G16 (tag-keyed routes -> asset_tag must be filterable).
+model: Asset
+slug: assets
+table: assets
+
+options:
+  belongs_to_organization: true
+  soft_deletes: true
+  pagination: true
+  per_page: 200
+
+columns:
+  plant_unit_id:
+    type: foreignId
+    foreign_model: PlantUnit
+    nullable: true
+    index: true
+    filterable: true
+  parent_asset_id:
+    type: foreignId
+    foreign_model: Asset
+    nullable: true
+    index: true
+  asset_tag:
+    type: string
+    nullable: false
+    filterable: true
+    sortable: true
+    searchable: true
+  asset_name:
+    type: string
+    nullable: false
+    sortable: true
+    searchable: true
+  equipment_class:
+    type: string
+    nullable: true
+    filterable: true
+    searchable: true
+  equipment_type:
+    type: string
+    nullable: true
+    filterable: true
+  driver_type:
+    type: string
+    nullable: true
+    filterable: true
+  criticality_class:
+    type: string
+    nullable: true
+    filterable: true
+  manufacturer:
+    type: string
+    nullable: true
+  commissioned_on:
+    type: date
+    nullable: true
+    sortable: true
+  design_speed_rpm:
+    type: float
+    nullable: true
+  rated_rpm:
+    type: float
+    nullable: true
+  rated_flow_m3h:
+    type: float
+    nullable: true
+  max_bearing_temp_c:
+    type: float
+    nullable: true
+  bearing_type:
+    type: string
+    nullable: true
+  bearing_de_model:
+    type: string
+    nullable: true
+  bearing_nde_model:
+    type: string
+    nullable: true
+  seal_plan:
+    type: string
+    nullable: true
+  operating_status:
+    type: string
+    nullable: true
+    default: "Running"
+    filterable: true
+  health_state:
+    type: string
+    nullable: true
+    default: "Normal"
+    filterable: true
+    sortable: true
+  health_index:
+    type: float
+    nullable: true
+    filterable: true
+    sortable: true
+  health_index_delta:
+    type: float
+    nullable: true
+  rms_velocity_mms:
+    type: float
+    nullable: true
+    sortable: true
+  rms_velocity_delta_pct:
+    type: float
+    nullable: true
+  bearing_temp_c:
+    type: float
+    nullable: true
+  bearing_temp_delta_c:
+    type: float
+    nullable: true
+  motor_current_a:
+    type: float
+    nullable: true
+  estimated_rul_days:
+    type: float
+    nullable: true
+    sortable: true
+  estimated_rul_window:
+    type: string
+    nullable: true
+  last_sample_at:
+    type: datetime
+    nullable: true
+    sortable: true
+  data_completeness_pct:
+    type: float
+    nullable: true
+  hierarchy_path:
+    type: string
+    nullable: true
+    searchable: true
+  monitored:
+    type: boolean
+    nullable: true
+    default: true
+    filterable: true
+  last_tag_validation_at:
+    type: datetime
+    nullable: true
+
+relationships:
+  - type: belongsTo
+    model: Organization
+  - type: belongsTo
+    model: PlantUnit
+  - type: belongsTo
+    model: Asset
+  - type: hasMany
+    model: AssetComponent
+  - type: hasMany
+    model: HistorianTag
+  - type: hasMany
+    model: AssetHealthIndex
+  - type: hasMany
+    model: DiagnosticIncident
+  - type: hasMany
+    model: ModelBaseline
+  - type: hasMany
+    model: FailureModeAssessment
+  - type: hasMany
+    model: SpectrumSnapshot
+  - type: hasMany
+    model: ShiftLogEntry
+
+permissions:
+  admin:
+    actions: [index, show, store, update, destroy, trashed, restore, forceDelete]
+    show_fields: "*"
+    create_fields: "*"
+    update_fields: "*"
+  reliability_engineer:
+    # read-only proof role: can list and read, cannot create (no store action, no writable fields)
+    actions: [index, show]
+    show_fields: "*"
+    create_fields: []
+    update_fields: []
+  machinery_specialist:
+    actions: [index, show, store, update]
+    show_fields: "*"
+    create_fields: &asset_specialist_writable
+      - plant_unit_id
+      - parent_asset_id
+      - asset_tag
+      - asset_name
+      - equipment_class
+      - equipment_type
+      - driver_type
+      - criticality_class
+      - manufacturer
+      - commissioned_on
+      - design_speed_rpm
+      - rated_rpm
+      - rated_flow_m3h
+      - max_bearing_temp_c
+      - bearing_type
+      - bearing_de_model
+      - bearing_nde_model
+      - seal_plan
+      - operating_status
+    update_fields: *asset_specialist_writable
+  maintenance_planner:
+    actions: [index, show]
+    show_fields: [id, asset_tag, asset_name, equipment_class, plant_unit_id, criticality_class, health_state, health_index, bearing_type, seal_plan, operating_status]
+    create_fields: []
+    update_fields: []
+    hidden_fields: [motor_current_a, data_completeness_pct, hierarchy_path]
+  operations_superintendent:
+    actions: [index, show]
+    show_fields: "*"
+    create_fields: []
+    update_fields: []
+    hidden_fields: [manufacturer, commissioned_on, bearing_de_model, bearing_nde_model, last_tag_validation_at]
